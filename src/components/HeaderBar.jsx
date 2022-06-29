@@ -1,4 +1,8 @@
 import {
+  DarkMode,
+  ExitToApp,
+  Feedback,
+  HelpCenter,
   Home,
   ManageAccounts,
   Notifications,
@@ -25,8 +29,9 @@ const MyToolbar = styled(Toolbar)({
 });
 
 const Search = styled("div")(({ theme }) => ({
-  backgroundColor: "white",
-  padding: "0 10px",
+  backgroundColor: theme.palette.primary.dark,
+  color: theme.palette.primary.light,
+  marginRight: "100px",
   borderRadius: theme.shape.borderRadius,
   width: "40%",
 }));
@@ -50,11 +55,11 @@ const UserBox = styled(Box)(({ theme }) => ({
 }));
 
 const HeaderBar = ({ mode, setMode }) => {
-  const [open, setOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   return (
     <AppBar position="sticky">
       <MyToolbar>
-        <Box display="flex" alignItems={"center"}>
+        <Box display="flex" bgcolor={'red'} alignItems={"center"}>
           <Typography
             variant="h6"
             sx={{ display: { xs: "none", sm: "block" } }}
@@ -76,25 +81,25 @@ const HeaderBar = ({ mode, setMode }) => {
           <Avatar
             sx={{ width: 30, height: 30 }}
             src="https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-            onClick={(e) => setOpen(true)}
           />
           <Badge badgeContent={2} color="error">
             <Notifications />
           </Badge>
           <Switch
-            onChange={(e) => setMode(mode === "light" ? "dark" : "light")}
+            onChange={e => setMode(mode === "light" ? "dark" : "light")}
           />
-          <ManageAccounts onClick={(e) => setOpen(true)} />
+          <ManageAccounts onClick={e => setProfileMenuOpen(true)} />
         </IconsBox>
-        <UserBox onClick={(e) => setOpen(true)}>
+        <UserBox onClick={e => setProfileMenuOpen(true)}>
           <Typography variant="span">Tony</Typography>
         </UserBox>
       </MyToolbar>
       <Menu
         id="demo-positioned-menu"
+        sx={{ marginTop: 4}}
         aria-labelledby="demo-positioned-button"
-        open={open}
-        onClose={(e) => setOpen(false)}
+        open={profileMenuOpen}
+        onClose={e => setProfileMenuOpen(false)}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
@@ -104,11 +109,11 @@ const HeaderBar = ({ mode, setMode }) => {
           horizontal: "right",
         }}
       >
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>
-          <Settings /> Settings
-        </MenuItem>
-        <MenuItem>Logout</MenuItem>
+        <MenuItem><Settings sx={{marginRight: 1}} /> Settings</MenuItem>
+        <MenuItem><DarkMode sx={{marginRight: 1}} /> Display</MenuItem>
+        <MenuItem><HelpCenter sx={{marginRight: 1}} /> Help</MenuItem>
+        <MenuItem><Feedback sx={{marginRight: 1}} /> Feedback</MenuItem>
+        <MenuItem><ExitToApp sx={{marginRight: 1}} /> Logout</MenuItem>
       </Menu>
     </AppBar>
   );
