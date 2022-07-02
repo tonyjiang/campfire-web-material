@@ -1,4 +1,5 @@
 import {
+  AddSharp,
   Article,
   FormatListBulleted,
   Groups,
@@ -13,6 +14,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Tooltip,
 } from "@mui/material";
 
 import React from "react";
@@ -29,6 +31,9 @@ const LeftNav = () => {
               </ListItemIcon>
               <ListItemText primary="Classes" />
             </ListItemButton>
+            <Tooltip title="Create a new class">
+              <AddSharp sx={{ marginRight: 4 }} />
+            </Tooltip>
           </ListItem>
           <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 4 }}>
@@ -52,6 +57,9 @@ const LeftNav = () => {
               </ListItemIcon>
               <ListItemText primary="Groups" />
             </ListItemButton>
+            <Tooltip title="Create a new group">
+              <AddSharp sx={{ marginRight: 4 }} />
+            </Tooltip>
           </ListItem>
           <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 4 }}>
@@ -75,6 +83,7 @@ const LeftNav = () => {
               </ListItemIcon>
               <ListItemText primary="People" />
             </ListItemButton>
+            <AddSharp sx={{ marginRight: 4 }} />
           </ListItem>
 
           <ListItem disablePadding>
@@ -84,6 +93,7 @@ const LeftNav = () => {
               </ListItemIcon>
               <ListItemText primary="Documents" />
             </ListItemButton>
+            <AddSharp sx={{ marginRight: 4 }} />
           </ListItem>
         </List>
       </Box>

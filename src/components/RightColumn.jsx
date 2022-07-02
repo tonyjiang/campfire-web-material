@@ -89,7 +89,7 @@ const RightBar = () => {
               />
             </ListItemAvatar>
             <ListItemText
-              primary="Hiking on the shore trail?"
+              primary="Weekend hiking on the shore trail?"
               secondary={
                 <React.Fragment>
                   <Typography
