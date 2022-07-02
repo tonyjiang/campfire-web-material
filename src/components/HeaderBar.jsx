@@ -59,7 +59,7 @@ const HeaderBar = ({ mode, setMode }) => {
   return (
     <AppBar position="sticky">
       <MyToolbar>
-        <Box display="flex" bgcolor={'red'} alignItems={"center"}>
+        <Box display="flex" alignItems={"center"}>
           <Typography
             variant="h6"
             sx={{ display: { xs: "none", sm: "block" } }}

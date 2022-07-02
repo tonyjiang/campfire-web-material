@@ -3,6 +3,7 @@ import {
   FormatListBulleted,
   Groups,
   People,
+  StarBorder,
 } from "@mui/icons-material";
 
 import {
@@ -21,7 +22,7 @@ const LeftNav = () => {
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="fixed">
         <List>
-        <ListItem disablePadding>
+          <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>
                 <FormatListBulleted />
@@ -29,6 +30,21 @@ const LeftNav = () => {
               <ListItemText primary="Classes" />
             </ListItemButton>
           </ListItem>
+          <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Evolutionary Psychology" />
+            </ListItemButton>
+            <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Practical Statistics" />
+            </ListItemButton>
+          </List>
+
           <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>
@@ -37,14 +53,30 @@ const LeftNav = () => {
               <ListItemText primary="Groups" />
             </ListItemButton>
           </ListItem>
+          <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Evolution Breakout Discussion 1" />
+            </ListItemButton>
+            <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Campus Soccer League" />
+            </ListItemButton>
+          </List>
+
           <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>
                 <People />
               </ListItemIcon>
-              <ListItemText primary="People you follow" />
+              <ListItemText primary="People" />
             </ListItemButton>
           </ListItem>
+
           <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>

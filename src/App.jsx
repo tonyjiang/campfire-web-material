@@ -1,6 +1,6 @@
 import LeftNav from "./components/LeftNav";
 import Feed from "./components/Feed";
-import RightBar from "./components/RightBar";
+import RightColumn from "./components/RightColumn";
 import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
 import HeaderBar from "./components/HeaderBar";
 import Add from "./components/Add";
@@ -21,7 +21,7 @@ const App = () => {
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <LeftNav />
           <Feed />
-          <RightBar />
+          <RightColumn />
         </Stack>
         <Add />
       </Box>
