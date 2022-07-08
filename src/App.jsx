@@ -8,6 +8,7 @@ import { useState } from "react";
 
 const App = () => {
   const [mode, setMode] = useState("light");
+  const [centerColumn, setCenterColumn] = useState(<Feed />);
 
   const modeTheme = createTheme({
     palette: {
@@ -19,8 +20,8 @@ const App = () => {
       <Box bgcolor={"background.default"} color={"text.primary"}>
         <HeaderBar mode={mode} setMode={setMode} />
         <Stack direction="row" spacing={2} justifyContent="space-between">
-          <LeftNav />
-          <Feed />
+          <LeftNav setCenterColumn={setCenterColumn} />
+          {centerColumn}
           <RightColumn />
         </Stack>
         <Add />

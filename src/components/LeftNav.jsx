@@ -9,6 +9,7 @@ import {
 
 import {
   Box,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -19,7 +20,13 @@ import {
 
 import React from "react";
 
-const LeftNav = () => {
+import CourseEdit from "./CourseEdit";
+
+const LeftNav = (props) => {
+  const createNewClass = (e) => {
+    props.setCenterColumn(<CourseEdit />)
+  }
+
   return (
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="fixed">
@@ -31,8 +38,10 @@ const LeftNav = () => {
               </ListItemIcon>
               <ListItemText primary="Classes" />
             </ListItemButton>
-            <Tooltip title="Create a new class">
-              <AddSharp sx={{ marginRight: 4 }} />
+            <Tooltip title="Create a new class" onClick={e => createNewClass(e)} >
+              <IconButton>
+                <AddSharp sx={{ marginRight: 4 }} />
+              </IconButton>
             </Tooltip>
           </ListItem>
           <List component="div" disablePadding>
