@@ -3,7 +3,7 @@ import Feed from "./components/Feed";
 import RightColumn from "./components/RightColumn";
 import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
 import HeaderBar from "./components/HeaderBar";
-import Add from "./components/Add";
+import Create from "./components/Create";
 import { useState } from "react";
 
 const App = () => {
@@ -24,7 +24,7 @@ const App = () => {
           {centerColumn}
           <RightColumn />
         </Stack>
-        <Add />
+        <Create />
       </Box>
     </ThemeProvider>
   );

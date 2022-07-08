@@ -34,13 +34,13 @@ const UserBox = styled(Box)({
   marginBottom: "20px",
 });
 
-const Add = () => {
+const Create = () => {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Tooltip
         onClick={(e) => setOpen(true)}
-        title="Delete"
+        title="What's on your mind?"
         sx={{
           position: "fixed",
           bottom: 20,
@@ -107,4 +107,4 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default Create;
