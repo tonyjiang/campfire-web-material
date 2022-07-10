@@ -1,6 +1,6 @@
 import { Box, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useState } from "react";
-import Post from "./Post";
+import CourseEvents from "./CourseEvents";
 
 const CourseEdit = () => {
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,8 @@ const CourseEdit = () => {
           <TextField
             variant="outlined"
             label="Location"
-          />  
+          />
+          <CourseEvents />
         </Stack>
       )}
     </Box>
