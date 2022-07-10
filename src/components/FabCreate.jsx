@@ -34,7 +34,7 @@ const UserBox = styled(Box)({
   marginBottom: "20px",
 });
 
-const Create = () => {
+const FabCreate = () => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -107,4 +107,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default FabCreate;

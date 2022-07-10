@@ -1,4 +1,4 @@
-import { Box, Stack, Skeleton } from "@mui/material";
+import { Box, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useState } from "react";
 import Post from "./Post";
 
@@ -14,13 +14,26 @@ const CourseEdit = () => {
       {loading ? (
         <Stack spacing={1}>
           <Skeleton variant="text" height={100} />
-          <Skeleton variant="text" height={200} />
-          <Skeleton variant="rectangular" height={300} />
+          <Skeleton variant="text" height={100} />
         </Stack>
       ) : (
-        <>
-          <Post />
-        </>
+        <Stack>
+          <h3>Create a new course</h3>
+          <TextField
+            variant="outlined"
+            label="Title"
+          />  
+          <TextField
+            multiline
+            rows={4}
+            variant="outlined"
+            label="Description"
+          />  
+          <TextField
+            variant="outlined"
+            label="Location"
+          />  
+        </Stack>
       )}
     </Box>
   );

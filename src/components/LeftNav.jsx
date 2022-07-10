@@ -32,7 +32,7 @@ const LeftNav = (props) => {
       <Box position="fixed">
         <List>
           <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
+            <ListItemButton component="a">
               <ListItemIcon>
                 <FormatListBulleted />
               </ListItemIcon>
@@ -60,7 +60,7 @@ const LeftNav = (props) => {
           </List>
 
           <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
+            <ListItemButton component="a">
               <ListItemIcon>
                 <Groups />
               </ListItemIcon>
@@ -75,7 +75,13 @@ const LeftNav = (props) => {
               <ListItemIcon>
                 <StarBorder />
               </ListItemIcon>
-              <ListItemText primary="Evolution Breakout Discussion 1" />
+              <ListItemText primary="Breakout Discussion 1" />
+            </ListItemButton>
+            <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Breakout Discussion 2" />
             </ListItemButton>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
@@ -86,7 +92,7 @@ const LeftNav = (props) => {
           </List>
 
           <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
+            <ListItemButton component="a">
               <ListItemIcon>
                 <People />
               </ListItemIcon>
@@ -96,7 +102,7 @@ const LeftNav = (props) => {
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
+            <ListItemButton component="a">
               <ListItemIcon>
                 <Article />
               </ListItemIcon>

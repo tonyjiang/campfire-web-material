@@ -1,9 +1,9 @@
 import LeftNav from "./components/LeftNav";
 import Feed from "./components/Feed";
 import RightColumn from "./components/RightColumn";
-import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
+import { Box, createTheme, Grid, ThemeProvider } from "@mui/material";
 import HeaderBar from "./components/HeaderBar";
-import Create from "./components/Create";
+import FabCreate from "./components/FabCreate";
 import { useState } from "react";
 
 const App = () => {
@@ -19,12 +19,18 @@ const App = () => {
     <ThemeProvider theme={modeTheme}>
       <Box bgcolor={"background.default"} color={"text.primary"}>
         <HeaderBar mode={mode} setMode={setMode} />
-        <Stack direction="row" spacing={2} justifyContent="space-between">
-          <LeftNav setCenterColumn={setCenterColumn} />
-          {centerColumn}
-          <RightColumn />
-        </Stack>
-        <Create />
+        <Grid container>
+          <Grid item xs={3} sx={{bgcolor: "teal"}}>
+            <LeftNav setCenterColumn={setCenterColumn} />
+          </Grid>
+          <Grid item xs={5} sx={{bgcolor: "red"}}>
+            {centerColumn}
+          </Grid>
+          <Grid item xs={4} sx={{bgcolor: "green"}}>
+            <RightColumn />
+          </Grid>
+        </Grid>
+        <FabCreate />
       </Box>
     </ThemeProvider>
   );
