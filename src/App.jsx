@@ -18,15 +18,15 @@ const App = () => {
   return (
     <ThemeProvider theme={modeTheme}>
       <Box bgcolor={"background.default"} color={"text.primary"}>
-        <HeaderBar mode={mode} setMode={setMode} />
-        <Grid container>
-          <Grid item xs={3} sx={{bgcolor: "teal"}}>
+        <HeaderBar mode={mode} setMode={setMode} minHeight="5vh" />
+        <Grid container minHeight="95vh">
+          <Grid item xs={0} sm={0} md={3}>
             <LeftNav setCenterColumn={setCenterColumn} />
           </Grid>
-          <Grid item xs={5} sx={{bgcolor: "red"}}>
+          <Grid item xs={12} sm={8} md={5.5}>
             {centerColumn}
           </Grid>
-          <Grid item xs={4} sx={{bgcolor: "green"}}>
+          <Grid item xs={0} sm={4} md={3.5}>
             <RightColumn />
           </Grid>
         </Grid>
