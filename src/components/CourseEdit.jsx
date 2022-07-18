@@ -2,9 +2,13 @@ import { Box, Button, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useState } from "react";
 import MaterialTable from "material-table";
 import TableIcons from './TableIcons';
+import axios from "axios";
 
-const CourseEdit = () => {
+const CourseEdit = (props) => {
   const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState(props && props.title);
+  const [description, setDescription] = useState(props && props.description);
+  const [location, setLocation] = useState(props && props.location);
   const [eventsData, setEventsData] = useState([]);
   const columns = [
     { title: "Title", field: "title" },
@@ -25,7 +29,25 @@ const CourseEdit = () => {
 
   setTimeout(() => {
     setLoading(false);
-  }, [2000]);
+  }, [200]);
+
+  const handleSave = () => {
+    let course = {
+      title: title,
+      description: description,
+      location: location,
+    }
+    if (props && props.courseId) {
+      course['courseId'] = props.courseId
+    }
+    axios.post('/api/course', course).catch(error => {
+      console.error(error)
+    })
+  }
+
+  const handleCancel = () => {
+
+  }
 
   return (
     <Box flex={4} p={{ xs: 0, md: 2 }}>
@@ -40,16 +62,22 @@ const CourseEdit = () => {
           <TextField
             variant="outlined"
             label="Title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
           />  
           <TextField
             multiline
             rows={4}
             variant="outlined"
             label="Description"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
           />  
           <TextField
             variant="outlined"
             label="Location"
+            value={location}
+            onChange={e => setLocation(e.target.value)}
           />
           <MaterialTable
             title="Course events"
@@ -87,8 +115,8 @@ const CourseEdit = () => {
             }}
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", paddingTop: 2, paddingRight: 2 }}>
-            <Button variant="outlined" size="large" sx={{ marginRight: 2 }}>Cancel</Button>
-            <Button variant="contained" size="large">Save</Button>
+            <Button variant="outlined" size="large" sx={{ marginRight: 2 }} onClick={e => handleCancel()}>Cancel</Button>
+            <Button variant="contained" size="large" onClick={e => handleSave()}>Save</Button>
           </Box>
         </Stack>
       )}
