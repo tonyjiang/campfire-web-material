@@ -34,6 +34,6 @@ const App = () => {
       </Box>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

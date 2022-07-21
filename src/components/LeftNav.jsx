@@ -17,15 +17,52 @@ import {
   ListItemText,
   Tooltip,
 } from "@mui/material";
-
+import axios from "axios";
 import React from "react";
+import { useEffect, useState } from "react";
 
 import CourseEdit from "./CourseEdit";
 
 const LeftNav = (props) => {
+  const [loading, setLoading] = useState(true);
+  const [courses, setCourses] = useState([]);
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/v1/courses?user_id=1")
+      .then((resp) => {
+        console.log(resp.data);
+        setCourses(resp.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   const createNewClass = (e) => {
-    props.setCenterColumn(<CourseEdit />)
-  }
+    props.setCenterColumn(<CourseEdit />);
+  };
+
+  let courseList = (
+    <List component="div" disablePadding>
+      {courses.map((course) => (
+        <ListItem>
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <StarBorder />
+            </ListItemIcon>
+            <ListItemText primary={course.title} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
+  );
+
+  if (loading) return <h2>'Loading .....'</h2>;
 
   return (
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
@@ -38,26 +75,17 @@ const LeftNav = (props) => {
               </ListItemIcon>
               <ListItemText primary="Classes" />
             </ListItemButton>
-            <Tooltip title="Create a new class" onClick={e => createNewClass(e)} >
+            <Tooltip
+              title="Create a new class"
+              onClick={(e) => createNewClass(e)}
+            >
               <IconButton>
                 <AddSharp sx={{ marginRight: 4 }} />
               </IconButton>
             </Tooltip>
           </ListItem>
-          <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Evolutionary Psychology" />
-            </ListItemButton>
-            <ListItemButton sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Practical Statistics" />
-            </ListItemButton>
-          </List>
+
+          {courseList}
 
           <ListItem disablePadding>
             <ListItemButton component="a">
@@ -71,7 +99,7 @@ const LeftNav = (props) => {
             </Tooltip>
           </ListItem>
           <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
                 <StarBorder />
               </ListItemIcon>
