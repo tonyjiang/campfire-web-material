@@ -29,11 +29,14 @@ const LeftNav = (props) => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("/api/v1/courses?user_id=1")
-      .then((resp) => {
-        console.log(resp.data);
-        setCourses(resp.data);
+    const req1 = axios.get("/api/v1/courses?user_id=1")
+    const req2 = axios.get("/api/v1/groups?user_id=1")
+    Promise.all([req1, req2])
+      .then(([resp1, resp2]) => {
+        console.log(resp1.data);
+        console.log(resp2.data);
+        setCourses(resp1.data);
+        setGroups(resp2.data);
       })
       .catch((error) => {
         console.error(error);
@@ -62,6 +65,21 @@ const LeftNav = (props) => {
     </List>
   );
 
+  let groupList = (
+    <List component="div" disablePadding>
+      {groups.map((group) => (
+        <ListItem>
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <StarBorder />
+            </ListItemIcon>
+            <ListItemText primary={group.name} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
+  );
+
   if (loading) return <h2>'Loading .....'</h2>;
 
   return (
@@ -73,10 +91,10 @@ const LeftNav = (props) => {
               <ListItemIcon>
                 <FormatListBulleted />
               </ListItemIcon>
-              <ListItemText primary="Classes" />
+              <ListItemText primary="Courses" />
             </ListItemButton>
             <Tooltip
-              title="Create a new class"
+              title="Create a new course"
               onClick={(e) => createNewClass(e)}
             >
               <IconButton>
@@ -98,26 +116,8 @@ const LeftNav = (props) => {
               <AddSharp sx={{ marginRight: 4 }} />
             </Tooltip>
           </ListItem>
-          <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Breakout Discussion 1" />
-            </ListItemButton>
-            <ListItemButton sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Breakout Discussion 2" />
-            </ListItemButton>
-            <ListItemButton sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="Campus Soccer League" />
-            </ListItemButton>
-          </List>
+
+          {groupList}
 
           <ListItem disablePadding>
             <ListItemButton component="a">
