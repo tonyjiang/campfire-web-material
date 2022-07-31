@@ -6,9 +6,12 @@ import axios from "axios";
 
 const CourseEdit = (props) => {
   const [loading, setLoading] = useState(true);
-  const [title, setTitle] = useState(props && props.title);
-  const [description, setDescription] = useState(props && props.description);
-  const [location, setLocation] = useState(props && props.location);
+  const [title, setTitle] = useState(props?.title);
+  const [year, setYear] = useState();
+  const [term, setTerm] = useState();
+  const [startDate, setStartDate] = useState();
+  const [description, setDescription] = useState(props?.description);
+  const [location, setLocation] = useState(props?.location);
   const [eventsData, setEventsData] = useState([]);
   const columns = [
     { title: "Title", field: "title" },
@@ -35,12 +38,15 @@ const CourseEdit = (props) => {
     let course = {
       title: title,
       description: description,
+      year: year,
+      term: term,
       location: location,
+      startDate: startDate,
     }
     if (props && props.courseId) {
       course['courseId'] = props.courseId
     }
-    axios.post('/api/course', course).catch(error => {
+    axios.post('/api/v1/courses', course).catch(error => {
       console.error(error)
     })
   }
@@ -72,7 +78,25 @@ const CourseEdit = (props) => {
             label="Description"
             value={description}
             onChange={e => setDescription(e.target.value)}
-          />  
+          />
+          <TextField
+            variant="outlined"
+            label="Year"
+            value={year}
+            onChange={e => setYear(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            label="Term"
+            value={term}
+            onChange={e => setTerm(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            label="Start Time"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+          />
           <TextField
             variant="outlined"
             label="Location"

@@ -46,7 +46,7 @@ const LeftNav = (props) => {
       });
   }, []);
 
-  const createNewClass = (e) => {
+  const createNewCourse = (e) => {
     props.setCenterColumn(<CourseEdit />);
   };
 
@@ -95,7 +95,7 @@ const LeftNav = (props) => {
             </ListItemButton>
             <Tooltip
               title="Create a new course"
-              onClick={(e) => createNewClass(e)}
+              onClick={(e) => createNewCourse(e)}
             >
               <IconButton>
                 <AddSharp sx={{ marginRight: 4 }} />
