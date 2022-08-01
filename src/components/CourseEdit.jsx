@@ -36,12 +36,13 @@ const CourseEdit = (props) => {
 
   const handleSave = () => {
     let course = {
+      user_id: 1,
       title: title,
       description: description,
       year: year,
       term: term,
       location: location,
-      startDate: startDate,
+      start_date: startDate,
     }
     if (props && props.courseId) {
       course['courseId'] = props.courseId
@@ -49,6 +50,7 @@ const CourseEdit = (props) => {
     axios.post('/api/v1/courses', course).catch(error => {
       console.error(error)
     })
+      .then(() => window.location = "http://127.0.0.1:8080")
   }
 
   const handleCancel = () => {
@@ -63,11 +65,13 @@ const CourseEdit = (props) => {
           <Skeleton variant="text" height={100} />
         </Stack>
       ) : (
+        <form>
         <Stack spacing={3}>
           <h3>Create a new course</h3>
           <TextField
             variant="outlined"
             label="Title"
+            required
             value={title}
             onChange={e => setTitle(e.target.value)}
           />  
@@ -83,18 +87,21 @@ const CourseEdit = (props) => {
             variant="outlined"
             label="Year"
             value={year}
+            required
             onChange={e => setYear(e.target.value)}
           />
           <TextField
             variant="outlined"
             label="Term"
             value={term}
+            required
             onChange={e => setTerm(e.target.value)}
           />
           <TextField
             variant="outlined"
-            label="Start Time"
+            label="Start Date"
             value={startDate}
+            required
             onChange={e => setStartDate(e.target.value)}
           />
           <TextField
@@ -143,6 +150,7 @@ const CourseEdit = (props) => {
             <Button variant="contained" size="large" onClick={e => handleSave()}>Save</Button>
           </Box>
         </Stack>
+        </form>
       )}
     </Box>
   );
