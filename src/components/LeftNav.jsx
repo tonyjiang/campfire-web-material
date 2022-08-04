@@ -29,12 +29,10 @@ const LeftNav = (props) => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    const req1 = axios.get("/api/v1/courses?user_id=1")
-    const req2 = axios.get("/api/v1/groups?user_id=1")
+    const req1 = axios.get("/api/v1/courses?user_id=1");
+    const req2 = axios.get("/api/v1/groups?user_id=1");
     Promise.all([req1, req2])
       .then(([resp1, resp2]) => {
-        console.log(resp1.data);
-        console.log(resp2.data);
         setCourses(resp1.data);
         setGroups(resp2.data);
       })
@@ -47,14 +45,18 @@ const LeftNav = (props) => {
   }, []);
 
   const createNewCourse = (e) => {
-    props.setCenterColumn(<CourseEdit />);
+    props.setCenterColumn(<CourseEdit editable={true} />);
+  };
+
+  const viewCourse = (course) => {
+    props.setCenterColumn(<CourseEdit editable={false} {...course} />);
   };
 
   let courseList = (
     <List component="div" disablePadding>
       {courses.map((course) => (
-        <ListItem>
-          <ListItemButton sx={{ pl: 4 }}>
+        <ListItem key={course.id}>
+          <ListItemButton sx={{ pl: 4 }} onClick={(e) => viewCourse(course)}>
             <ListItemIcon>
               <StarBorder />
             </ListItemIcon>
@@ -93,10 +95,7 @@ const LeftNav = (props) => {
               </ListItemIcon>
               <ListItemText primary="Courses" />
             </ListItemButton>
-            <Tooltip
-              title="Create a new course"
-              onClick={(e) => createNewCourse(e)}
-            >
+            <Tooltip title="Create a new course" onClick={createNewCourse}>
               <IconButton>
                 <AddSharp sx={{ marginRight: 4 }} />
               </IconButton>
