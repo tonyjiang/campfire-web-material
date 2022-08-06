@@ -7,14 +7,14 @@ import axios from "axios";
 const Course = (props) => {
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState(props);
-  const [enabled, setEnabled] = useState(true);
+  const [editable, setEditable] = useState(true);
   const [eventsData, setEventsData] = useState([]);
   const columns = [
     { title: "Title", field: "title" },
     { title: "Description", field: "description" },
     {
       title: "Event Type",
-      field: "eventType",
+      field: "event_type",
       lookup: {
         1: "Lecture",
         2: "Exam",
@@ -28,15 +28,14 @@ const Course = (props) => {
 
   useEffect(() => {
     setCourse(props);
-    setEnabled(props.editable ? true : false);
+    setEditable(props.editable ? true : false);
   }, [props]);
 
   setTimeout(() => {
     setLoading(false);
   }, [200]);
 
-  const handleSave = () => {
-    console.log(`course.id ${course.d}`)
+  const handleSaveCourse = () => {
     let data = {
       user_id: 1,
       title: course.title,
@@ -63,11 +62,24 @@ const Course = (props) => {
     }
   };
 
+  const handleSaveEvents = () => {
+    console.log(`Saving events for course.id ${course.id}`)
+    eventsData.map(event => {
+      event['course_id'] = course.id
+    });
+    axios
+      .patch(`/api/v1/courses/${course.id}`, eventsData)
+      .catch((error) => {
+        console.error(error);
+      })
+      .then(() => (window.location = "http://127.0.0.1:8080"));
+  };
+
   const handleCancel = () => {
     window.location = "http://127.0.0.1:8080";
   };
 
-  const pageTitle = enabled ? (
+  const pageTitle = editable ? (
     <Box
       sx={{
         display: "flex",
@@ -80,11 +92,11 @@ const Course = (props) => {
         variant="outlined"
         size="large"
         sx={{ marginRight: 2 }}
-        onClick={(e) => handleCancel()}
+        onClick={handleCancel}
       >
         Cancel
       </Button>
-      <Button variant="contained" size="large" onClick={(e) => handleSave()}>
+      <Button variant="contained" size="large" onClick={handleSaveCourse}>
         Save
       </Button>
     </Box>
@@ -100,12 +112,42 @@ const Course = (props) => {
       <Button
         variant="contained"
         size="large"
-        onClick={(e) => setEnabled(true)}
+        onClick={(e) => setEditable(true)}
       >
-        Start Editing
+        Edit
       </Button>
     </Box>
   );
+
+  const tableEditableConfig = editable ? {
+    onRowAdd: (newData) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          setEventsData([...eventsData, newData]);
+          resolve();
+        }, 1000);
+      }),
+    onRowUpdate: (newData, oldData) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const dataUpdate = [...eventsData];
+          const index = oldData.tableData.id;
+          dataUpdate[index] = newData;
+          setEventsData([...dataUpdate]);
+          resolve();
+        }, 1000);
+      }),
+    onRowDelete: (oldData) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const dataDelete = [...eventsData];
+          const index = oldData.tableData.id;
+          dataDelete.splice(index, 1);
+          setEventsData([...dataDelete]);
+          resolve();
+        }, 1000);
+      }),
+  } : null;
 
   return (
     <Box flex={4} p={{ xs: 0, md: 2 }}>
@@ -122,7 +164,7 @@ const Course = (props) => {
             <TextField
               variant="outlined"
               label="Title"
-              disabled={!enabled}
+              disabled={!editable}
               required
               value={course?.title || ""}
               onChange={(e) => setCourse({ ...course, title: e.target.value })}
@@ -130,7 +172,7 @@ const Course = (props) => {
             <TextField
               multiline
               rows={4}
-              disabled={!enabled}
+              disabled={!editable}
               variant="outlined"
               label="Description"
               value={course?.description || ""}
@@ -142,7 +184,7 @@ const Course = (props) => {
               variant="outlined"
               label="Year"
               value={course?.year || ""}
-              disabled={!enabled}
+              disabled={!editable}
               required
               onChange={(e) => setCourse({ ...course, year: e.target.value })}
             />
@@ -150,14 +192,14 @@ const Course = (props) => {
               variant="outlined"
               label="Term"
               value={course?.term || ""}
-              disabled={!enabled}
+              disabled={!editable}
               onChange={(e) => setCourse({ ...course, term: e.target.value })}
             />
             <TextField
               variant="outlined"
               label="Start Date"
               value={course?.start_date || ""}
-              disabled={!enabled}
+              disabled={!editable}
               required
               onChange={(e) =>
                 setCourse({ ...course, start_date: e.target.value })
@@ -166,7 +208,7 @@ const Course = (props) => {
             <TextField
               variant="outlined"
               label="Location"
-              disabled={!enabled}
+              disabled={!editable}
               value={course?.location || ""}
               onChange={(e) =>
                 setCourse({ ...course, location: e.target.value })
@@ -177,35 +219,7 @@ const Course = (props) => {
               columns={columns}
               data={eventsData}
               icons={TableIcons}
-              editable={{
-                onRowAdd: (newData) =>
-                  new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      setEventsData([...eventsData, newData]);
-                      resolve();
-                    }, 1000);
-                  }),
-                onRowUpdate: (newData, oldData) =>
-                  new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      const dataUpdate = [...eventsData];
-                      const index = oldData.tableData.id;
-                      dataUpdate[index] = newData;
-                      setEventsData([...dataUpdate]);
-                      resolve();
-                    }, 1000);
-                  }),
-                onRowDelete: (oldData) =>
-                  new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      const dataDelete = [...eventsData];
-                      const index = oldData.tableData.id;
-                      dataDelete.splice(index, 1);
-                      setEventsData([...dataDelete]);
-                      resolve();
-                    }, 1000);
-                  }),
-              }}
+              editable={tableEditableConfig}
             />
           </Stack>
         </form>
