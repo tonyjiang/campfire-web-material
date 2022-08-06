@@ -4,7 +4,7 @@ import MaterialTable from "material-table";
 import TableIcons from "./TableIcons";
 import axios from "axios";
 
-const CourseEdit = (props) => {
+const Course = (props) => {
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState(props);
   const [enabled, setEnabled] = useState(true);
@@ -214,4 +214,4 @@ const CourseEdit = (props) => {
   );
 };
 
-export default CourseEdit;
+export default Course;

@@ -21,7 +21,7 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 
-import CourseEdit from "./CourseEdit";
+import Course from "./Course";
 
 const LeftNav = (props) => {
   const [loading, setLoading] = useState(true);
@@ -45,11 +45,11 @@ const LeftNav = (props) => {
   }, []);
 
   const createNewCourse = (e) => {
-    props.setCenterColumn(<CourseEdit editable={true} />);
+    props.setCenterColumn(<Course editable={true} />);
   };
 
   const viewCourse = (course) => {
-    props.setCenterColumn(<CourseEdit editable={false} {...course} />);
+    props.setCenterColumn(<Course editable={false} {...course} />);
   };
 
   let courseList = (
