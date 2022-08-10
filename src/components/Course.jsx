@@ -8,7 +8,7 @@ const Course = (props) => {
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState(props);
   const [editable, setEditable] = useState(true);
-  const [eventsData, setEventsData] = useState([]);
+  const [courseEvents, setCourseEvents] = useState([]);
   const columns = [
     { title: "Title", field: "title" },
     { title: "Description", field: "description" },
@@ -16,14 +16,15 @@ const Course = (props) => {
       title: "Event Type",
       field: "event_type",
       lookup: {
-        1: "Lecture",
-        2: "Exam",
-        3: "Discussion",
-        4: "Presentation",
-        5: "No class",
-        6: "Other",
+        lecture: "Lecture",
+        exam: "Exam",
+        discussion: "Discussion",
+        presentation: "Presentation",
+        no_class: "No class",
+        other: "Other",
       },
     },
+    { title: "Time", field: "event_time", initialEditValue: "2022-02-22 14:30" },
   ];
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const Course = (props) => {
   }, [200]);
 
   const handleSaveCourse = () => {
+    courseEvents.forEach((event) => delete event['tableData'])
     let data = {
       user_id: 1,
       title: course.title,
@@ -44,6 +46,7 @@ const Course = (props) => {
       term: course.term,
       location: course.location,
       start_date: course.start_date,
+      events: courseEvents,
     };
     if (course.id) {
       axios
@@ -51,6 +54,7 @@ const Course = (props) => {
         .catch((error) => {
           console.error(error);
         })
+        // this is not acceptable beyond MVP
         .then(() => (window.location = "http://127.0.0.1:8080"));
     } else {
       axios
@@ -62,20 +66,8 @@ const Course = (props) => {
     }
   };
 
-  const handleSaveEvents = () => {
-    console.log(`Saving events for course.id ${course.id}`)
-    eventsData.map(event => {
-      event['course_id'] = course.id
-    });
-    axios
-      .patch(`/api/v1/courses/${course.id}`, eventsData)
-      .catch((error) => {
-        console.error(error);
-      })
-      .then(() => (window.location = "http://127.0.0.1:8080"));
-  };
-
   const handleCancel = () => {
+    // this is not acceptable beyond MVP
     window.location = "http://127.0.0.1:8080";
   };
 
@@ -119,31 +111,31 @@ const Course = (props) => {
     </Box>
   );
 
-  const tableEditableConfig = editable ? {
+  const editableTableConfig = editable ? {
     onRowAdd: (newData) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
-          setEventsData([...eventsData, newData]);
+          setCourseEvents([...courseEvents, newData]);
           resolve();
         }, 1000);
       }),
     onRowUpdate: (newData, oldData) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
-          const dataUpdate = [...eventsData];
+          const dataUpdate = [...courseEvents];
           const index = oldData.tableData.id;
           dataUpdate[index] = newData;
-          setEventsData([...dataUpdate]);
+          setCourseEvents([...dataUpdate]);
           resolve();
         }, 1000);
       }),
     onRowDelete: (oldData) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
-          const dataDelete = [...eventsData];
+          const dataDelete = [...courseEvents];
           const index = oldData.tableData.id;
           dataDelete.splice(index, 1);
-          setEventsData([...dataDelete]);
+          setCourseEvents([...dataDelete]);
           resolve();
         }, 1000);
       }),
@@ -217,9 +209,9 @@ const Course = (props) => {
             <MaterialTable
               title="Course events"
               columns={columns}
-              data={eventsData}
+              data={courseEvents}
               icons={TableIcons}
-              editable={tableEditableConfig}
+              editable={editableTableConfig}
             />
           </Stack>
         </form>
