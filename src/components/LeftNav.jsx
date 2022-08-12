@@ -21,7 +21,8 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 
-import Course from "./Course";
+import CourseEdit from "./CourseEdit";
+import GroupEdit from "./GroupEdit";
 
 const LeftNav = (props) => {
   const [loading, setLoading] = useState(true);
@@ -45,11 +46,19 @@ const LeftNav = (props) => {
   }, []);
 
   const createNewCourse = (e) => {
-    props.setCenterColumn(<Course editable={true} />);
+    props.setCenterColumn(<CourseEdit editable={true} />);
+  };
+
+  const createNewGroup = (e) => {
+    props.setCenterColumn(<GroupEdit editable={true} />);
   };
 
   const viewCourse = (course) => {
-    props.setCenterColumn(<Course editable={false} {...course} />);
+    props.setCenterColumn(<CourseEdit editable={false} {...course} />);
+  };
+
+  const viewGroup = (group) => {
+    props.setCenterColumn(<GroupEdit editable={false} {...group} />);
   };
 
   let courseList = (
@@ -70,8 +79,8 @@ const LeftNav = (props) => {
   let groupList = (
     <List component="div" disablePadding>
       {groups.map((group) => (
-        <ListItem>
-          <ListItemButton sx={{ pl: 4 }}>
+        <ListItem key={group.id}>
+          <ListItemButton sx={{ pl: 4 }} onClick={(e) => viewGroup(group)}>
             <ListItemIcon>
               <StarBorder />
             </ListItemIcon>
@@ -96,9 +105,7 @@ const LeftNav = (props) => {
               <ListItemText primary="Courses" />
             </ListItemButton>
             <Tooltip title="Create a new course" onClick={createNewCourse}>
-              <IconButton>
-                <AddSharp sx={{ marginRight: 4 }} />
-              </IconButton>
+              <AddSharp sx={{ marginRight: 4 }} />
             </Tooltip>
           </ListItem>
 
@@ -111,7 +118,7 @@ const LeftNav = (props) => {
               </ListItemIcon>
               <ListItemText primary="Groups" />
             </ListItemButton>
-            <Tooltip title="Create a new group">
+            <Tooltip title="Create a new group" onClick={createNewGroup}>
               <AddSharp sx={{ marginRight: 4 }} />
             </Tooltip>
           </ListItem>
