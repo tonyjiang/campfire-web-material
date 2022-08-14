@@ -1,15 +1,14 @@
 import {
-  AddSharp,
-  Article,
-  FormatListBulleted,
-  Groups,
-  People,
-  StarBorder,
+  AddSharp as AddSharpIcon,
+  Article as ArticleIcon,
+  FormatListBulleted as FormatListBulletedIcon,
+  Groups as GroupsIcon,
+  People as PeopleIcon,
+  StarBorder as StarBorderIcon,
 } from "@mui/icons-material";
 
 import {
   Box,
-  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -22,6 +21,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 import CourseEdit from "./CourseEdit";
+import Group from "./Group";
 import GroupEdit from "./GroupEdit";
 
 const LeftNav = (props) => {
@@ -58,7 +58,7 @@ const LeftNav = (props) => {
   };
 
   const viewGroup = (group) => {
-    props.setCenterColumn(<GroupEdit editable={false} {...group} />);
+    props.setCenterColumn(<Group {...group} />);
   };
 
   let courseList = (
@@ -67,7 +67,7 @@ const LeftNav = (props) => {
         <ListItem key={course.id}>
           <ListItemButton sx={{ pl: 4 }} onClick={(e) => viewCourse(course)}>
             <ListItemIcon>
-              <StarBorder />
+              <StarBorderIcon />
             </ListItemIcon>
             <ListItemText primary={course.title} />
           </ListItemButton>
@@ -82,7 +82,7 @@ const LeftNav = (props) => {
         <ListItem key={group.id}>
           <ListItemButton sx={{ pl: 4 }} onClick={(e) => viewGroup(group)}>
             <ListItemIcon>
-              <StarBorder />
+              <StarBorderIcon />
             </ListItemIcon>
             <ListItemText primary={group.name} />
           </ListItemButton>
@@ -100,12 +100,12 @@ const LeftNav = (props) => {
           <ListItem disablePadding>
             <ListItemButton component="a">
               <ListItemIcon>
-                <FormatListBulleted />
+                <FormatListBulletedIcon />
               </ListItemIcon>
               <ListItemText primary="Courses" />
             </ListItemButton>
             <Tooltip title="Create a new course" onClick={createNewCourse}>
-              <AddSharp sx={{ marginRight: 4 }} />
+              <AddSharpIcon sx={{ marginRight: 4 }} />
             </Tooltip>
           </ListItem>
 
@@ -114,12 +114,12 @@ const LeftNav = (props) => {
           <ListItem disablePadding>
             <ListItemButton component="a">
               <ListItemIcon>
-                <Groups />
+                <GroupsIcon />
               </ListItemIcon>
               <ListItemText primary="Groups" />
             </ListItemButton>
             <Tooltip title="Create a new group" onClick={createNewGroup}>
-              <AddSharp sx={{ marginRight: 4 }} />
+              <AddSharpIcon sx={{ marginRight: 4 }} />
             </Tooltip>
           </ListItem>
 
@@ -128,21 +128,21 @@ const LeftNav = (props) => {
           <ListItem disablePadding>
             <ListItemButton component="a">
               <ListItemIcon>
-                <People />
+                <PeopleIcon />
               </ListItemIcon>
               <ListItemText primary="People" />
             </ListItemButton>
-            <AddSharp sx={{ marginRight: 4 }} />
+            <AddSharpIcon sx={{ marginRight: 4 }} />
           </ListItem>
 
           <ListItem disablePadding>
             <ListItemButton component="a">
               <ListItemIcon>
-                <Article />
+                <ArticleIcon />
               </ListItemIcon>
               <ListItemText primary="Documents" />
             </ListItemButton>
-            <AddSharp sx={{ marginRight: 4 }} />
+            <AddSharpIcon sx={{ marginRight: 4 }} />
           </ListItem>
         </List>
       </Box>

@@ -7,7 +7,7 @@ import FabCreate from "./components/FabCreate";
 import { useState } from "react";
 
 const App = () => {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState("dark");
   const [centerColumn, setCenterColumn] = useState(<Feed />);
 
   const modeTheme = createTheme({
