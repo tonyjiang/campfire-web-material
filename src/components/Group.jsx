@@ -1,15 +1,29 @@
 import {
+  Avatar,
   Box,
-  Checkbox,
-  FormControlLabel,
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
   FormGroup,
+  IconButton,
   Skeleton,
   Stack,
   styled,
   Tab,
   Tabs,
   TextField,
+  Typography,
 } from "@mui/material";
+import { red } from '@mui/material/colors';
+import {
+  ChatBubbleOutline,
+  MoreVert,
+  FavoriteBorder,
+  Send,
+} from '@mui/icons-material';
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -19,10 +33,11 @@ const SecondaryTab = styled(Tab)(({ theme }) => ({
 
 const Group = (props) => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [comment, setComment] = useState('');
   const [group, setGroup] = useState(props);
   const [selectedTab, setSelectedTab] = useState(0);
   const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setGroup(props);
@@ -30,8 +45,7 @@ const Group = (props) => {
     axios
       .get(`/api/v1/posts?group_id=${group.id}&user_id=1`)
       .then((resp) => {
-        console.log(JSON.stringify(resp));
-        setPosts(resp);
+        setPosts(resp.data);
       })
       .catch((err) => {
         console.error(err);
@@ -82,39 +96,53 @@ const Group = (props) => {
   return (
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       <FormGroup>
-        <Stack spacing={3}>
-          {groupHeader}
-          <input hidden value={group?.id} />
-          <TextField
-            variant="outlined"
-            label="Name"
-            required
-            value={group?.name || ""}
-            onChange={(e) => setGroup({ ...group, name: e.target.value })}
-          />
-          <TextField
-            multiline
-            rows={4}
-            variant="outlined"
-            label="Description"
-            value={group?.description || ""}
-            onChange={(e) =>
-              setGroup({ ...group, description: e.target.value })
-            }
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={group?.public}
-                onChange={(e) =>
-                  setGroup({ ...group, public: e.target.checked })
-                }
-              />
-            }
-            label="Public"
-          />
-        </Stack>
       </FormGroup>
+      <Stack spacing={3}>
+        {groupHeader}
+        <input hidden value={group?.id} />
+        {posts.map(post =>
+          <Card key={post.id}>
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                  P
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="settings">
+                  <MoreVert />
+                </IconButton>
+              }
+              title={`${post.author.first_name} ${post.author.last_name}`}
+              subheader={post.created_at}
+            />
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                {post.post_text}
+              </Typography>
+            </CardContent>
+            <CardActions>
+            <IconButton aria-label="add to favorites">
+                <ChatBubbleOutline />
+              </IconButton>
+              <IconButton aria-label="add to favorites">
+                <FavoriteBorder />
+              </IconButton>
+              <IconButton aria-label="share">
+                <Send />
+              </IconButton>
+            </CardActions>
+            <TextField
+              id={post.id}
+              fullWidth
+              variant="outlined"
+              label="Comment"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </Card>
+        )}
+      </Stack>
     </Box>
   );
 };
