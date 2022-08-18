@@ -8,6 +8,8 @@ import {
   CardActions,
   FormGroup,
   IconButton,
+  List,
+  ListItem,
   Skeleton,
   Stack,
   styled,
@@ -16,7 +18,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { red } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import {
   ChatBubbleOutline,
   MoreVert,
@@ -43,8 +45,9 @@ const Group = (props) => {
     setGroup(props);
     setSelectedTab(0);
     axios
-      .get(`/api/v1/posts?group_id=${group.id}&user_id=1`)
+      .get(`/api/v1/posts?group_id=${props.id}`)
       .then((resp) => {
+        console.log(resp.data);
         setPosts(resp.data);
       })
       .catch((err) => {
@@ -99,18 +102,43 @@ const Group = (props) => {
     </Box>
   );
 
+  const renderComments = (comments) => {
+    return <List>
+      {comments.map(comment =>
+        <ListItem>
+          <Card>
+          <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">
+                  {comment.author.first_name.substring(0, 1) + comment.author.last_name.substring(0, 1)}
+                </Avatar>
+              }
+            title={`${comment.author.first_name} ${comment.author.last_name}`}
+            subheader={comment.created_at}
+          />
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              {comment.comment_text}
+            </Typography>
+          </CardContent>
+          </Card>
+        </ListItem>
+      )}
+    </List>
+  };
+
   return (
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       <FormGroup></FormGroup>
       <Stack spacing={3}>
         {groupHeader}
-        <input hidden value={group?.id} />
+        <input hidden value={group?.id} readOnly />
         {posts.map((post) => (
           <Card key={post.id}>
             <CardHeader
               avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  P
+                <Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">
+                  { post.author.first_name.substring(0, 1) + post.author.last_name.substring(0, 1) }
                 </Avatar>
               }
               action={
@@ -139,11 +167,13 @@ const Group = (props) => {
             </CardActions>
             <TextField
               fullWidth
+              multiline
               variant="outlined"
               label="Comment"
               value={myComments[post.id]}
               onChange={(e) => handleCommentInput(e, post)}
             />
+            { renderComments(post.comments) }
           </Card>
         ))}
       </Stack>
