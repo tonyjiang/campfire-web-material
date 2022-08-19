@@ -14,7 +14,7 @@ const GroupEdit = (props) => {
 
   setTimeout(() => {
     setLoading(false);
-  }, [200]);
+  }, [20]);
 
   const handleSave = () => {
     let data = {
