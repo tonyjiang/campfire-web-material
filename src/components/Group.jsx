@@ -20,9 +20,7 @@ const Group = (props) => {
     // maybe we should do the fetching here instead of inside GroupFeed;
     // setTimeout is not a good solution, unless it's under 50ms,
     // which won't noticeably affect user expereince
-    setTimeout(() => {
-      setLoading(false);
-    }, [500]);
+    setTimeout(() => { setLoading(false); }, [1000]);
   }, [props]);
 
   const handleTabChange = (_, id) => {
@@ -52,7 +50,7 @@ const Group = (props) => {
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       {groupHeader}
       {selectedTab === 0 ? (
-        <GroupFeed {...group} setGroupLoading={setLoading} />
+        <GroupFeed {...group} />
       ) : selectedTab === 1 ? (
         <GroupEdit {...group} />
       ) : (

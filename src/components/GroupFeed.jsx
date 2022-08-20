@@ -24,7 +24,6 @@ import {
   MoodOutlined,
   MoreVert,
   PhotoOutlined,
-  Send,
 } from "@mui/icons-material";
 
 import React, { useEffect, useState } from "react";
@@ -82,14 +81,26 @@ const GroupFeed = (props) => {
   };
 
   const sendComment = (e, post) => {
-    console.log("Sending comment to server");
-  }
+    const data = {
+      post_id: post.id,
+      comment_text: myComments[post.id],
+      user_id: 2,
+    };
+    axios
+      .post('/api/v1/comments', data)
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        console.log("We should reload comments of the post");
+      });
+  };
 
   const postComments = (comments) => {
     return (
       <List>
         {comments.map((comment) => (
-          <ListItem key={ comment.id }>
+          <ListItem key={comment.id}>
             <CommentCard>
               <CardHeader
                 avatar={
@@ -157,19 +168,29 @@ const GroupFeed = (props) => {
             value={myComments[post.id]}
             onChange={(e) => handleCommentInput(e, post)}
           />
-          <CardActions style={{display: "flex", width: "100%"}}>
-            <IconButton aria-label="media">
-              <PhotoOutlined />
-            </IconButton>
-            <IconButton aria-label="emoji">
-              <MoodOutlined />
-            </IconButton>
-            <IconButton aria-label="gif">
-              <GifBoxOutlined />
-            </IconButton>
-            <Button variant="outlined" style={{ marginLeft: "200px" }} onClick={ e => sendComment(e, post) }>
-              Send
-            </Button>
+          <CardActions
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Box>
+              <IconButton aria-label="media">
+                <PhotoOutlined />
+              </IconButton>
+              <IconButton aria-label="emoji">
+                <MoodOutlined />
+              </IconButton>
+              <IconButton aria-label="gif">
+                <GifBoxOutlined />
+              </IconButton>
+            </Box>
+            <Box>
+              <Button variant="outlined" style={{marginRight: "25px"}} onClick={e => sendComment(e, post)}>
+                Send
+              </Button>
+            </Box>
           </CardActions>
           {postComments(post.comments)}
         </Card>
