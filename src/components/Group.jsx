@@ -16,6 +16,10 @@ const Group = (props) => {
   useEffect(() => {
     setGroup(props);
     setSelectedTab(0);
+
+    // maybe we should do the fetching here instead of inside GroupFeed;
+    // setTimeout is not a good solution, unless it's under 50ms,
+    // which won't noticeably affect user expereince
     setTimeout(() => {
       setLoading(false);
     }, [500]);

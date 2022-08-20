@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardHeader,
   CardContent,
@@ -11,25 +12,23 @@ import {
   Skeleton,
   Stack,
   styled,
-  Tab,
-  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import {
   ChatBubbleOutline,
-  MoreVert,
   FavoriteBorder,
+  GifBoxOutlined,
+  IosShareOutlined,
+  MoodOutlined,
+  MoreVert,
+  PhotoOutlined,
   Send,
 } from "@mui/icons-material";
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-const SecondaryTab = styled(Tab)(({ theme }) => ({
-  color: theme.palette.primary.light,
-}));
 
 const CommentCard = styled(Card)(({ theme }) => ({
   color: theme.palette.primary.light,
@@ -58,7 +57,6 @@ const GroupFeed = (props) => {
       })
       .finally(() => {
         setLoading(false);
-        props.setGroupLoading(false);
       });
   }, [props]);
 
@@ -82,6 +80,10 @@ const GroupFeed = (props) => {
     newComments[String(post.id)] = e.target.value;
     setMyComments(newComments);
   };
+
+  const sendComment = (e, post) => {
+    console.log("Sending comment to server");
+  }
 
   const postComments = (comments) => {
     return (
@@ -144,7 +146,7 @@ const GroupFeed = (props) => {
               <FavoriteBorder />
             </IconButton>
             <IconButton aria-label="share">
-              <Send />
+              <IosShareOutlined />
             </IconButton>
           </CardActions>
           <TextField
@@ -155,6 +157,20 @@ const GroupFeed = (props) => {
             value={myComments[post.id]}
             onChange={(e) => handleCommentInput(e, post)}
           />
+          <CardActions style={{display: "flex", width: "100%"}}>
+            <IconButton aria-label="media">
+              <PhotoOutlined />
+            </IconButton>
+            <IconButton aria-label="emoji">
+              <MoodOutlined />
+            </IconButton>
+            <IconButton aria-label="gif">
+              <GifBoxOutlined />
+            </IconButton>
+            <Button variant="outlined" style={{ marginLeft: "200px" }} onClick={ e => sendComment(e, post) }>
+              Send
+            </Button>
+          </CardActions>
           {postComments(post.comments)}
         </Card>
       ))}
