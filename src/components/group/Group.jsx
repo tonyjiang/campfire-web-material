@@ -3,6 +3,7 @@ import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import GroupEdit from "./GroupEdit";
 import GroupFeed from "./GroupFeed";
+import GroupMembers from "./GroupMembers";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
@@ -38,7 +39,7 @@ const Group = (props) => {
           indicatorColor="secondary"
           variant="fullWidth"
         >
-          <Tab label={group.name} id={0} aria-controls="tab-0" />
+          <Tab label="Conversations" id={0} aria-controls="tab-0" />
           <SecondaryTab label="About" id={1} aria-controls="tab-1" />
           <SecondaryTab label="Members" id={2} aria-controls="tab-2" />
         </Tabs>
@@ -54,7 +55,7 @@ const Group = (props) => {
       ) : selectedTab === 1 ? (
         <GroupEdit {...group} />
       ) : (
-        <div />
+        <GroupMembers {...group} />
       )}
     </Box>
   );

@@ -1,7 +1,7 @@
 import { Box, Button, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import TableIcons from "./TableIcons";
+import TableIcons from "../TableIcons";
 import axios from "axios";
 
 const CourseEdit = (props) => {

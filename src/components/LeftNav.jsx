@@ -20,14 +20,18 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 
-import CourseEdit from "./CourseEdit";
-import Group from "./Group";
-import GroupEdit from "./GroupEdit";
+import Course from "./course/Course";
+import CourseEdit from "./course/CourseEdit";
+import Group from "./group/Group";
+import GroupEdit from "./group/GroupEdit";
 
 const LeftNav = (props) => {
-  const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState();
   const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
 
   useEffect(() => {
     const req1 = axios.get("/api/v1/courses?user_id=1");
@@ -39,6 +43,7 @@ const LeftNav = (props) => {
       })
       .catch((error) => {
         console.error(error);
+        setError(error);
       })
       .finally(() => {
         setLoading(false);
@@ -54,44 +59,61 @@ const LeftNav = (props) => {
   };
 
   const viewCourse = (course) => {
-    props.setCenterColumn(<CourseEdit editable={false} {...course} />);
+    setSelectedCourse(course.id);
+    setSelectedGroup(null);
+    props.setCenterColumn(<Course {...course} />);
   };
 
   const viewGroup = (group) => {
+    setSelectedGroup(group.id);
+    setSelectedCourse(null);
     props.setCenterColumn(<Group {...group} />);
   };
 
   let courseList = (
     <List component="div" disablePadding>
       {courses.map((course) => (
-        <ListItem key={course.id}>
-          <ListItemButton sx={{ pl: 4 }} onClick={(e) => viewCourse(course)}>
-            <ListItemIcon>
-              <StarBorderIcon />
-            </ListItemIcon>
-            <ListItemText primary={course.title} />
-          </ListItemButton>
-        </ListItem>
+        <ListItemButton
+          key={course.id}
+          sx={{ pl: 4 }}
+          selected={selectedCourse === course.id}
+          onClick={(e) => viewCourse(course)}
+        >
+          <ListItemIcon>
+            <StarBorderIcon />
+          </ListItemIcon>
+          <ListItemText primary={course.title} />
+        </ListItemButton>
       ))}
     </List>
   );
 
   let groupList = (
-    <List component="div" disablePadding>
+    <List component="nav" disablePadding>
       {groups.map((group) => (
-        <ListItem key={group.id}>
-          <ListItemButton sx={{ pl: 4 }} onClick={(e) => viewGroup(group)}>
-            <ListItemIcon>
-              <StarBorderIcon />
-            </ListItemIcon>
-            <ListItemText primary={group.name} />
-          </ListItemButton>
-        </ListItem>
+        <ListItemButton
+          key={group.id}
+          sx={{ pl: 4 }}
+          selected={selectedGroup === group.id} onClick={(e) => viewGroup(group)}
+        >
+          <ListItemIcon>
+            <StarBorderIcon />
+          </ListItemIcon>
+          <ListItemText primary={group.name} />
+        </ListItemButton>
       ))}
     </List>
   );
 
   if (loading) return <h2>'Loading .....'</h2>;
+  if (error)
+    return (
+      <div>
+        <h2>Error! Look at the browser console for details.</h2>
+        <hr />
+        <h4>{JSON.stringify(error)}</h4>
+      </div>
+    );
 
   return (
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
