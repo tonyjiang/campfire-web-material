@@ -9,6 +9,9 @@ const CourseEdit = (props) => {
   const [course, setCourse] = useState(props);
   const [editable, setEditable] = useState(true);
   const [courseEvents, setCourseEvents] = useState([]);
+  const [deletedEvents, setDeletedEvents] = useState([]);
+  const [error, setError] = useState();
+
   const columns = [
     { title: "Title", field: "title" },
     { title: "Description", field: "description" },
@@ -24,12 +27,26 @@ const CourseEdit = (props) => {
         other: "Other",
       },
     },
-    { title: "Time", field: "event_time", initialEditValue: "2022-02-22 14:30" },
+    {
+      title: "Time",
+      field: "event_time",
+      initialEditValue: "2022-02-22 14:30",
+    },
+    { title: "id", hidden: true },
   ];
 
   useEffect(() => {
     setCourse(props);
     setEditable(props.editable ? true : false);
+    axios
+      .get(`/api/v1/courses/${props.id}`)
+      .then((resp) => {
+        setCourseEvents(resp.data.events);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+      });
   }, [props]);
 
   setTimeout(() => {
@@ -37,7 +54,7 @@ const CourseEdit = (props) => {
   }, [200]);
 
   const handleSaveCourse = () => {
-    courseEvents.forEach((event) => delete event['tableData'])
+    courseEvents.forEach((event) => delete event["tableData"]);
     let data = {
       user_id: 1,
       title: course.title,
@@ -47,6 +64,7 @@ const CourseEdit = (props) => {
       location: course.location,
       start_date: course.start_date,
       events: courseEvents,
+      deleted_events: deletedEvents,
     };
     if (course.id) {
       axios
@@ -111,35 +129,48 @@ const CourseEdit = (props) => {
     </Box>
   );
 
-  const editableTableConfig = editable ? {
-    onRowAdd: (newData) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          setCourseEvents([...courseEvents, newData]);
-          resolve();
-        }, 1000);
-      }),
-    onRowUpdate: (newData, oldData) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          const dataUpdate = [...courseEvents];
-          const index = oldData.tableData.id;
-          dataUpdate[index] = newData;
-          setCourseEvents([...dataUpdate]);
-          resolve();
-        }, 1000);
-      }),
-    onRowDelete: (oldData) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          const dataDelete = [...courseEvents];
-          const index = oldData.tableData.id;
-          dataDelete.splice(index, 1);
-          setCourseEvents([...dataDelete]);
-          resolve();
-        }, 1000);
-      }),
-  } : null;
+  const editableTableConfig = editable
+    ? {
+        onRowAdd: (newData) =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              setCourseEvents([...courseEvents, newData]);
+              resolve();
+            }, 500);
+          }),
+        onRowUpdate: (newData, oldData) =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              const dataUpdate = [...courseEvents];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setCourseEvents([...dataUpdate]);
+              resolve();
+            }, 500);
+          }),
+        onRowDelete: (deletedRow) =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              const events = [...courseEvents];
+              const index = deletedRow.tableData.id;
+              events.splice(index, 1);
+              setCourseEvents([...events]);
+              if (deletedRow.id)
+                setDeletedEvents([...deletedEvents, deletedRow.id]);
+              resolve();
+            }, 500);
+          }),
+      }
+    : null;
+
+  if (loading) return <Skeleton variant="text" height={100} />;
+  if (error)
+    return (
+      <div>
+        <h2>Error! Look at the browser console for details.</h2>
+        <p>{JSON.stringify(error)}</p>
+      </div>
+    );
 
   return (
     <Box flex={4} p={{ xs: 0, md: 2 }}>
