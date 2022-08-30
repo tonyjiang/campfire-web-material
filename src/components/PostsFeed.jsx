@@ -34,7 +34,7 @@ const CommentCard = styled(Card)(({ theme }) => ({
   marginLeft: "5px",
 }));
 
-const CourseFeed = (props) => {
+const PostsFeed = (props) => {
   const [myComments, setMyComments] = useState({});
   const [posts, setPosts] = useState(props.posts);
   const [error, setError] = useState();
@@ -115,7 +115,7 @@ const CourseFeed = (props) => {
   if (error)
     return (
       <div>
-        <h2>Error! Look at the browser console for details.</h2>
+        <h2>Error in PostsFeed! Look at the browser console for details.</h2>
         <hr />
         <h4>{JSON.stringify(error)}</h4>
       </div>
@@ -200,4 +200,4 @@ const CourseFeed = (props) => {
   );
 };
 
-export default CourseFeed;
+export default PostsFeed;

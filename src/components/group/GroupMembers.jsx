@@ -14,7 +14,7 @@ import { MoreVert } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const GroupFeed = (props) => {
+const GroupMembers = (props) => {
   const [loading, setLoading] = useState(true);
   const [group, setGroup] = useState(props);
   const [members, setMembers] = useState([]);
@@ -77,4 +77,4 @@ const GroupFeed = (props) => {
   );
 };
 
-export default GroupFeed;
+export default GroupMembers;

@@ -2,7 +2,7 @@ import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
 import CourseEdit from "./CourseEdit";
-import CourseFeed from "./CourseFeed";
+import PostsFeed from "../PostsFeed";
 import CourseMembers from "./CourseMembers";
 import axios from "axios";
 
@@ -68,7 +68,7 @@ const Course = (props) => {
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       {courseHeader}
       {selectedTab === 0 ? (
-        <CourseFeed posts={posts} />
+        <PostsFeed posts={posts} />
       ) : selectedTab === 1 ? (
         <CourseEdit {...course} />
       ) : (
