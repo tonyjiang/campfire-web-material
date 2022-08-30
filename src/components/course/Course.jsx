@@ -68,7 +68,7 @@ const Course = (props) => {
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       {courseHeader}
       {selectedTab === 0 ? (
-        <CourseFeed {...course} posts={posts} />
+        <CourseFeed posts={posts} />
       ) : selectedTab === 1 ? (
         <CourseEdit {...course} />
       ) : (

@@ -183,7 +183,6 @@ const CourseEdit = (props) => {
         <form>
           <Stack spacing={3}>
             {pageTitle}
-            <input hidden value={course?.id} />
             <TextField
               variant="outlined"
               label="Title"

@@ -25,7 +25,7 @@ import {
   PhotoOutlined,
 } from "@mui/icons-material";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 const CommentCard = styled(Card)(({ theme }) => ({
@@ -36,11 +36,12 @@ const CommentCard = styled(Card)(({ theme }) => ({
 
 const CourseFeed = (props) => {
   const [myComments, setMyComments] = useState({});
-  const [course, setCourse] = useState(props);
-  const [error, setError] = useState(null);
+  const [posts, setPosts] = useState(props.posts);
+  const [error, setError] = useState();
+  const commentsRef = useRef({});
 
   useEffect(() => {
-    setCourse(props);
+    setPosts(props.posts);
   }, [props]);
 
   const handleCommentInput = (e, post) => {
@@ -49,20 +50,37 @@ const CourseFeed = (props) => {
     setMyComments(newComments);
   };
 
-  const sendComment = (e, post) => {
+  const sendComment = (post) => {
     const data = {
       post_id: post.id,
       comment_text: myComments[post.id],
       user_id: 2,
     };
     axios
-      .post('/api/v1/comments', data)
+      .post("/api/v1/comments", data)
+      .then((_) => {
+        const comments = { ...myComments };
+        delete comments[String(post.id)];
+        setMyComments(comments);
+        commentsRef.current[post.id].value = "";
+
+        const newPosts = [...posts];
+        newPosts
+          .find((p) => p.id == post.id)
+          .comments.push({
+            ...data,
+            author: { first_name: "Charles", last_name: "Darwin" },
+          });
+        setPosts(newPosts);
+      })
       .catch((err) => {
         console.error(err);
         setError(err);
       })
       .finally(() => {
-        console.log("We should reload comments of the post locally, not remotely");
+        console.log(
+          "Here we reload comments of the post locally(not remotely)"
+        );
       });
   };
 
@@ -105,8 +123,7 @@ const CourseFeed = (props) => {
 
   return (
     <Stack spacing={3}>
-      <input hidden value={course?.id} readOnly />
-      {course.posts.map((post) => (
+      {posts.map((post) => (
         <Card key={post.id}>
           <CardHeader
             avatar={
@@ -142,6 +159,7 @@ const CourseFeed = (props) => {
           <TextField
             fullWidth
             multiline
+            inputRef={(element) => (commentsRef.current[post.id] = element)}
             variant="outlined"
             label="Comment"
             value={myComments[post.id]}
@@ -166,7 +184,11 @@ const CourseFeed = (props) => {
               </IconButton>
             </Box>
             <Box>
-              <Button variant="outlined" style={{marginRight: "25px"}} onClick={e => sendComment(e, post)}>
+              <Button
+                variant="outlined"
+                style={{ marginRight: "25px" }}
+                onClick={(e) => sendComment(post)}
+              >
                 Send
               </Button>
             </Box>
