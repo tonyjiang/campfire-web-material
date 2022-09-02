@@ -2,7 +2,8 @@ import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
 import GroupEdit from "./GroupEdit";
-import PostsFeed from "../PostsFeed";
+import PostsFeed from "../post/PostsFeed";
+import CreatePost from "../post/CreatePost";
 import GroupMembers from "./GroupMembers";
 import axios from "axios";
 
@@ -19,7 +20,7 @@ const Group = (props) => {
 
   useEffect(() => {
     axios
-      .get(`/api/v1/posts?group_id=${props.id}`)
+      .get(`/api/v1/posts?context_type=Group&context_id=${props.id}`)
       .then((resp) => {
         setPosts(resp.data);
         setGroup(props);
@@ -38,11 +39,38 @@ const Group = (props) => {
     setSelectedTab(id);
   };
 
+  const addNewPost = (postText) => {
+    const data = {
+      context_type: "Group",
+      context_id: props.id,
+      post_text: postText,
+      user_id: 1,
+    };
+
+    axios
+      .post("/api/v1/posts", data)
+      .then((resp) => {
+        const post = {
+          id: resp.data.id,
+          author: { first_name: "John", last_name: "Smith" },
+          comments: [],
+          ...data,
+        };
+        setPosts([post, ...posts]);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+      });
+  };
+
   if (loading) return <Skeleton variant="text" height={100} />;
   if (error)
     return (
       <div>
-        <h2>Error in Group component! Look at the browser console for details.</h2>
+        <h2>
+          Error in Group component! Look at the browser console for details.
+        </h2>
         <p>{JSON.stringify(error)}</p>
       </div>
     );
@@ -68,10 +96,17 @@ const Group = (props) => {
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       {groupHeader}
       {selectedTab === 0 ? (
-        <PostsFeed posts={posts} />
+        <>
+          <CreatePost
+            contextType="Group"
+            addNewPost={addNewPost}
+            style={{ marginTop: "10px", marginBottom: "10px" }}
+          />
+          <PostsFeed posts={posts} />
+        </>
       ) : selectedTab === 1 ? (
         <GroupEdit {...group} />
-      ) : (
+      ) : ( 
         <GroupMembers {...group} />
       )}
     </Box>
