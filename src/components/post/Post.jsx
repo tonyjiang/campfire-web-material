@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { blue, red } from "@mui/material/colors";
 import {
+  ChatBubbleOutline,
+  Favorite,
   FavoriteBorder,
   IosShareOutlined,
   MoreVert,
@@ -30,11 +32,13 @@ const CommentCard = styled(Card)(({ theme }) => ({
 const PostsFeed = (props) => {
   const [post, setPost] = useState(props.post);
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [error, setError] = useState();
 
   useEffect(() => {
     setPost(props.post);
     setComments(props.post.comments);
+    setLikes(props.post.likes);
   }, [props]);
 
   const postComments = () => {
@@ -88,6 +92,39 @@ const PostsFeed = (props) => {
       });
   };
 
+  const handleLikeClick = () => {
+    // the current user is hardcoded as 1
+    const like = likes.find((like) => like.user_id === 1);
+    if (like) {
+      axios
+        .delete(`/api/v1/posts/${post.id}/likes/${like.id}`)
+        .then((resp) => {
+          const newLikes = likes.filter((like) => like.user_id !== 1);
+          setLikes(newLikes);
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(err);
+        });
+    } else {
+      const data = {
+        user_id: 1,
+        likable_type: "Post",
+        likable_id: post.id,
+      };
+      axios
+        .post(`/api/v1/posts/${post.id}/likes`, data)
+        .then((resp) => {
+          const newLikes = [...likes, resp.data];
+          setLikes(newLikes);
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(err);
+        });
+    }
+  };
+
   if (error)
     return (
       <div>
@@ -119,9 +156,19 @@ const PostsFeed = (props) => {
           {post.post_text}
         </Typography>
       </CardContent>
-      <CardActions>
-        <IconButton aria-label="favorites">
-          <FavoriteBorder />
+      <CardActions sx={{ display: "flex" }}>
+        <IconButton sx={{ marginRight: "20px" }}>
+          <ChatBubbleOutline style={{ marginRight: "12px" }} />
+          {comments.length ? <span style={{ fontSize: "12px" }}>{comments.length}</span> : null}
+        </IconButton>
+        <IconButton sx={{ marginRight: "20px" }} onClick={handleLikeClick}>
+          {likes.find((like) => like.user_id === 1) ? (
+            <Favorite style={{ marginRight: "12px" }}
+            />
+          ) : (
+            <FavoriteBorder style={{ marginRight: "12px" }} />
+          )}
+          {likes.length ? <span style={{ fontSize: "12px" }}>{likes.length}</span> : null}
         </IconButton>
         <IconButton aria-label="share">
           <IosShareOutlined />
