@@ -3,7 +3,6 @@ import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CourseEdit from "./CourseEdit";
 import PostsFeed from "../post/PostsFeed";
-import CreatePost from "../post/CreatePost";
 import CourseMembers from "./CourseMembers";
 import axios from "axios";
 
@@ -39,31 +38,6 @@ const Course = (props) => {
     setSelectedTab(id);
   };
 
-  const addNewPost = (postText) => {
-    const data = {
-      context_type: "Course",
-      context_id: props.id,
-      post_text: postText,
-      user_id: 1,
-    };
-
-    axios
-      .post("/api/v1/posts", data)
-      .then((resp) => {
-        const post = {
-          id: resp.data.id,
-          author: { first_name: "John", last_name: "Smith" },
-          comments: [],
-          ...data,
-        };
-        setPosts([post, ...posts]);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(err);
-      });
-  };
-
   if (loading) return <Skeleton variant="text" height={100} />;
   if (error)
     return (
@@ -95,14 +69,7 @@ const Course = (props) => {
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       {courseHeader}
       {selectedTab === 0 ? (
-        <>
-          <CreatePost
-            contextType="Course"
-            addNewPost={addNewPost}
-            style={{ marginTop: "10px", marginBottom: "10px" }}
-          />
-          <PostsFeed posts={posts} />
-        </>
+        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Course" contextId={course.id} />
       ) : selectedTab === 1 ? (
         <CourseEdit {...course} />
       ) : (

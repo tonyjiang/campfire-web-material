@@ -4,6 +4,8 @@ import {
   Card,
   CardActions,
   IconButton,
+  ImageList,
+  ImageListItem,
   TextField,
 } from "@mui/material";
 import {
@@ -16,17 +18,25 @@ import React, { useState } from "react";
 
 const CreatePost = (props) => {
   const [postText, setPostText] = useState();
-  const [inFocus, setInFocus] = useState(false);
+  const [inputInFocus, setInputInFocus] = useState(false);
+  const [images, setImages] = useState([]);
+
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      setImages(Array.from(e.target.files));
+    }
+  };
 
   const handleInputChange = (e) => {
-    setInFocus(true);
+    setInputInFocus(true);
     setPostText(e.target.value);
   };
 
   const sendPost = () => {
-    props.addNewPost(postText);
+    props.addNewPost(postText, images);
     setPostText("");
-    setInFocus(false);
+    setImages([]);
+    setInputInFocus(false);
   };
 
   return (
@@ -37,10 +47,22 @@ const CreatePost = (props) => {
         style={{ marginTop: "5px" }}
         variant="outlined"
         label={props.contextType === "Post" ? "Comment" : "Post"}
-        InputLabelProps={{ shrink: inFocus }}
+        InputLabelProps={{ shrink: inputInFocus }}
         value={postText}
         onChange={(e) => handleInputChange(e)}
       />
+      {images.length === 0 ? null : (
+        <ImageList rowHeight='auto'>
+          {images.map((image) => (
+            <ImageListItem key={ image.name }>
+              <img
+                src={URL.createObjectURL(image)}
+                alt="where-t-f-is-da-img?"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      )}
       <CardActions
         style={{
           display: "flex",
@@ -49,7 +71,14 @@ const CreatePost = (props) => {
         }}
       >
         <Box>
-          <IconButton aria-label="media">
+          <IconButton aria-label="media" component="label">
+            <input
+              hidden
+              accept="image/*"
+              multiple
+              type="file"
+              onChange={handleImageChange}
+            />
             <PhotoOutlined />
           </IconButton>
           <IconButton aria-label="emoji">

@@ -5,6 +5,8 @@ import {
   CardContent,
   CardActions,
   IconButton,
+  ImageList,
+  ImageListItem,
   List,
   ListItem,
   styled,
@@ -33,18 +35,20 @@ const PostsFeed = (props) => {
   const [post, setPost] = useState(props.post);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
   const [error, setError] = useState();
 
   useEffect(() => {
     setPost(props.post);
     setComments(props.post.comments);
-    setLikes(props.post.likes);
+    setLikes(props.post.likes || []);
+    setImageUrls(props.post.image_urls);
   }, [props]);
 
   const postComments = () => {
     return (
       <List>
-        {comments.map((comment) => (
+        {comments?.map((comment) => (
           <ListItem key={comment.id}>
             <CommentCard>
               <CardHeader
@@ -94,7 +98,7 @@ const PostsFeed = (props) => {
 
   const handleLikeClick = () => {
     // the current user is hardcoded as 1
-    const like = likes.find((like) => like.user_id === 1);
+    const like = likes?.find((like) => like.user_id === 1);
     if (like) {
       axios
         .delete(`/api/v1/posts/${post.id}/likes/${like.id}`)
@@ -155,20 +159,35 @@ const PostsFeed = (props) => {
         <Typography variant="body2" color="text.secondary">
           {post.post_text}
         </Typography>
+        {imageUrls?.length > 0 ? (
+          <ImageList cols={2} rowHeight={100}>
+            {imageUrls.map((imageUrl, index) => (
+              <ImageListItem key={index}>
+                <img
+                  src={imageUrl}
+                  alt="where-t-f-is-da-img?"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        ) : null}
       </CardContent>
       <CardActions sx={{ display: "flex" }}>
         <IconButton sx={{ marginRight: "20px" }}>
           <ChatBubbleOutline style={{ marginRight: "12px" }} />
-          {comments.length ? <span style={{ fontSize: "12px" }}>{comments.length}</span> : null}
+          {comments?.length ? (
+            <span style={{ fontSize: "12px" }}>{comments.length}</span>
+          ) : null}
         </IconButton>
         <IconButton sx={{ marginRight: "20px" }} onClick={handleLikeClick}>
-          {likes.find((like) => like.user_id === 1) ? (
-            <Favorite style={{ marginRight: "12px" }}
-            />
+          {likes?.find((like) => like.user_id === 1) ? (
+            <Favorite style={{ marginRight: "12px" }} />
           ) : (
             <FavoriteBorder style={{ marginRight: "12px" }} />
           )}
-          {likes.length ? <span style={{ fontSize: "12px" }}>{likes.length}</span> : null}
+          {likes?.length ? (
+            <span style={{ fontSize: "12px" }}>{likes.length}</span>
+          ) : null}
         </IconButton>
         <IconButton aria-label="share">
           <IosShareOutlined />

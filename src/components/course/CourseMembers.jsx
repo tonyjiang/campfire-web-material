@@ -14,7 +14,7 @@ import { MoreVert } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const CourseFeed = (props) => {
+const CourseMembers = (props) => {
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState(props);
   const [members, setMembers] = useState([]);
@@ -49,7 +49,6 @@ const CourseFeed = (props) => {
 
   return (
     <Stack spacing={3}>
-      <input hidden value={course?.id} readOnly />
       {members.map((member) => (
         <Card key={member.id}>
           <CardHeader
@@ -78,4 +77,4 @@ const CourseFeed = (props) => {
   );
 };
 
-export default CourseFeed;
+export default CourseMembers;

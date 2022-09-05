@@ -48,7 +48,6 @@ const GroupMembers = (props) => {
 
   return (
     <Stack spacing={3}>
-      <input hidden value={group?.id} readOnly />
       {members.map((member) => (
         <Card key={member.id}>
           <CardHeader

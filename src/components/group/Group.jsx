@@ -3,7 +3,6 @@ import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import GroupEdit from "./GroupEdit";
 import PostsFeed from "../post/PostsFeed";
-import CreatePost from "../post/CreatePost";
 import GroupMembers from "./GroupMembers";
 import axios from "axios";
 
@@ -39,31 +38,6 @@ const Group = (props) => {
     setSelectedTab(id);
   };
 
-  const addNewPost = (postText) => {
-    const data = {
-      context_type: "Group",
-      context_id: props.id,
-      post_text: postText,
-      user_id: 1,
-    };
-
-    axios
-      .post("/api/v1/posts", data)
-      .then((resp) => {
-        const post = {
-          id: resp.data.id,
-          author: { first_name: "John", last_name: "Smith" },
-          comments: [],
-          ...data,
-        };
-        setPosts([post, ...posts]);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(err);
-      });
-  };
-
   if (loading) return <Skeleton variant="text" height={100} />;
   if (error)
     return (
@@ -96,14 +70,7 @@ const Group = (props) => {
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       {groupHeader}
       {selectedTab === 0 ? (
-        <>
-          <CreatePost
-            contextType="Group"
-            addNewPost={addNewPost}
-            style={{ marginTop: "10px", marginBottom: "10px" }}
-          />
-          <PostsFeed posts={posts} />
-        </>
+        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Group" contextId={group.id} />
       ) : selectedTab === 1 ? (
         <GroupEdit {...group} />
       ) : ( 
