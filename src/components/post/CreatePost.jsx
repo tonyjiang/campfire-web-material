@@ -52,7 +52,7 @@ const CreatePost = (props) => {
         onChange={(e) => handleInputChange(e)}
       />
       {images.length === 0 ? null : (
-        <ImageList rowHeight='auto'>
+        <ImageList cols={3} rowHeight='auto'>
           {images.map((image) => (
             <ImageListItem key={ image.name }>
               <img

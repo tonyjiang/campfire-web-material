@@ -25,7 +25,6 @@ const CourseMembers = (props) => {
     axios
       .get(`/api/v1/users?course_id=${props.id}`)
       .then((resp) => {
-        console.log(resp.data);
         setMembers(resp.data);
       })
       .catch((err) => {
@@ -54,8 +53,8 @@ const CourseMembers = (props) => {
           <CardHeader
             avatar={
               <Avatar sx={{ bgcolor: purple[500] }}>
-                {member.first_name.substring(0, 1) +
-                  member.last_name.substring(0, 1)}
+                {member.user.first_name.substring(0, 1) +
+                  member.user.last_name.substring(0, 1)}
               </Avatar>
             }
             action={
@@ -63,12 +62,12 @@ const CourseMembers = (props) => {
                 <MoreVert />
               </IconButton>
             }
-            title={`${member.first_name} ${member.last_name}`}
+            title={`${member.user.first_name} ${member.user.last_name}`}
             subheader={`Joined since ${member.created_at}`}
           />
           <CardContent>
             <Typography variant="body2" color="text.secondary">
-              {member.bio}
+              {member.role}
             </Typography>
           </CardContent>
         </Card>

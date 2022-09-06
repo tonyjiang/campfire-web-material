@@ -160,7 +160,7 @@ const PostsFeed = (props) => {
           {post.post_text}
         </Typography>
         {imageUrls?.length > 0 ? (
-          <ImageList cols={2} rowHeight={100}>
+          <ImageList cols={1} rowHeight="auto">
             {imageUrls.map((imageUrl, index) => (
               <ImageListItem key={index}>
                 <img
