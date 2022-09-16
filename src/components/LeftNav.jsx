@@ -14,6 +14,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Skeleton,
   Tooltip,
 } from "@mui/material";
 import axios from "axios";
@@ -21,7 +22,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 import Course from "./course/Course";
-import CourseEdit from "./course/CourseEdit";
+import CourseEditRichText from "./course/CourseEditRichText";
 import Group from "./group/Group";
 import GroupEdit from "./group/GroupEdit";
 
@@ -51,7 +52,7 @@ const LeftNav = (props) => {
   }, []);
 
   const createNewCourse = (e) => {
-    props.setCenterColumn(<CourseEdit editable={true} />);
+    props.setCenterColumn(<CourseEditRichText editable={true} />);
   };
 
   const createNewGroup = (e) => {
@@ -94,7 +95,8 @@ const LeftNav = (props) => {
         <ListItemButton
           key={group.id}
           sx={{ pl: 4 }}
-          selected={selectedGroup === group.id} onClick={(e) => viewGroup(group)}
+          selected={selectedGroup === group.id}
+          onClick={(e) => viewGroup(group)}
         >
           <ListItemIcon>
             <StarBorderIcon />
@@ -105,7 +107,7 @@ const LeftNav = (props) => {
     </List>
   );
 
-  if (loading) return <h2>'Loading .....'</h2>;
+  if (loading) return <Skeleton variant="text" height={100} />;
   if (error)
     return (
       <div>
@@ -116,58 +118,61 @@ const LeftNav = (props) => {
     );
 
   return (
-    <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
-      <Box position="fixed">
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton component="a">
-              <ListItemIcon>
-                <FormatListBulletedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Courses" />
-            </ListItemButton>
-            <Tooltip title="Create a new course" onClick={createNewCourse}>
-              <AddSharpIcon sx={{ marginRight: 4 }} />
-            </Tooltip>
-          </ListItem>
-
-          {courseList}
-
-          <ListItem disablePadding>
-            <ListItemButton component="a">
-              <ListItemIcon>
-                <GroupsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Groups" />
-            </ListItemButton>
-            <Tooltip title="Create a new group" onClick={createNewGroup}>
-              <AddSharpIcon sx={{ marginRight: 4 }} />
-            </Tooltip>
-          </ListItem>
-
-          {groupList}
-
-          <ListItem disablePadding>
-            <ListItemButton component="a">
-              <ListItemIcon>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary="People" />
-            </ListItemButton>
+    <Box
+      position="fixed"
+      flex={1}
+      p={2}
+      sx={{ display: { xs: "none", sm: "block" } }}
+    >
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton component="a">
+            <ListItemIcon>
+              <FormatListBulletedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Courses" />
+          </ListItemButton>
+          <Tooltip title="Create a new course" onClick={createNewCourse}>
             <AddSharpIcon sx={{ marginRight: 4 }} />
-          </ListItem>
+          </Tooltip>
+        </ListItem>
 
-          <ListItem disablePadding>
-            <ListItemButton component="a">
-              <ListItemIcon>
-                <ArticleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Documents" />
-            </ListItemButton>
+        {courseList}
+
+        <ListItem disablePadding>
+          <ListItemButton component="a">
+            <ListItemIcon>
+              <GroupsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Groups" />
+          </ListItemButton>
+          <Tooltip title="Create a new group" onClick={createNewGroup}>
             <AddSharpIcon sx={{ marginRight: 4 }} />
-          </ListItem>
-        </List>
-      </Box>
+          </Tooltip>
+        </ListItem>
+
+        {groupList}
+
+        <ListItem disablePadding>
+          <ListItemButton component="a">
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="People" />
+          </ListItemButton>
+          <AddSharpIcon sx={{ marginRight: 4 }} />
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton component="a">
+            <ListItemIcon>
+              <ArticleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Documents" />
+          </ListItemButton>
+          <AddSharpIcon sx={{ marginRight: 4 }} />
+        </ListItem>
+      </List>
     </Box>
   );
 };

@@ -1,7 +1,7 @@
 import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
-import CourseEdit from "./CourseEdit";
+import CourseEditRichText from "./CourseEditRichText";
 import PostsFeed from "../post/PostsFeed";
 import CourseMembers from "./CourseMembers";
 import axios from "axios";
@@ -71,7 +71,7 @@ const Course = (props) => {
       {selectedTab === 0 ? (
         <PostsFeed posts={posts} setPosts={ setPosts } contextType="Course" contextId={course.id} />
       ) : selectedTab === 1 ? (
-        <CourseEdit {...course} />
+        <CourseEditRichText {...course} />
       ) : (
         <CourseMembers {...course} />
       )}

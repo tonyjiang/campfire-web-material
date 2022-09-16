@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Post from "./Post";
 import CreatePost from "./CreatePost";
 import axios from "axios";
