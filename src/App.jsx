@@ -1,6 +1,5 @@
 import LeftNav from "./components/LeftNav";
 import Feed from "./components/Feed";
-import RightColumn from "./components/RightColumn";
 import { Box, createTheme, Grid, ThemeProvider } from "@mui/material";
 import HeaderBar from "./components/HeaderBar";
 import FabCreate from "./components/FabCreate";
@@ -20,14 +19,14 @@ const App = () => {
       <Box bgcolor={"background.default"} color={"text.primary"}>
         <HeaderBar mode={mode} setMode={setMode} minHeight="5vh" />
         <Grid container minHeight="95vh">
-          <Grid item xs={0} sm={0} md={3}>
+          <Grid item sm={0} md={0} lg={3}>
             <LeftNav setCenterColumn={setCenterColumn} />
           </Grid>
-          <Grid item xs={12} sm={8} md={5.5}>
+          <Grid item sm={12} md={10} lg={7}>
             {centerColumn}
           </Grid>
-          <Grid item xs={0} sm={4} md={3.5}>
-            <RightColumn />
+          <Grid item sm={0} md={2} lg={2}>
+            <div />
           </Grid>
         </Grid>
         <FabCreate />

@@ -122,7 +122,7 @@ const LeftNav = (props) => {
       position="fixed"
       flex={1}
       p={2}
-      sx={{ display: { xs: "none", sm: "block" } }}
+      sx={{ display: { md: "none", lg: "block" } }}
     >
       <List>
         <ListItem disablePadding>

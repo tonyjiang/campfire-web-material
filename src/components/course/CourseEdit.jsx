@@ -7,7 +7,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Skeleton,
   Stack,
   TextField,
 } from "@mui/material";
@@ -15,27 +14,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const CourseEdit = (props) => {
-  const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState(props);
   const [editable, setEditable] = useState();
-  const [syllabus, setSyllabus] = useState();
   const [error, setError] = useState();
 
   useEffect(() => {
     setCourse(props);
-    setEditable(props.editable ? true : false);
-    axios
-      .get(`/api/v1/courses/${props.id}`)
-      .then((resp) => {
-        setSyllabus(resp.data.syllabus);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
   }, [props]);
 
   const handleSave = () => {
@@ -45,14 +29,13 @@ const CourseEdit = (props) => {
       description: course.description,
       year: course.year,
       term: course.term,
-      location: course.location,
       start_date: course.start_date,
-      syllabus: syllabus,
     };
     if (course.id) {
       axios
         .patch(`/api/v1/courses/${course.id}`, data)
         .catch((error) => {
+          setError(error);
           console.error(error);
         })
         // this is not acceptable beyond MVP
@@ -61,6 +44,7 @@ const CourseEdit = (props) => {
       axios
         .post("/api/v1/courses", data)
         .catch((error) => {
+          setError(error);
           console.error(error);
         })
         .then(() => (window.location = "http://127.0.0.1:8080"));
@@ -72,7 +56,7 @@ const CourseEdit = (props) => {
     window.location = "http://127.0.0.1:8080";
   };
 
-  const editButton = editable ? (
+  const actionButtons = editable ? (
     <Box
       sx={{
         display: "flex",
@@ -110,23 +94,16 @@ const CourseEdit = (props) => {
     </Box>
   );
 
-  if (loading) return <Skeleton variant="text" height={100} />;
   if (error)
     return (
       <div>
-        <h2>Error! Look at the browser console for details.</h2>
+        <h2>Error in CourseEdit.jsx! Look at the browser console for details.</h2>
         <p>{JSON.stringify(error)}</p>
       </div>
     );
 
   return (
     <Box flex={4} p={{ xs: 0, md: 2 }}>
-      {loading ? (
-        <Stack spacing={1}>
-          <Skeleton variant="text" height={100} />
-          <Skeleton variant="text" height={100} />
-        </Stack>
-      ) : (
         <Stack spacing={3}>
           <TextField
             variant="outlined"
@@ -190,9 +167,8 @@ const CourseEdit = (props) => {
               />
             </FormControl>
           </Box>
-          {editButton}
+          {actionButtons}
         </Stack>
-      )}
     </Box>
   );
 };
