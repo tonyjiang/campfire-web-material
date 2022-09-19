@@ -1,39 +1,25 @@
-import { Box, Button, Skeleton, Stack, TextField } from "@mui/material";
+import "../editor/styles.css";
+
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Skeleton,
+  Stack,
+  TextField,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MaterialTable from "material-table";
-import TableIcons from "../TableIcons";
 import axios from "axios";
 
 const CourseEdit = (props) => {
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState(props);
-  const [editable, setEditable] = useState(true);
-  const [courseEvents, setCourseEvents] = useState([]);
-  const [deletedEvents, setDeletedEvents] = useState([]);
+  const [editable, setEditable] = useState();
+  const [syllabus, setSyllabus] = useState();
   const [error, setError] = useState();
-
-  const columns = [
-    { title: "Title", field: "title" },
-    { title: "Description", field: "description" },
-    {
-      title: "Event Type",
-      field: "event_type",
-      lookup: {
-        lecture: "Lecture",
-        exam: "Exam",
-        discussion: "Discussion",
-        presentation: "Presentation",
-        no_class: "No class",
-        other: "Other",
-      },
-    },
-    {
-      title: "Time",
-      field: "event_time",
-      initialEditValue: "2022-02-22 14:30",
-    },
-    { title: "id", hidden: true },
-  ];
 
   useEffect(() => {
     setCourse(props);
@@ -41,20 +27,18 @@ const CourseEdit = (props) => {
     axios
       .get(`/api/v1/courses/${props.id}`)
       .then((resp) => {
-        setCourseEvents(resp.data.events);
+        setSyllabus(resp.data.syllabus);
       })
       .catch((err) => {
         console.error(err);
         setError(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [props]);
 
-  setTimeout(() => {
-    setLoading(false);
-  }, [200]);
-
-  const handleSaveCourse = () => {
-    courseEvents.forEach((event) => delete event["tableData"]);
+  const handleSave = () => {
     let data = {
       user_id: 1,
       title: course.title,
@@ -63,8 +47,7 @@ const CourseEdit = (props) => {
       term: course.term,
       location: course.location,
       start_date: course.start_date,
-      events: courseEvents,
-      deleted_events: deletedEvents,
+      syllabus: syllabus,
     };
     if (course.id) {
       axios
@@ -89,24 +72,23 @@ const CourseEdit = (props) => {
     window.location = "http://127.0.0.1:8080";
   };
 
-  const pageTitle = editable ? (
+  const editButton = editable ? (
     <Box
       sx={{
         display: "flex",
         justifyContent: "flex-end",
-        paddingTop: 2,
         paddingRight: 2,
       }}
     >
       <Button
         variant="outlined"
-        size="large"
+        size="medium"
         sx={{ marginRight: 2 }}
         onClick={handleCancel}
       >
         Cancel
       </Button>
-      <Button variant="contained" size="large" onClick={handleSaveCourse}>
+      <Button variant="contained" size="medium" onClick={handleSave}>
         Save
       </Button>
     </Box>
@@ -115,53 +97,18 @@ const CourseEdit = (props) => {
       sx={{
         display: "flex",
         justifyContent: "flex-end",
-        paddingTop: 2,
         paddingRight: 2,
       }}
     >
       <Button
         variant="contained"
-        size="large"
+        size="medium"
         onClick={(e) => setEditable(true)}
       >
         Edit
       </Button>
     </Box>
   );
-
-  const editableTableConfig = editable
-    ? {
-        onRowAdd: (newData) =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              setCourseEvents([...courseEvents, newData]);
-              resolve();
-            }, 500);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              const dataUpdate = [...courseEvents];
-              const index = oldData.tableData.id;
-              dataUpdate[index] = newData;
-              setCourseEvents([...dataUpdate]);
-              resolve();
-            }, 500);
-          }),
-        onRowDelete: (deletedRow) =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              const events = [...courseEvents];
-              const index = deletedRow.tableData.id;
-              events.splice(index, 1);
-              setCourseEvents([...events]);
-              if (deletedRow.id)
-                setDeletedEvents([...deletedEvents, deletedRow.id]);
-              resolve();
-            }, 500);
-          }),
-      }
-    : null;
 
   if (loading) return <Skeleton variant="text" height={100} />;
   if (error)
@@ -180,71 +127,71 @@ const CourseEdit = (props) => {
           <Skeleton variant="text" height={100} />
         </Stack>
       ) : (
-        <form>
-          <Stack spacing={3}>
-            {pageTitle}
-            <TextField
-              variant="outlined"
-              label="Title"
-              disabled={!editable}
-              required
-              value={course?.title || ""}
-              onChange={(e) => setCourse({ ...course, title: e.target.value })}
-            />
-            <TextField
-              multiline
-              rows={4}
-              disabled={!editable}
-              variant="outlined"
-              label="Description"
-              value={course?.description || ""}
-              onChange={(e) =>
-                setCourse({ ...course, description: e.target.value })
-              }
-            />
-            <TextField
-              variant="outlined"
-              label="Year"
-              value={course?.year || ""}
-              disabled={!editable}
-              required
-              onChange={(e) => setCourse({ ...course, year: e.target.value })}
-            />
-            <TextField
-              variant="outlined"
-              label="Term"
-              value={course?.term || ""}
-              disabled={!editable}
-              onChange={(e) => setCourse({ ...course, term: e.target.value })}
-            />
-            <TextField
-              variant="outlined"
-              label="Start Date"
-              value={course?.start_date || ""}
-              disabled={!editable}
-              required
-              onChange={(e) =>
-                setCourse({ ...course, start_date: e.target.value })
-              }
-            />
-            <TextField
-              variant="outlined"
-              label="Location"
-              disabled={!editable}
-              value={course?.location || ""}
-              onChange={(e) =>
-                setCourse({ ...course, location: e.target.value })
-              }
-            />
-            <MaterialTable
-              title="Course events"
-              columns={columns}
-              data={courseEvents}
-              icons={TableIcons}
-              editable={editableTableConfig}
-            />
-          </Stack>
-        </form>
+        <Stack spacing={3}>
+          <TextField
+            variant="outlined"
+            label="Title"
+            disabled={!editable}
+            required
+            value={course?.title || ""}
+            onChange={(e) => setCourse({ ...course, title: e.target.value })}
+          />
+          <TextField
+            multiline
+            rows={4}
+            disabled={!editable}
+            variant="outlined"
+            label="Description"
+            value={course?.description || ""}
+            onChange={(e) =>
+              setCourse({ ...course, description: e.target.value })
+            }
+          />
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <FormControl sx={{ minWidth: 180 }}>
+              <TextField
+                variant="outlined"
+                label="Year"
+                value={course?.year || ""}
+                disabled={!editable}
+                required
+                onChange={(e) => setCourse({ ...course, year: e.target.value })}
+              />
+            </FormControl>
+            <FormControl sx={{ minWidth: 180 }}>
+              <InputLabel id="demo-simple-select-helper-label">Term</InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={course?.term || ""}
+                label="Term"
+                onChange={(e) => setCourse({ ...course, term: e.target.value })}
+                disabled={!editable}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="spring">Spring</MenuItem>
+                <MenuItem value="summer">Summer</MenuItem>
+                <MenuItem value="fall">Fall</MenuItem>
+                <MenuItem value="winter">Winter</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ minWidth: 180 }}>
+              <TextField
+                variant="outlined"
+                label="Start Date"
+                value={course?.start_date || ""}
+                disabled={!editable}
+                required
+                onChange={(e) =>
+                  setCourse({ ...course, start_date: e.target.value })
+                }
+              />
+            </FormControl>
+          </Box>
+          {editButton}
+        </Stack>
       )}
     </Box>
   );

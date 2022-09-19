@@ -1,9 +1,10 @@
 import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
-import CourseEditRichText from "./CourseEditRichText";
-import PostsFeed from "../post/PostsFeed";
+import CourseEdit from "./CourseEdit";
 import CourseMembers from "./CourseMembers";
+import PostsFeed from "../post/PostsFeed";
+import SyllabusEdit from "./SyllabusEdit";
 import axios from "axios";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
@@ -58,8 +59,9 @@ const Course = (props) => {
           variant="fullWidth"
         >
           <Tab label="Conversations" id={0} aria-controls="tab-0" />
-          <SecondaryTab label="Syllabus" id={1} aria-controls="tab-1" />
-          <SecondaryTab label="Members" id={2} aria-controls="tab-2" />
+          <SecondaryTab label="Course" id={1} aria-controls="tab-1" />
+          <SecondaryTab label="Syllabus" id={2} aria-controls="tab-2" />
+          <SecondaryTab label="Members" id={3} aria-controls="tab-3" />
         </Tabs>
       </Box>
     </Box>
@@ -71,7 +73,9 @@ const Course = (props) => {
       {selectedTab === 0 ? (
         <PostsFeed posts={posts} setPosts={ setPosts } contextType="Course" contextId={course.id} />
       ) : selectedTab === 1 ? (
-        <CourseEditRichText {...course} />
+        <CourseEdit {...course} />
+      ) : selectedTab === 2 ? (
+        <SyllabusEdit {...course} />
       ) : (
         <CourseMembers {...course} />
       )}

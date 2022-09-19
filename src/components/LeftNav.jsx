@@ -22,7 +22,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 import Course from "./course/Course";
-import CourseEditRichText from "./course/CourseEditRichText";
+import CourseEdit from "./course/CourseEdit";
 import Group from "./group/Group";
 import GroupEdit from "./group/GroupEdit";
 
@@ -52,7 +52,7 @@ const LeftNav = (props) => {
   }, []);
 
   const createNewCourse = (e) => {
-    props.setCenterColumn(<CourseEditRichText editable={true} />);
+    props.setCenterColumn(<CourseEdit editable={true} />);
   };
 
   const createNewGroup = (e) => {
