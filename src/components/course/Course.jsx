@@ -43,7 +43,7 @@ const Course = (props) => {
   if (error)
     return (
       <div>
-        <h2>Error in Group.jsx component! Look at the browser console for details.</h2>
+        <h2>Error in Course.jsx component! Look at the browser console for details.</h2>
         <hr />
         <p>{JSON.stringify(error)}</p>
       </div>

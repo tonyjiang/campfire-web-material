@@ -43,7 +43,7 @@ const Group = (props) => {
     return (
       <div>
         <h2>
-          Error in Group component! Look at the browser console for details.
+          Error in Group.jsx! Look at the browser console for details.
         </h2>
         <p>{JSON.stringify(error)}</p>
       </div>

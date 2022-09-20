@@ -21,7 +21,8 @@ import {
   Typography,
   Switch,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { UserContext } from "./user/UserContext";
 
 const MyToolbar = styled(Toolbar)({
   display: "flex",
@@ -48,14 +49,18 @@ const IconsBox = styled(Box)(({ theme }) => ({
 const UserBox = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  gap: "10px",
-  [theme.breakpoints.up("sm")]: {
-    display: "none",
-  },
+  gap: "3px",
+  marginLeft: "20px",
 }));
 
 const HeaderBar = ({ mode, setMode }) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const { setUser } = useContext(UserContext);
+
+  const handleLogout = () => {
+    setUser(null);
+  }
+
   return (
     <AppBar position="sticky">
       <MyToolbar>
@@ -86,20 +91,21 @@ const HeaderBar = ({ mode, setMode }) => {
             <Notifications />
           </Badge>
           <Switch
-            onChange={e => setMode(mode === "light" ? "dark" : "light")}
+            color="default"
+            onChange={(e) => setMode(mode === "light" ? "dark" : "light")}
           />
-          <ManageAccounts onClick={e => setProfileMenuOpen(true)} />
+          <UserBox onClick={(e) => setProfileMenuOpen(true)}>
+            <ManageAccounts />
+            <Typography variant="span">Tony</Typography>
+          </UserBox>
         </IconsBox>
-        <UserBox onClick={e => setProfileMenuOpen(true)}>
-          <Typography variant="span">Tony</Typography>
-        </UserBox>
       </MyToolbar>
       <Menu
         id="demo-positioned-menu"
-        sx={{ marginTop: 4}}
+        sx={{ marginTop: 4 }}
         aria-labelledby="demo-positioned-button"
         open={profileMenuOpen}
-        onClose={e => setProfileMenuOpen(false)}
+        onClose={(e) => setProfileMenuOpen(false)}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
@@ -109,11 +115,21 @@ const HeaderBar = ({ mode, setMode }) => {
           horizontal: "right",
         }}
       >
-        <MenuItem><Settings sx={{marginRight: 1}} /> Settings</MenuItem>
-        <MenuItem><DarkMode sx={{marginRight: 1}} /> Display</MenuItem>
-        <MenuItem><HelpCenter sx={{marginRight: 1}} /> Help</MenuItem>
-        <MenuItem><Feedback sx={{marginRight: 1}} /> Feedback</MenuItem>
-        <MenuItem><ExitToApp sx={{marginRight: 1}} /> Logout</MenuItem>
+        <MenuItem>
+          <Settings sx={{ marginRight: 1 }} /> Settings
+        </MenuItem>
+        <MenuItem>
+          <DarkMode sx={{ marginRight: 1 }} /> Display
+        </MenuItem>
+        <MenuItem>
+          <HelpCenter sx={{ marginRight: 1 }} /> Help
+        </MenuItem>
+        <MenuItem>
+          <Feedback sx={{ marginRight: 1 }} /> Feedback
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <ExitToApp sx={{ marginRight: 1 }} /> Logout
+        </MenuItem>
       </Menu>
     </AppBar>
   );

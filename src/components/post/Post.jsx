@@ -31,7 +31,7 @@ const CommentCard = styled(Card)(({ theme }) => ({
   marginLeft: "5px",
 }));
 
-const PostsFeed = (props) => {
+export default function Post(props) {
   const [post, setPost] = useState(props.post);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
@@ -202,5 +202,3 @@ const PostsFeed = (props) => {
     </Card>
   );
 };
-
-export default PostsFeed;
