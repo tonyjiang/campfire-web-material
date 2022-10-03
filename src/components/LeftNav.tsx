@@ -2,11 +2,15 @@ import {
   AddSharp as AddSharpIcon,
   ArrowForward,
   ArrowForwardIos,
+  Chat,
+  Class,
+  ClassOutlined,
   ExpandLess,
   ExpandMore,
   FormatListBulleted as FormatListBulletedIcon,
   Groups as GroupsIcon,
   KeyboardArrowRight,
+  School,
   StarBorder as StarBorderIcon,
 } from "@mui/icons-material";
 
@@ -85,7 +89,7 @@ const LeftNav = (props) => {
           onClick={(e) => viewCourse(course)}
         >
           <ListItemIcon>
-            <StarBorderIcon />
+            <ClassOutlined sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
           </ListItemIcon>
           <Tooltip title={course.title}>
             <ListItemText primary={course.title} primaryTypographyProps={{ overflow: 'hidden', textOverflow: 'ellipsis' }}/>
@@ -106,7 +110,7 @@ const LeftNav = (props) => {
           onClick={(e) => viewGroup(group)}
         >
           <ListItemIcon>
-            <StarBorderIcon />
+            <Chat sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
           </ListItemIcon>
           <ListItemText primary={group.name}/>
         </ListItemButton>
@@ -138,12 +142,12 @@ const LeftNav = (props) => {
         <ListItem disablePadding>
           <ListItemButton >
             <Tooltip title={openCourses ? "Close courses" : "Open courses"} onClick={openCoursesClick}>
-              {openCourses ? <ExpandMore style={{marginRight: 4}}/> : <KeyboardArrowRight style={{marginRight: 5, marginLeft: -1}}/>}
+              {openCourses ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
             </Tooltip>
-            <FormatListBulletedIcon style={{paddingRight: 10}} onClick={openCoursesClick}/>
+            <School sx={{paddingRight: 2.5}} onClick={openCoursesClick}/>
             <ListItemText primary="Courses"  onClick={openCoursesClick}/>
             <Tooltip title="Create a new course" onClick={createNewCourse} >
-              <AddSharpIcon style={{paddingLeft: 10}}/>
+              <AddSharpIcon sx={{paddingLeft: 2.5}}/>
             </Tooltip>
           </ListItemButton>
         </ListItem>
@@ -154,12 +158,12 @@ const LeftNav = (props) => {
         <ListItem disablePadding>
           <ListItemButton>
             <Tooltip title={openGroups ? "Close groups" : "Open groups"} onClick={openGroupsClick}>
-              {openGroups ? <ExpandMore style={{marginRight: 4}}/> : <KeyboardArrowRight style={{marginRight: 5, marginLeft: -1}}/>}
+              {openGroups ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
             </Tooltip>
-            <GroupsIcon style={{paddingRight: 10}} onClick={openGroupsClick}/>
+            <GroupsIcon sx={{paddingRight: 2.5}} onClick={openGroupsClick}/>
             <ListItemText primary="Groups" onClick={openGroupsClick}/>
             <Tooltip title="Create a new group" onClick={createNewGroup}>
-              <AddSharpIcon style={{paddingLeft: 10}}/>
+              <AddSharpIcon sx={{paddingLeft: 2.5}}/>
             </Tooltip>
           </ListItemButton>
         </ListItem>

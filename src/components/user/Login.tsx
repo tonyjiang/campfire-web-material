@@ -24,20 +24,13 @@ import { useContext, useState } from "react";
 import SignUpModal from "./SignUpModal";
 import { UserContext } from "./UserContext";
 import { ReactComponent as CampfireLogo } from '../../assets/CampfireLogo.svg';
+import React from "react";
 
 const MyToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
 });
 
-const IconsBox = styled(Box)(({ theme }) => ({
-  display: "none",
-  alignItems: "center",
-  gap: "20px",
-  [theme.breakpoints.up("sm")]: {
-    display: "flex",
-  },
-}));
 
 export default function Login() {
   const [mode, setMode] = useState("dark");
@@ -75,22 +68,24 @@ export default function Login() {
             <Box display="flex">
               <CampfireLogo height={40} fill={"white"} stroke={"grey"}/>
             </Box>
-            <IconsBox>
-              <Switch
-                color="default"
-                onChange={(e) => setMode(mode === "light" ? "dark" : "light")}
-              />
-            </IconsBox>
           </MyToolbar>
         </AppBar>
-        <Grid container minHeight="95vh">
-          <Grid item sm={0} md={0} lg={3}></Grid>
-          <Grid item sm={12} md={10} lg={7}>
-            <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-              <h1>Welcome!</h1>
-            </Box>
-            <Stack spacing={3}>
-              <FormControl sx={{ m: 1, width: "49ch" }} variant="outlined">
+        <Grid container sx={{minHeight: "95vh", maxHeight: "95vh"}}>
+          <Grid xs={true}></Grid>
+          <Grid 
+            container xs={"auto"} 
+            justifyContent="center" 
+            alignItems="center" 
+            direction="column"
+            sx={{marginTop: "-25vh"}}> 
+          <Stack spacing={2}>
+              <div style={{
+                display: 'inline-flex'
+              }}>
+                <CampfireLogo height={40} fill={"white"} stroke={"grey"}/>
+                <Typography variant="h4" sx={{paddingLeft: 1}}>Welcome to Campfire!</Typography>
+              </div>
+              <FormControl sx={{maxWidth: "450px" }} variant="outlined">
                 <InputLabel htmlFor="email">Email</InputLabel>
                 <OutlinedInput
                   id="email"
@@ -100,12 +95,11 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </FormControl>
-              <FormControl sx={{ m: 1, width: "50ch" }} variant="outlined">
+              <FormControl sx={{maxWidth: "450px" }} variant="outlined">
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <OutlinedInput
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  sx={{ marginLeft: "5px" }}
                   label="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -126,22 +120,21 @@ export default function Login() {
               <Button
                 variant="contained"
                 size="large"
-                sx={{ m: 1, width: "53ch" }}
+                sx={{maxWidth: "450px" }}
                 onClick={handleLogin}
               >
                 Login
               </Button>
-              <div sx={{ marginTop: "100px", marginBottom: "100px" }}>
+              <div>
                 <Link href="#">Forgot password?</Link>
               </div>
-              <div sx={{ marginTop: "100px", marginBottom: "100px" }}></div>
               <Box sx={{ display: "flex", flexDirection: "row", marginTop: "100px", marginBottom: "100px" }}>
                 <span>Don't have an account yet?</span>
                 <SignUpModal />
               </Box>
             </Stack>
           </Grid>
-          <Grid item sm={0} md={2} lg={2}></Grid>
+          <Grid xs={true}></Grid>
         </Grid>
       </Box>
     </ThemeProvider>

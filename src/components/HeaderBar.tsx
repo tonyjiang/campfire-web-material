@@ -32,7 +32,7 @@ const MyToolbar = styled(Toolbar)({
 const IconsBox = styled(Box)(({ theme }) => ({
   display: "none",
   alignItems: "center",
-  gap: "20px",
+  gap: "10px",
   [theme.breakpoints.up("sm")]: {
     display: "flex",
   },
@@ -41,8 +41,6 @@ const IconsBox = styled(Box)(({ theme }) => ({
 const UserBox = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  gap: "3px",
-  marginLeft: "20px",
 }));
 
 const HeaderBar = ({ mode, setMode }) => {
@@ -59,19 +57,14 @@ const HeaderBar = ({ mode, setMode }) => {
         <Box display="flex" alignItems={"center"}>
         <CampfireLogo height={40} fill={"white"} stroke={"grey"}/>
         </Box>
-        <IconsBox>
+        <IconsBox sx={{'&:hover': {cursor: "pointer"}}} onClick={(e) => setProfileMenuOpen(true)}>
+        <UserBox>
+          <Typography variant="inherit">Tony</Typography>
+          </UserBox>
           <Avatar
-            sx={{ width: 30, height: 30 }}
+            sx={{ width: 40, height: 40 }}
             src="https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
           />
-          <Switch
-            color="default"
-            onChange={(e) => setMode(mode === "light" ? "dark" : "light")}
-          />
-          <UserBox onClick={(e) => setProfileMenuOpen(true)}>
-            <ManageAccounts />
-            <Typography variant="span">Tony</Typography>
-          </UserBox>
         </IconsBox>
       </MyToolbar>
       <Menu
@@ -91,15 +84,6 @@ const HeaderBar = ({ mode, setMode }) => {
       >
         <MenuItem>
           <Settings sx={{ marginRight: 1 }} /> Settings
-        </MenuItem>
-        <MenuItem>
-          <DarkMode sx={{ marginRight: 1 }} /> Display
-        </MenuItem>
-        <MenuItem>
-          <HelpCenter sx={{ marginRight: 1 }} /> Help
-        </MenuItem>
-        <MenuItem>
-          <Feedback sx={{ marginRight: 1 }} /> Feedback
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ExitToApp sx={{ marginRight: 1 }} /> Logout
