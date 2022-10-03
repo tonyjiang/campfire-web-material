@@ -3,9 +3,7 @@ import {
   ExitToApp,
   Feedback,
   HelpCenter,
-  Home,
   ManageAccounts,
-  Notifications,
   Settings,
 } from "@mui/icons-material";
 import {
@@ -23,19 +21,13 @@ import {
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { UserContext } from "./user/UserContext";
+import { ReactComponent as CampfireLogo } from '../assets/CampfireLogo.svg';
+
 
 const MyToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
 });
-
-const Search = styled("div")(({ theme }) => ({
-  backgroundColor: theme.palette.primary.dark,
-  color: theme.palette.primary.light,
-  marginRight: "100px",
-  borderRadius: theme.shape.borderRadius,
-  width: "40%",
-}));
 
 const IconsBox = styled(Box)(({ theme }) => ({
   display: "none",
@@ -65,31 +57,13 @@ const HeaderBar = ({ mode, setMode }) => {
     <AppBar position="sticky">
       <MyToolbar>
         <Box display="flex" alignItems={"center"}>
-          <Typography
-            variant="h6"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            Campfire
-          </Typography>
-          <Typography
-            variant="h8"
-            sx={{ display: { xs: "block", sm: "none" } }}
-          >
-            Campfire
-          </Typography>
-          <Home sx={{ marginLeft: 1 }} />
+        <CampfireLogo height={40} fill={"white"} stroke={"grey"}/>
         </Box>
-        <Search>
-          <InputBase placeholder="Search..." />
-        </Search>
         <IconsBox>
           <Avatar
             sx={{ width: 30, height: 30 }}
             src="https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
           />
-          <Badge badgeContent={2} color="error">
-            <Notifications />
-          </Badge>
           <Switch
             color="default"
             onChange={(e) => setMode(mode === "light" ? "dark" : "light")}

@@ -1,14 +1,18 @@
 import {
   AddSharp as AddSharpIcon,
-  Article as ArticleIcon,
+  ArrowForward,
+  ArrowForwardIos,
+  ExpandLess,
+  ExpandMore,
   FormatListBulleted as FormatListBulletedIcon,
   Groups as GroupsIcon,
-  People as PeopleIcon,
+  KeyboardArrowRight,
   StarBorder as StarBorderIcon,
 } from "@mui/icons-material";
 
 import {
   Box,
+  Collapse,
   List,
   ListItem,
   ListItemButton,
@@ -51,57 +55,60 @@ const LeftNav = (props) => {
       });
   }, []);
 
-  const createNewCourse = (e) => {
+  const createNewCourse = () => {
     props.setCenterColumn(<CourseEdit editable={true} />);
   };
 
-  const createNewGroup = (e) => {
+  const createNewGroup = () => {
     props.setCenterColumn(<GroupEdit editable={true} />);
   };
 
   const viewCourse = (course) => {
     setSelectedCourse(course.id);
-    setSelectedGroup(null);
     props.setCenterColumn(<Course {...course} />);
   };
 
   const viewGroup = (group) => {
     setSelectedGroup(group.id);
-    setSelectedCourse(null);
     props.setCenterColumn(<Group {...group} />);
   };
+
+  const [openCourses, setCoursesOpen] = React.useState(true);
+  const [openGroups, setGroupsOpen] = React.useState(true);
 
   let courseList = (
     <List component="div" disablePadding>
       {courses.map((course) => (
         <ListItemButton
           key={course.id}
-          sx={{ pl: 4 }}
           selected={selectedCourse === course.id}
           onClick={(e) => viewCourse(course)}
         >
           <ListItemIcon>
             <StarBorderIcon />
           </ListItemIcon>
-          <ListItemText primary={course.title} />
+          <Tooltip title={course.title}>
+            <ListItemText primary={course.title} primaryTypographyProps={{ overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+          </Tooltip>
         </ListItemButton>
       ))}
     </List>
   );
 
   let groupList = (
-    <List component="nav" disablePadding>
+    <List component="nav"
+     disablePadding
+     >
       {groups.map((group) => (
         <ListItemButton
           key={group.id}
-          sx={{ pl: 4 }}
           selected={selectedGroup === group.id}
           onClick={(e) => viewGroup(group)}
         >
           <ListItemIcon>
             <StarBorderIcon />
           </ListItemIcon>
-          <ListItemText primary={group.name} />
+          <ListItemText primary={group.name}/>
         </ListItemButton>
       ))}
     </List>
@@ -117,61 +124,50 @@ const LeftNav = (props) => {
       </div>
     );
 
+  const openCoursesClick = () => {
+    setCoursesOpen(!openCourses);
+  };
+
+  const openGroupsClick = () => {
+    setGroupsOpen(!openGroups);
+  };
+
   return (
-    <Box
-      position="fixed"
-      flex={1}
-      p={2}
-      sx={{ display: { md: "none", lg: "block" } }}
-    >
+    <Box>
       <List>
         <ListItem disablePadding>
-          <ListItemButton component="a">
-            <ListItemIcon>
-              <FormatListBulletedIcon />
-            </ListItemIcon>
-            <ListItemText primary="Courses" />
+          <ListItemButton >
+            <Tooltip title={openCourses ? "Close courses" : "Open courses"} onClick={openCoursesClick}>
+              {openCourses ? <ExpandMore style={{marginRight: 4}}/> : <KeyboardArrowRight style={{marginRight: 5, marginLeft: -1}}/>}
+            </Tooltip>
+            <FormatListBulletedIcon style={{paddingRight: 10}} onClick={openCoursesClick}/>
+            <ListItemText primary="Courses"  onClick={openCoursesClick}/>
+            <Tooltip title="Create a new course" onClick={createNewCourse} >
+              <AddSharpIcon style={{paddingLeft: 10}}/>
+            </Tooltip>
           </ListItemButton>
-          <Tooltip title="Create a new course" onClick={createNewCourse}>
-            <AddSharpIcon sx={{ marginRight: 4 }} />
-          </Tooltip>
         </ListItem>
-
-        {courseList}
+        <Collapse in={openCourses} timeout="auto" unmountOnExit>
+          {courseList}
+        </Collapse>
 
         <ListItem disablePadding>
-          <ListItemButton component="a">
-            <ListItemIcon>
-              <GroupsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Groups" />
+          <ListItemButton>
+            <Tooltip title={openGroups ? "Close groups" : "Open groups"} onClick={openGroupsClick}>
+              {openGroups ? <ExpandMore style={{marginRight: 4}}/> : <KeyboardArrowRight style={{marginRight: 5, marginLeft: -1}}/>}
+            </Tooltip>
+            <GroupsIcon style={{paddingRight: 10}} onClick={openGroupsClick}/>
+            <ListItemText primary="Groups" onClick={openGroupsClick}/>
+            <Tooltip title="Create a new group" onClick={createNewGroup}>
+              <AddSharpIcon style={{paddingLeft: 10}}/>
+            </Tooltip>
           </ListItemButton>
-          <Tooltip title="Create a new group" onClick={createNewGroup}>
-            <AddSharpIcon sx={{ marginRight: 4 }} />
-          </Tooltip>
         </ListItem>
 
-        {groupList}
+        <Collapse in={openGroups} timeout="auto" unmountOnExit>
+          {groupList}
+        </Collapse>
 
-        <ListItem disablePadding>
-          <ListItemButton component="a">
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="People" />
-          </ListItemButton>
-          <AddSharpIcon sx={{ marginRight: 4 }} />
-        </ListItem>
-
-        <ListItem disablePadding>
-          <ListItemButton component="a">
-            <ListItemIcon>
-              <ArticleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Documents" />
-          </ListItemButton>
-          <AddSharpIcon sx={{ marginRight: 4 }} />
-        </ListItem>
       </List>
     </Box>
   );

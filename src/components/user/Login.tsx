@@ -17,13 +17,13 @@ import {
   Switch,
   Link,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useContext, useState } from "react";
 
 import SignUpModal from "./SignUpModal";
 import { UserContext } from "./UserContext";
+import { ReactComponent as CampfireLogo } from '../../assets/CampfireLogo.svg';
 
 const MyToolbar = styled(Toolbar)({
   display: "flex",
@@ -72,20 +72,8 @@ export default function Login() {
       <Box bgcolor={"background.default"} color={"text.primary"}>
         <AppBar position="sticky">
           <MyToolbar>
-            <Box display="flex" alignItems={"center"}>
-              <Typography
-                variant="h6"
-                sx={{ display: { xs: "none", sm: "block" } }}
-              >
-                Campfire
-              </Typography>
-              <Typography
-                variant="h8"
-                sx={{ display: { xs: "block", sm: "none" } }}
-              >
-                Campfire
-              </Typography>
-              <HomeIcon sx={{ marginLeft: 1 }} />
+            <Box display="flex">
+              <CampfireLogo height={40} fill={"white"} stroke={"grey"}/>
             </Box>
             <IconsBox>
               <Switch

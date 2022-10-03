@@ -2,7 +2,6 @@ import { Box, Skeleton } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
 import PostsFeed from "./post/PostsFeed";
-import Greetings from "./Greetings";
 import axios from "axios";
 
 const HomeFeed = (props) => {
@@ -39,17 +38,16 @@ const HomeFeed = (props) => {
     );
 
   return (
-    <Box flex={4} p={{ xs: 0, md: 2 }}>
-      {posts.length === 0 ? (
-        <Greetings />
-      ) : (
-        <PostsFeed
+    <Box>
+      {
+        <
+          PostsFeed
           posts={posts}
           setPosts={setPosts}
           contextType="User"
           contextId={1}
         />
-      )}
+      }
     </Box>
   );
 };

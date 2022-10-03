@@ -4,7 +4,7 @@ import { useState } from "react";
 import LeftNav from "./components/LeftNav";
 import HomeFeed from "./components/HomeFeed";
 import HeaderBar from "./components/HeaderBar";
-import FabCreate from "./components/FabCreate";
+import React from "react";
 
 const Home = () => {
   const [mode, setMode] = useState("dark");
@@ -18,20 +18,24 @@ const Home = () => {
 
   return (
     <ThemeProvider theme={modeTheme}>
-      <Box bgcolor={"background.default"} color={"text.primary"}>
-        <HeaderBar mode={mode} setMode={setMode} minHeight="5vh" />
-        <Grid container minHeight="95vh">
-          <Grid item sm={0} md={0} lg={3}>
-            <LeftNav setCenterColumn={setCenterColumn} />
+      <Box bgcolor={"background.default"} color={"text.primary"} sx={{minHeight: "100vh", maxHeight: "100vh"}}>
+        <HeaderBar 
+          mode={mode} 
+          setMode={setMode}
+        />
+        <Grid container  sx={{minWidth: "100%"}}>
+          <Grid 
+            item 
+            sx={{maxWidth: "20%", minWidth: 185}}
+          >
+            <LeftNav setCenterColumn={setCenterColumn}/>
           </Grid>
-          <Grid item sm={12} md={10} lg={7}>
+          <Grid item
+           xs={true}
+           >
             {centerColumn}
           </Grid>
-          <Grid item sm={0} md={2} lg={2}>
-            <div />
-          </Grid>
         </Grid>
-        <FabCreate />
       </Box>
     </ThemeProvider>
   );

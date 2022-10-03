@@ -23,6 +23,7 @@ import { TRANSFORMERS } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { Box, Button } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import React from "react";
 
 function Placeholder() {
   return (
