@@ -16,6 +16,7 @@ import {
   Typography,
   Switch,
   Link,
+  responsiveFontSizes,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -39,11 +40,13 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { setUser } = useContext(UserContext);
 
-  const modeTheme = createTheme({
+  let modeTheme = createTheme({
     palette: {
       mode: mode,
     },
   });
+  modeTheme = responsiveFontSizes(modeTheme)
+
 
   const handleLogin = () => {
     setUser({
@@ -82,8 +85,12 @@ export default function Login() {
               <div style={{
                 display: 'inline-flex'
               }}>
-                <CampfireLogo height={40} fill={"white"} stroke={"grey"}/>
-                <Typography variant="h4" sx={{paddingLeft: 1}}>Welcome to Campfire!</Typography>
+                <Typography variant="h4">
+                  <CampfireLogo height={"1.15em"} fill={"white"} stroke={"grey"} style={{marginRight: 8}}/>
+                </Typography>
+                <Typography variant="h4">
+                  Welcome to Campfire!
+                  </Typography>
               </div>
               <FormControl sx={{maxWidth: "450px" }} variant="outlined">
                 <InputLabel htmlFor="email">Email</InputLabel>
