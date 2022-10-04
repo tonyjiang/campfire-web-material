@@ -14,7 +14,6 @@ import {
   ThemeProvider,
   Toolbar,
   Typography,
-  Switch,
   Link,
   responsiveFontSizes,
 } from "@mui/material";
@@ -34,7 +33,7 @@ const MyToolbar = styled(Toolbar)({
 
 
 export default function Login() {
-  const [mode, setMode] = useState("dark");
+  const [mode] = useState("dark");
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);

@@ -5,6 +5,7 @@ import LeftNav from "./components/LeftNav";
 import HomeFeed from "./components/HomeFeed";
 import HeaderBar from "./components/HeaderBar";
 import React from "react";
+import useAppBarHeight from "./Utils";
 
 const Home = () => {
   const [mode, setMode] = useState("dark");
@@ -16,17 +17,20 @@ const Home = () => {
     },
   });
 
+  const appBarHeight = useAppBarHeight()
+
   return (
     <ThemeProvider theme={modeTheme}>
-      <Box bgcolor={"background.default"} color={"text.primary"} sx={{minHeight: "100vh", maxHeight: "100vh"}}>
+      <Box bgcolor={"background.default"} color={"text.primary"} sx={{minHeight: "100vh", maxHeight: "100vh", overflow: 'hidden'}}>
         <HeaderBar 
           mode={mode} 
           setMode={setMode}
         />
         <Grid container  sx={{minWidth: "100%"}}>
-          <Grid 
+          <Grid  
             item 
-            sx={{maxWidth: "20%", minWidth: 185}}
+            sx={{maxWidth: "20%", minWidth: 185, minHeight: `calc(100vh - ${appBarHeight}px)`, maxHeight: `calc(100vh - ${appBarHeight}px)`}}
+
           >
             <LeftNav setCenterColumn={setCenterColumn}/>
           </Grid>

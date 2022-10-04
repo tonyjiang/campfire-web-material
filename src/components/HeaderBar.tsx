@@ -1,23 +1,16 @@
 import {
-  DarkMode,
   ExitToApp,
-  Feedback,
-  HelpCenter,
-  ManageAccounts,
   Settings,
 } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
-  Badge,
   Box,
-  InputBase,
   Menu,
   MenuItem,
   styled,
   Toolbar,
   Typography,
-  Switch,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { UserContext } from "./user/UserContext";

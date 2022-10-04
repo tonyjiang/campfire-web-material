@@ -1,17 +1,11 @@
 import {
   AddSharp as AddSharpIcon,
-  ArrowForward,
-  ArrowForwardIos,
   Chat,
-  Class,
   ClassOutlined,
-  ExpandLess,
   ExpandMore,
-  FormatListBulleted as FormatListBulletedIcon,
   Groups as GroupsIcon,
   KeyboardArrowRight,
   School,
-  StarBorder as StarBorderIcon,
 } from "@mui/icons-material";
 
 import {
@@ -33,6 +27,7 @@ import Course from "./course/Course";
 import CourseEdit from "./course/CourseEdit";
 import Group from "./group/Group";
 import GroupEdit from "./group/GroupEdit";
+import './scrollbar.css';
 
 const LeftNav = (props) => {
   const [courses, setCourses] = useState([]);
@@ -59,20 +54,24 @@ const LeftNav = (props) => {
       });
   }, []);
 
-  const createNewCourse = () => {
+  const createNewCourse = (event: any) => {
     props.setCenterColumn(<CourseEdit editable={true} />);
+    event.stopPropagation();
   };
 
-  const createNewGroup = () => {
+  const createNewGroup = (event: any) => {
     props.setCenterColumn(<GroupEdit editable={true} />);
+    event.stopPropagation();
   };
 
   const viewCourse = (course) => {
+    setSelectedGroup(null);
     setSelectedCourse(course.id);
     props.setCenterColumn(<Course {...course} />);
   };
 
   const viewGroup = (group) => {
+    setSelectedCourse(null);
     setSelectedGroup(group.id);
     props.setCenterColumn(<Group {...group} />);
   };
@@ -86,7 +85,7 @@ const LeftNav = (props) => {
         <ListItemButton
           key={course.id}
           selected={selectedCourse === course.id}
-          onClick={(e) => viewCourse(course)}
+          onClick={() => viewCourse(course)}
         >
           <ListItemIcon>
             <ClassOutlined sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
@@ -107,12 +106,14 @@ const LeftNav = (props) => {
         <ListItemButton
           key={group.id}
           selected={selectedGroup === group.id}
-          onClick={(e) => viewGroup(group)}
+          onClick={() => viewGroup(group)}
         >
           <ListItemIcon>
             <Chat sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
           </ListItemIcon>
-          <ListItemText primary={group.name}/>
+          <Tooltip title={group.name}>
+            <ListItemText primary={group.name} primaryTypographyProps={{ overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+          </Tooltip>
         </ListItemButton>
       ))}
     </List>
@@ -128,25 +129,25 @@ const LeftNav = (props) => {
       </div>
     );
 
-  const openCoursesClick = () => {
+  const openCoursesClick = (event: any) => {
     setCoursesOpen(!openCourses);
   };
 
-  const openGroupsClick = () => {
+  const openGroupsClick = (event: any) => {
     setGroupsOpen(!openGroups);
   };
 
   return (
-    <Box>
+    <Box style={{maxHeight: '100%', overflow: 'auto'}}>
       <List>
         <ListItem disablePadding>
-          <ListItemButton >
-            <Tooltip title={openCourses ? "Close courses" : "Open courses"} onClick={openCoursesClick}>
+          <ListItemButton onClick={openCoursesClick}>
+            <Tooltip title={openCourses ? "Close courses" : "Open courses"}>
               {openCourses ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
             </Tooltip>
-            <School sx={{paddingRight: 2.5}} onClick={openCoursesClick}/>
-            <ListItemText primary="Courses"  onClick={openCoursesClick}/>
-            <Tooltip title="Create a new course" onClick={createNewCourse} >
+            <School sx={{paddingRight: 2.5}}/>
+            <ListItemText primary="Courses"/>
+            <Tooltip title="Create a new course" onClick={(e) => createNewCourse(e)} >
               <AddSharpIcon sx={{paddingLeft: 2.5}}/>
             </Tooltip>
           </ListItemButton>
@@ -162,7 +163,7 @@ const LeftNav = (props) => {
             </Tooltip>
             <GroupsIcon sx={{paddingRight: 2.5}} onClick={openGroupsClick}/>
             <ListItemText primary="Groups" onClick={openGroupsClick}/>
-            <Tooltip title="Create a new group" onClick={createNewGroup}>
+            <Tooltip title="Create a new group" onClick={(e) => createNewGroup(e)}>
               <AddSharpIcon sx={{paddingLeft: 2.5}}/>
             </Tooltip>
           </ListItemButton>
