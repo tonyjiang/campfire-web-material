@@ -27,9 +27,9 @@ const Home = () => {
           setMode={setMode}
         />
         <Grid container  sx={{minWidth: "100%"}}>
-          <Grid  
+          <Grid
             item 
-            sx={{maxWidth: "20%", minWidth: 185, minHeight: `calc(100vh - ${appBarHeight}px)`, maxHeight: `calc(100vh - ${appBarHeight}px)`}}
+            sx={{maxWidth: "20%", minWidth: 200, minHeight: `calc(100vh - ${appBarHeight}px)`, maxHeight: `calc(100vh - ${appBarHeight}px)`}}
 
           >
             <LeftNav setCenterColumn={setCenterColumn}/>
