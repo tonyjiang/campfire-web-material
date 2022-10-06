@@ -1,5 +1,6 @@
 import {
   AddSharp as AddSharpIcon,
+  Carpenter,
   Chat,
   ClassOutlined,
   EmojiEvents,
@@ -28,8 +29,10 @@ import { useEffect, useState } from "react";
 
 import Course from "./course/Course";
 import CourseEdit from "./course/CourseEdit";
-import Group from "./group/Group";
-import GroupEdit from "./group/GroupEdit";
+import Club from "./club/Club";
+import ClubEdit from "./club/ClubEdit";
+import Channel from "./channel/Channel";
+import ChannelEdit from "./channel/ChannelEdit";
 import './scrollbar.css';
 
 const LeftNav = (props) => {
@@ -37,18 +40,20 @@ const LeftNav = (props) => {
   const [selectedCourse, setSelectedCourse] = useState();
   const [clubs, setClubs] = useState([]);
   const [selectedClub, setSelectedClub] = useState();
-  const [groups, setGroups] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState();
+  const [channels, setChannels] = useState([]);
+  const [selectedChannel, setSelectedChannel] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
   useEffect(() => {
     const req1 = axios.get("/api/v1/courses?user_id=1");
-    const req2 = axios.get("/api/v1/groups?user_id=1");
-    Promise.all([req1, req2])
-      .then(([resp1, resp2]) => {
+    const req2 = axios.get("/api/v1/clubs?user_id=1");
+    const req3 = axios.get("/api/v1/channels?user_id=1");
+    Promise.all([req1, req2, req3])
+      .then(([resp1, resp2, resp3]) => {
         setCourses(resp1.data);
-        setGroups(resp2.data);
+        setClubs(resp2.data);
+        setChannels(resp3.data);
       })
       .catch((error) => {
         console.error(error);
@@ -64,26 +69,40 @@ const LeftNav = (props) => {
     event.stopPropagation();
   };
 
-  const createNewGroup = (event: any) => {
-    props.setCenterColumn(<GroupEdit editable={true} />);
+  const createNewClub = (event: any) => {
+    props.setCenterColumn(<ClubEdit editable={true} />);
+    event.stopPropagation();
+  };
+
+  const createNewChannel = (event: any) => {
+    props.setCenterColumn(<ChannelEdit editable={true} />);
     event.stopPropagation();
   };
 
   const viewCourse = (course) => {
-    setSelectedGroup(null);
+    setSelectedClub(null);
+    setSelectedChannel(null);
     setSelectedCourse(course.id);
     props.setCenterColumn(<Course {...course} />);
   };
 
-  const viewGroup = (group) => {
+  const viewClub = (club) => {
     setSelectedCourse(null);
-    setSelectedGroup(group.id);
-    props.setCenterColumn(<Group {...group} />);
+    setSelectedChannel(null);
+    setSelectedClub(club.id);
+    props.setCenterColumn(<Club {...club} />);
+  };
+
+  const viewChannel = (channel) => {
+    setSelectedCourse(null);
+    setSelectedClub(null);
+    setSelectedChannel(channel.id);
+    props.setCenterColumn(<Channel {...channel} />);
   };
 
   const [openCourses, setCoursesOpen] = React.useState(true);
   const [openClubs, setClubsOpen] = React.useState(true);
-  const [openGroups, setGroupsOpen] = React.useState(true);
+  const [openChannels, setChannelsOpen] = React.useState(true);
 
   let courseList = (
     <List component="div" disablePadding>
@@ -117,7 +136,7 @@ const LeftNav = (props) => {
           sx={{ pt: 0.5, pb: 0.5}} 
         >
           <ListItemIcon>
-            <Chat sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
+            <Carpenter sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
           </ListItemIcon>
           <Tooltip title={club.name}>
             <ListItemText primary={club.name} primaryTypographyProps={{ overflow: 'hidden', textOverflow: 'ellipsis' }}/>
@@ -127,21 +146,21 @@ const LeftNav = (props) => {
     </List>
   );
 
-  let groupList = (
+  let channelList = (
     <List component="nav"
      disablePadding
      >
-      {groups.map((group) => (
+      {channels.map((channel) => (
         <ListItemButton
-          key={group.id}
-          selected={selectedGroup === group.id}
-          onClick={() => viewGroup(group)}
+          key={channel.id}
+          selected={selectedChannel === channel.id}
+          onClick={() => viewChannel(channel)}
         >
           <ListItemIcon>
             <Chat sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
           </ListItemIcon>
-          <Tooltip title={group.name}>
-            <ListItemText primary={group.name} primaryTypographyProps={{ overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+          <Tooltip title={channel.name}>
+            <ListItemText primary={channel.name} primaryTypographyProps={{ overflow: 'hidden', textOverflow: 'ellipsis' }}/>
           </Tooltip>
         </ListItemButton>
       ))}
@@ -166,8 +185,8 @@ const LeftNav = (props) => {
     setClubsOpen(!openClubs);
   };
 
-  const openGroupsClick = (event: any) => {
-    setGroupsOpen(!openGroups);
+  const openChannelsClick = (event: any) => {
+    setChannelsOpen(!openChannels);
   };
 
   return (
@@ -228,31 +247,31 @@ const LeftNav = (props) => {
         </Collapse>
 
         <Divider variant="middle" sx={{paddingTop: 1}} />
-        
-        <Tooltip title="Find new groups">
+
+        <Tooltip title="Find new channels">
           <ListItem disablePadding sx={{paddingTop: 1.5}}>
             <ListItemButton sx={{ pt: 0.25, pb: 0.25}} onClick={(e) => searchNewCourses(e)}>
-              <ListItemText primary="Find New Groups" primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+              <ListItemText primary="Find New Channels" primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
               <Search sx={{paddingLeft: 2.5}}/>
             </ListItemButton>
           </ListItem>
         </Tooltip>
 
         <ListItem disablePadding>
-          <ListItemButton sx={{ pt: 0.5, pb: 0.5}} onClick={openGroupsClick}>
-            <Tooltip title={openGroups ? "Close groups" : "Open groups"}>
-              {openGroups ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
+          <ListItemButton sx={{ pt: 0.5, pb: 0.5}} onClick={openChannelsClick}>
+            <Tooltip title={openChannels ? "Close channels" : "Open channels"}>
+              {openChannels ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
             </Tooltip>
             <GroupsIcon sx={{paddingRight: 2.5}}/>
-            <ListItemText primary="Groups"/>
-            <Tooltip title="Create a new group" onClick={(e) => createNewGroup(e)}>
+            <ListItemText primary="Channels"/>
+            <Tooltip title="Create a new channel" onClick={(e) => createNewChannel(e)}>
               <AddSharpIcon sx={{paddingLeft: 2.5}}/>
             </Tooltip>
           </ListItemButton>
         </ListItem>
 
-        <Collapse in={openGroups} timeout="auto" unmountOnExit>
-          {groupList}
+        <Collapse in={openChannels} timeout="auto" unmountOnExit>
+          {channelList}
         </Collapse>
 
       </List>

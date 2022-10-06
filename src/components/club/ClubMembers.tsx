@@ -14,16 +14,16 @@ import { MoreVert } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const GroupMembers = (props) => {
+const ClubMembers = (props) => {
   const [loading, setLoading] = useState(true);
-  const [group, setGroup] = useState(props);
+  const [club, setClub] = useState(props);
   const [members, setMembers] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setGroup(props);
+    setClub(props);
     axios
-      .get(`/api/v1/users?group_id=${props.id}`)
+      .get(`/api/v1/users?club_id=${props.id}`)
       .then((resp) => {
         setMembers(resp.data);
       })
@@ -76,4 +76,4 @@ const GroupMembers = (props) => {
   );
 };
 
-export default GroupMembers;
+export default ClubMembers;

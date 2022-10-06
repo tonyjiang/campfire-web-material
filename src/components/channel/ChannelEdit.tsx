@@ -2,13 +2,13 @@ import { Box, Button, Checkbox, FormControlLabel, FormGroup, Skeleton, Stack, Te
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const GroupEdit = (props) => {
+const ChannelEdit = (props) => {
   const [loading, setLoading] = useState(true);
-  const [group, setGroup] = useState(props);
+  const [channel, setChannel] = useState(props);
   const [editable, setEditable] = useState(true);
 
   useEffect(() => {
-    setGroup(props);
+    setChannel(props);
     setEditable(props.editable ? true : false);
   }, [props]);
 
@@ -19,13 +19,13 @@ const GroupEdit = (props) => {
   const handleSave = () => {
     let data = {
       user_id: 1,
-      name: group.name,
-      description: group.description,
-      public: group.public,
+      name: channel.name,
+      description: channel.description,
+      public: channel.public,
     };
-    if (group.id) {
+    if (channel.id) {
       axios
-        .patch(`/api/v1/groups/${group.id}`, data)
+        .patch(`/api/v1/channels/${channel.id}`, data)
         .catch((error) => {
           console.error(error);
         })
@@ -33,7 +33,7 @@ const GroupEdit = (props) => {
         .then(() => (window.location = "http://127.0.0.1:8080"));
     } else {
       axios
-        .post("/api/v1/groups", data)
+        .post("/api/v1/channels", data)
         .catch((error) => {
           console.error(error);
         })
@@ -97,14 +97,14 @@ const GroupEdit = (props) => {
         <FormGroup>
           <Stack spacing={3}>
             {pageTitle}
-            <input hidden value={group?.id} />
+            <input hidden value={channel?.id} />
             <TextField
               variant="outlined"
               label="Name"
               disabled={!editable}
               required
-              value={group?.name || ""}
-              onChange={(e) => setGroup({ ...group, name: e.target.value })}
+              value={channel?.name || ""}
+              onChange={(e) => setChannel({ ...channel, name: e.target.value })}
             />
             <TextField
               multiline
@@ -112,15 +112,15 @@ const GroupEdit = (props) => {
               disabled={!editable}
               variant="outlined"
               label="Description"
-              value={group?.description || ""}
+              value={channel?.description || ""}
               onChange={(e) =>
-                setGroup({ ...group, description: e.target.value })
+                setChannel({ ...channel, description: e.target.value })
               }
             />
             <FormControlLabel
               control={<Checkbox
-                checked={group?.public}
-                onChange={(e) => setGroup({...group, public: e.target.checked}) }
+                checked={channel?.public}
+                onChange={(e) => setChannel({...channel, public: e.target.checked}) }
               />}
               label="Public"
             />
@@ -131,4 +131,4 @@ const GroupEdit = (props) => {
   );
 };
 
-export default GroupEdit;
+export default ChannelEdit;
