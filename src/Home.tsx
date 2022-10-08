@@ -21,7 +21,7 @@ const Home = () => {
 
   return (
     <ThemeProvider theme={modeTheme}>
-      <Box bgcolor={"background.default"} color={"text.primary"} sx={{minHeight: "100vh", maxHeight: "100vh", overflow: 'hidden'}}>
+      <Box bgcolor={"background.default"} color={"text.primary"} style={{minHeight: "100vh", maxHeight: "100vh", overflow: 'hidden'}}>
         <HeaderBar 
           mode={mode} 
           setMode={setMode}
@@ -29,12 +29,16 @@ const Home = () => {
         <Grid container  sx={{minWidth: "100%"}}>
           <Grid
             item 
-            sx={{maxWidth: "20%", minWidth: 200, minHeight: `calc(100vh - ${appBarHeight}px)`, maxHeight: `calc(100vh - ${appBarHeight}px)`}}
-
+            sx={{paddingTop: 1, paddingLeft: 1, paddingBottom: 1, maxWidth: "20%", minWidth: {xs: 0, sm: 225}, minHeight: `calc(100vh - ${appBarHeight}px)`, maxHeight: `calc(100vh - ${appBarHeight}px)`}}
           >
             <LeftNav setCenterColumn={setCenterColumn}/>
           </Grid>
           <Grid item
+          sx = {{
+            paddingLeft: 1,
+            paddingRight: 1,
+            paddingTop : 1,
+          }}
            xs={true}
            >
             {centerColumn}
