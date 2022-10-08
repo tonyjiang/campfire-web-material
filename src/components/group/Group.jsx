@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import GroupEdit from "./GroupEdit";
 import PostsFeed from "../post/PostsFeed";
 import GroupMembers from "./GroupMembers";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,

@@ -19,12 +19,13 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Course from "./course/Course";
 import CourseEdit from "./course/CourseEdit";
 import Group from "./group/Group";
 import GroupEdit from "./group/GroupEdit";
+import { UserContext } from "./user/UserContext";
 
 const LeftNav = (props) => {
   const [courses, setCourses] = useState([]);
@@ -33,10 +34,12 @@ const LeftNav = (props) => {
   const [selectedGroup, setSelectedGroup] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    const req1 = axios.get("/api/v1/courses?user_id=1");
-    const req2 = axios.get("/api/v1/groups?user_id=1");
+    const config = { headers: { 'Authorization': `Bearer ${user.access_token}` } };
+    const req1 = axios.get(`/api/v1/courses?user_id=${user.id}`, config);
+    const req2 = axios.get(`/api/v1/groups?user_id=${user.id}`, config);
     Promise.all([req1, req2])
       .then(([resp1, resp2]) => {
         setCourses(resp1.data);

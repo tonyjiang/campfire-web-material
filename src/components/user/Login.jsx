@@ -21,6 +21,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useContext, useState } from "react";
+import axios from "axios";
 
 import SignUpModal from "./SignUpModal";
 import { UserContext } from "./UserContext";
@@ -45,6 +46,7 @@ export default function Login() {
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const { setUser } = useContext(UserContext);
+  const oauth_client_id = process.env.REACT_APP_OAUTH_CLIENT_ID;
 
   const modeTheme = createTheme({
     palette: {
@@ -53,14 +55,22 @@ export default function Login() {
   });
 
   const handleLogin = () => {
-    setUser({
-      id: 1,
-      first_name: "Mars",
-      last_name: "Jiangster",
-      username: "themartian",
-      email: "mars@jianster.org",
-      profile_picture: "some storage link such as s3",
-    });
+    const data = {
+      email: email,
+      password: password,
+      client_id: oauth_client_id,
+    };
+
+    axios
+      .post('/api/v1/users/login', data)
+      .then((resp) => {
+        console.log(resp.data);
+        localStorage.setItem('user', JSON.stringify(resp.data));
+        setUser(resp.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
   };
 
   const handleClickShowPassword = () => {
@@ -108,7 +118,7 @@ export default function Login() {
                   id="email"
                   type="text"
                   label="Email"
-                  value={email}
+                  value={email || ''}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </FormControl>
@@ -119,7 +129,7 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   sx={{ marginLeft: "5px" }}
                   label="Password"
-                  value={password}
+                  value={password || ''}
                   onChange={(e) => setPassword(e.target.value)}
                   endAdornment={
                     <InputAdornment position="end">

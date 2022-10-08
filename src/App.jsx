@@ -4,7 +4,8 @@ import { UserContext } from './components/user/UserContext';
 import { useState } from 'react';
 
 const App = () => {
-  const [user, setUser] = useState();
+  const cachedUser = JSON.parse(localStorage.getItem('user'));
+  const [user, setUser] = useState(cachedUser);
 
   return (
     <UserContext.Provider value={{user, setUser}}>

@@ -58,6 +58,7 @@ const HeaderBar = ({ mode, setMode }) => {
   const { setUser } = useContext(UserContext);
 
   const handleLogout = () => {
+    localStorage.clear();
     setUser(null);
   }
 

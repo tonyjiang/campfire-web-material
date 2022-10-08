@@ -11,8 +11,10 @@ const HomeFeed = (props) => {
   const [error, setError] = useState();
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const config = {headers: {Authorization: `Bearer ${user.access_token}`}}
     axios
-      .get(`/api/v1/users/1/feed`)
+      .get(`/api/v1/users/${user.id}/feed`, config)
       .then((resp) => {
         setPosts(resp.data);
       })
