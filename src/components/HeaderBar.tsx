@@ -23,12 +23,9 @@ const MyToolbar = styled(Toolbar)({
 });
 
 const IconsBox = styled(Box)(({ theme }) => ({
-  display: "none",
+  display: "flex",
   alignItems: "center",
-  gap: "10px",
-  [theme.breakpoints.up("sm")]: {
-    display: "flex",
-  },
+  gap: "10px"
 }));
 
 const UserBox = styled(Box)(({ theme }) => ({

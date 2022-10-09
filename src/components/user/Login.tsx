@@ -73,8 +73,9 @@ export default function Login() {
           </MyToolbar>
         </AppBar>
         <Grid container sx={{minHeight: "95vh", maxHeight: "95vh"}}>
-          <Grid xs={true}></Grid>
+          <Grid item xs={true}></Grid>
           <Grid 
+            item
             container xs={"auto"} 
             justifyContent="center" 
             alignItems="center" 
@@ -140,7 +141,7 @@ export default function Login() {
               </Box>
             </Stack>
           </Grid>
-          <Grid xs={true}></Grid>
+          <Grid item xs={true}></Grid>
         </Grid>
       </Box>
     </ThemeProvider>
