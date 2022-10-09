@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import ClubEdit from "./ClubEdit";
 import PostsFeed from "../post/PostsFeed";
 import ClubMembers from "./ClubMembers";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,

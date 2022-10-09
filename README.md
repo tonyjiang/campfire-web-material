@@ -1,3 +1,16 @@
+# Campfire Web App
+This React app relies on the Ruby on Rails API server for data access.
+
+### Starting the application
+We need to specify the Oauth client ID in `.env.development` file when starting the app, like so:
+```
+REACT_APP_OAUTH_CLIENT_ID=GuBL7rw78bK2nadWKmiLoeXfuxeZeENpgAhaOMKiB5M
+```
+
+Runs the app in the development mode.\
+Open [http://localhost:8080](http://localhost:8080) to view it in your browser.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
