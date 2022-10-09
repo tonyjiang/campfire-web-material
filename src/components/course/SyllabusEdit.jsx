@@ -1,6 +1,5 @@
 import "../editor/styles.css";
 
-import axios from "axios";
 import ExampleTheme from "../editor/themes/ExampleTheme";
 import AutoLinkPlugin from "../editor/plugins/AutoLinkPlugin";
 import ListMaxIndentLevelPlugin from "../editor/plugins/ListMaxIndentLevelPlugin";
@@ -23,6 +22,7 @@ import { TRANSFORMERS } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { Box, Button } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import axios from "../../api/axios";
 
 function Placeholder() {
   return (
@@ -74,7 +74,7 @@ const SyllabusEdit = (props) => {
       setEditable(false);
 
       // this is not acceptable beyond MVP
-      window.location = "http://127.0.0.1:8080";
+      window.location = process.env.REACT_APP_HOME_URL;
     };
 
     const handleSave = () => {
@@ -90,7 +90,7 @@ const SyllabusEdit = (props) => {
           console.error(error);
         })
         // this is not acceptable beyond MVP
-        .then(() => (window.location = "http://127.0.0.1:8080"));
+        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
     };
   
     return (

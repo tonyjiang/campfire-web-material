@@ -17,9 +17,9 @@ import {
   Skeleton,
   Tooltip,
 } from "@mui/material";
-import axios from "axios";
 import React from "react";
 import { useContext, useEffect, useState } from "react";
+import axios from "../api/axios";
 
 import Course from "./course/Course";
 import CourseEdit from "./course/CourseEdit";
@@ -37,9 +37,8 @@ const LeftNav = (props) => {
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    const config = { headers: { 'Authorization': `Bearer ${user.access_token}` } };
-    const req1 = axios.get(`/api/v1/courses?user_id=${user.id}`, config);
-    const req2 = axios.get(`/api/v1/groups?user_id=${user.id}`, config);
+    const req1 = axios.get(`/api/v1/courses?user_id=${user.id}`);
+    const req2 = axios.get(`/api/v1/groups?user_id=${user.id}`);
     Promise.all([req1, req2])
       .then(([resp1, resp2]) => {
         setCourses(resp1.data);
@@ -52,7 +51,7 @@ const LeftNav = (props) => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  });
 
   const createNewCourse = (e) => {
     props.setCenterColumn(<CourseEdit editable={true} />);

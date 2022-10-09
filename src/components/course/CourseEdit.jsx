@@ -11,7 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const CourseEdit = (props) => {
   const [course, setCourse] = useState(props);
@@ -39,7 +39,7 @@ const CourseEdit = (props) => {
           console.error(error);
         })
         // this is not acceptable beyond MVP
-        .then(() => (window.location = "http://127.0.0.1:8080"));
+        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
     } else {
       axios
         .post("/api/v1/courses", data)
@@ -47,13 +47,13 @@ const CourseEdit = (props) => {
           setError(error);
           console.error(error);
         })
-        .then(() => (window.location = "http://127.0.0.1:8080"));
+        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
     }
   };
 
   const handleCancel = () => {
     // this is not acceptable beyond MVP
-    window.location = "http://127.0.0.1:8080";
+    window.location = process.env.REACT_APP_HOME_URL;
   };
 
   const actionButtons = editable ? (

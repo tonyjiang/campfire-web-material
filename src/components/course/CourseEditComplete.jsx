@@ -2,7 +2,7 @@ import { Box, Button, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import TableIcons from "../TableIcons";
-import axios from "axios";
+import axios from "../../api/axios";
 
 // This component is named "Complete" because it includes both course information
 // and course schedule - each class's time, subject, format, etc. Currently it's
@@ -76,20 +76,20 @@ const CourseEditComplete = (props) => {
           console.error(error);
         })
         // this is not acceptable beyond MVP
-        .then(() => (window.location = "http://127.0.0.1:8080"));
+        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
     } else {
       axios
         .post("/api/v1/courses", data)
         .catch((error) => {
           console.error(error);
         })
-        .then(() => (window.location = "http://127.0.0.1:8080"));
+        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
     }
   };
 
   const handleCancel = () => {
     // this is not acceptable beyond MVP
-    window.location = "http://127.0.0.1:8080";
+    window.location = process.env.REACT_APP_HOME_URL;
   };
 
   const pageTitle = editable ? (

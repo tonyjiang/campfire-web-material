@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import React, { useState } from "react";
 import Post from "./Post";
 import CreatePost from "./CreatePost";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const PostsFeed = (props) => {
   const [error, setError] = useState();
