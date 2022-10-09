@@ -28,9 +28,9 @@ import {
   Skeleton,
   Tooltip,
 } from "@mui/material";
-import axios from "axios";
+import axios from "../api/axios";
 import React from "react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Course from "./course/Course";
 import CourseEdit from "./course/CourseEdit";
@@ -38,11 +38,11 @@ import Club from "./club/Club";
 import ClubEdit from "./club/ClubEdit";
 import Channel from "./channel/Channel";
 import ChannelEdit from "./channel/ChannelEdit";
+import { UserContext } from "./user/UserContext";
 import './scrollbar.css';
 import useAppBarHeight from "../Utils";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { StrictDroppable } from "./StrictDroppable";
-
 
 const LeftNav = (props) => {
   const [courses, setCourses] = useState([]);
@@ -53,13 +53,14 @@ const LeftNav = (props) => {
   const [selectedChannel, setSelectedChannel] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
+  const { user } = useContext(UserContext);
 
   const appBarHeight = useAppBarHeight()
 
   useEffect(() => {
-    const req1 = axios.get("/api/v1/courses?user_id=1");
-    const req2 = axios.get("/api/v1/clubs?user_id=1");
-    const req3 = axios.get("/api/v1/channels?user_id=1");
+    const req1 = axios.get(`/api/v1/courses?user_id=${user.id}`);
+    const req2 = axios.get(`/api/v1/clubs?user_id=${user.id}`);
+    const req3 = axios.get(`/api/v1/groups?user_id=${user.id}`);
     Promise.all([req1, req2, req3])
       .then(([resp1, resp2, resp3]) => {
         setCourses(resp1.data);
@@ -73,7 +74,7 @@ const LeftNav = (props) => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  });
 
   const createNewCourse = (event: any) => {
     props.setCenterColumn(<CourseEdit editable={true} />);

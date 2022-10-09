@@ -2,7 +2,7 @@ import { Box, Skeleton } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
 import PostsFeed from "./post/PostsFeed";
-import axios from "axios";
+import axios from "../api/axios";
 
 const HomeFeed = (props) => {
   const [loading, setLoading] = useState(true);
@@ -10,8 +10,9 @@ const HomeFeed = (props) => {
   const [error, setError] = useState();
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
     axios
-      .get(`/api/v1/users/1/feed`)
+      .get(`/api/v1/users/${user.id}/feed`)
       .then((resp) => {
         setPosts(resp.data);
       })

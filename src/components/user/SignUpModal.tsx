@@ -16,7 +16,7 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useContext, useState } from "react";
-import { axios } from "axios";
+import axios from "axios";
 
 import { UserContext } from "./UserContext";
 
@@ -34,23 +34,27 @@ export default function SignUpModal() {
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [showPassword, setShowPassword] = useState(false);
-  const [userType, setUserType] = useState();
+  const [userType, setUserType] = useState('student');
   const { setUser } = useContext(UserContext);
+  const oauth_client_id = process.env.REACT_APP_OAUTH_CLIENT_ID;
 
   const handleSignUp = () => {
     const data = {
       first_name: firstName,
       last_name: lastName,
+      user_type: userType,
       email: email,
       password: password,
       // this could be a company if somebody who is not a college student
       // is taking some public courses; but lets start with universities
-      organization: university,
+      // organization_id: university,
+      organization_id: 1,
+      client_id: oauth_client_id,
     };
-    console.log(data);
     axios
       .post("/api/v1/users", data)
       .then((resp) => {
+        localStorage.setItem('user', JSON.stringify(resp.data));
         setUser(resp.data);
       })
       .catch((err) => {
@@ -169,10 +173,9 @@ export default function SignUpModal() {
                 label="Your primary role"
                 onChange={(e) => setUserType(e.target.value)}
               >
-                <MenuItem value="3">Professor</MenuItem>
-                <MenuItem value="4">Instructor</MenuItem>
-                <MenuItem value="5">Assistant</MenuItem>
-                <MenuItem value="6">Student</MenuItem>
+                <MenuItem value="instructor">Instructor</MenuItem>
+                <MenuItem value="assistant">Assistant</MenuItem>
+                <MenuItem value="student">Student</MenuItem>
               </Select>
             </FormControl>
             <Box>

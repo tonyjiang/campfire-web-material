@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const ClubEdit = (props) => {
   const [loading, setLoading] = useState(true);
@@ -30,20 +30,20 @@ const ClubEdit = (props) => {
           console.error(error);
         })
         // this is not acceptable beyond MVP
-        .then(() => (window.location = "http://127.0.0.1:8080"));
+        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
     } else {
       axios
         .post("/api/v1/clubs", data)
         .catch((error) => {
           console.error(error);
         })
-        .then(() => (window.location = "http://127.0.0.1:8080"));
+        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
     }
   };
 
   const handleCancel = () => {
     // this is not acceptable beyond MVP
-    window.location = "http://127.0.0.1:8080";
+    window.location = process.env.REACT_APP_HOME_URL;
   };
 
   const pageTitle = editable ? (

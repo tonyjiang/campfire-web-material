@@ -1,15 +1,23 @@
-import Home from './Home';
-import Login from './components/user/Login';
-import { UserContext } from './components/user/UserContext';
-import { useState } from 'react';
-import React from 'react';
+import Login from "./components/user/Login";
+import { UserContext } from "./components/user/UserContext";
+import React, { Suspense, useState } from "react";
+const Home = React.lazy(() => import("./Home"));
 
 const App = () => {
-  const [user, setUser] = useState();
+  const cachedUser = JSON.parse(localStorage.getItem("user"));
+  const [user, setUser] = useState(cachedUser);
+  if (!user)
+    return (
+      <UserContext.Provider value={{ user, setUser }}>
+        <Login />
+      </UserContext.Provider>
+    );
 
   return (
-    <UserContext.Provider value={{user, setUser}}>
-      {user ? <Home /> : <Login />}
+    <UserContext.Provider value={{ user, setUser }}>
+      <Suspense>
+        <Home />
+      </Suspense>
     </UserContext.Provider>
   );
 };

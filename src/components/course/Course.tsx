@@ -5,7 +5,7 @@ import CourseEdit from "./CourseEdit";
 import CourseMembers from "./CourseMembers";
 import PostsFeed from "../post/PostsFeed";
 import SyllabusEdit from "./SyllabusEdit";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
