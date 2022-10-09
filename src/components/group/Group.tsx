@@ -1,17 +1,17 @@
 import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
-import ChannelEdit from "./ChannelEdit";
+import GroupEdit from "./GroupEdit";
 import PostsFeed from "../post/PostsFeed";
-import ChannelMembers from "./ChannelMembers";
+import GroupMembers from "./GroupMembers";
 import axios from "axios";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
 }));
 
-const Channel = (props) => {
-  const [channel, setChannel] = useState(props);
+const Group = (props) => {
+  const [group, setGroup] = useState(props);
   const [posts, setPosts] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -19,10 +19,10 @@ const Channel = (props) => {
 
   useEffect(() => {
     axios
-      .get(`/api/v1/posts?context_type=Channel&context_id=${props.id}`)
+      .get(`/api/v1/posts?context_type=Group&context_id=${props.id}`)
       .then((resp) => {
         setPosts(resp.data);
-        setChannel(props);
+        setGroup(props);
         setSelectedTab(0);
       })
       .catch((err) => {
@@ -43,13 +43,13 @@ const Channel = (props) => {
     return (
       <div>
         <h2>
-          Error in Channel.jsx! Look at the browser console for details.
+          Error in Group.jsx! Look at the browser console for details.
         </h2>
         <p>{JSON.stringify(error)}</p>
       </div>
     );
 
-  const channelHeader = (
+  const groupHeader = (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
@@ -68,16 +68,16 @@ const Channel = (props) => {
 
   return (
     <Box flex={4} p={{ xs: 0, md: 2 }}>
-      {channelHeader}
+      {groupHeader}
       {selectedTab === 0 ? (
-        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Channel" contextId={channel.id} />
+        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Group" contextId={group.id} />
       ) : selectedTab === 1 ? (
-        <ChannelEdit {...channel} />
+        <GroupEdit {...group} />
       ) : ( 
-        <ChannelMembers {...channel} />
+        <GroupMembers {...group} />
       )}
     </Box>
   );
 };
 
-export default Channel;
+export default Group;
