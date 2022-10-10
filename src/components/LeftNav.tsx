@@ -8,7 +8,6 @@ import {
   Groups as GroupsIcon,
   KeyboardArrowRight,
   KeyboardDoubleArrowRight,
-  PersonalVideoRounded,
   School,
   Search,
 } from "@mui/icons-material";
@@ -36,12 +35,12 @@ import Course from "./course/Course";
 import CourseEdit from "./course/CourseEdit";
 import Club from "./club/Club";
 import ClubEdit from "./club/ClubEdit";
-import Channel from "./channel/Channel";
-import ChannelEdit from "./channel/ChannelEdit";
+import Group from "./group/Group";
+import GroupEdit from "./group/GroupEdit";
 import { UserContext } from "./user/UserContext";
 import './scrollbar.css';
 import useAppBarHeight from "../Utils";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { StrictDroppable } from "./StrictDroppable";
 
 const LeftNav = (props) => {
@@ -49,8 +48,8 @@ const LeftNav = (props) => {
   const [selectedCourse, setSelectedCourse] = useState();
   const [clubs, setClubs] = useState([]);
   const [selectedClub, setSelectedClub] = useState();
-  const [channels, setChannels] = useState([]);
-  const [selectedChannel, setSelectedChannel] = useState();
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const { user } = useContext(UserContext);
@@ -65,7 +64,7 @@ const LeftNav = (props) => {
       .then(([resp1, resp2, resp3]) => {
         setCourses(resp1.data);
         setClubs(resp2.data);
-        setChannels(resp3.data);
+        setGroups(resp3.data);
       })
       .catch((error) => {
         console.error(error);
@@ -86,30 +85,30 @@ const LeftNav = (props) => {
     event.stopPropagation();
   };
 
-  const createNewChannel = (event: any) => {
-    props.setCenterColumn(<ChannelEdit editable={true} />);
+  const createNewGroup = (event: any) => {
+    props.setCenterColumn(<GroupEdit editable={true} />);
     event.stopPropagation();
   };
 
   const viewCourse = (course) => {
     setSelectedClub(null);
-    setSelectedChannel(null);
+    setSelectedGroup(null);
     setSelectedCourse(course.id);
     props.setCenterColumn(<Course {...course} />);
   };
 
   const viewClub = (club) => {
     setSelectedCourse(null);
-    setSelectedChannel(null);
+    setSelectedGroup(null);
     setSelectedClub(club.id);
     props.setCenterColumn(<Club {...club} />);
   };
 
-  const viewChannel = (channel) => {
+  const viewGroup = (group) => {
     setSelectedCourse(null);
     setSelectedClub(null);
-    setSelectedChannel(channel.id);
-    props.setCenterColumn(<Channel {...channel} />);
+    setSelectedGroup(group.id);
+    props.setCenterColumn(<Group {...group} />);
   };
 
   const openCoursesClick = (event: any) => {
@@ -120,8 +119,8 @@ const LeftNav = (props) => {
     setClubsOpen(!openClubs);
   };
 
-  const openChannelsClick = (event: any) => {
-    setChannelsOpen(!openChannels);
+  const openGroupsClick = (event: any) => {
+    setGroupsOpen(!openGroups);
   };
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -132,10 +131,21 @@ const LeftNav = (props) => {
 
   const [openCourses, setCoursesOpen] = useState(true);
   const [openClubs, setClubsOpen] = useState(true);
-  const [openChannels, setChannelsOpen] = useState(true);
+  const [openGroups, setGroupsOpen] = useState(true);
 
     
-  const onDragEnd = () => {
+  const onDragEnd = result => {
+    const {destination, source, draggableId } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (destination.index === source.index) {
+      return;
+    }
+
+
 
   };
 
@@ -154,7 +164,7 @@ const LeftNav = (props) => {
                 <Draggable
                   key={course.id}
                   draggableId={String(course.id)}
-                  index={Number(`${course.id == 4 ? course.id - 2 : course.id - 1}`)}>
+                  index={Number(`${course.id > 4 ? course.id - 2 : course.id - 1}`)}>
                   {(provided) => (
                   <ListItemButton
                     {...provided.draggableProps}
@@ -162,12 +172,12 @@ const LeftNav = (props) => {
                     ref={provided.innerRef}
                     selected={selectedCourse === course.id}
                     onClick={() => {viewCourse(course); mobileDrawerToggle();}}
-                    sx={{ pt: 0.5, pb: 0.5}} 
+                    sx={{ pt: 0.5, pb: 0.5, backgroundColor: {xs: "#353535", sm: "#121212"}}}  
                   >
                     <ListItemIcon>
                       <ClassOutlined sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
                     </ListItemIcon>
-                    <Tooltip title={course.title}>
+                    <Tooltip title={course.title} disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
                       <ListItemText primary={course.title} primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
                     </Tooltip>
                   </ListItemButton>
@@ -204,12 +214,12 @@ const LeftNav = (props) => {
                   ref={provided.innerRef}
                   selected={selectedClub === club.id}
                   onClick={() => {viewClub(club); mobileDrawerToggle();}}
-                  sx={{ pt: 0.5, pb: 0.5}} 
+                  sx={{ pt: 0.5, pb: 0.5, backgroundColor: {xs: "#353535", sm: "#121212"}}} 
                 >
                   <ListItemIcon>
                     <Carpenter sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
                   </ListItemIcon>
-                  <Tooltip title={club.name}>
+                  <Tooltip title={club.name} disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
                     <ListItemText primary={club.name} primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
                   </Tooltip>
                 </ListItemButton>
@@ -223,36 +233,36 @@ const LeftNav = (props) => {
     </DragDropContext>
   );
 
-  let channelList = (
+  let groupList = (
     <DragDropContext 
     onDragEnd = {onDragEnd}
     >
-      <StrictDroppable droppableId = {"channel"}>
+      <StrictDroppable droppableId = {"group"}>
       {
         (provided) => (
         <List
         disablePadding
         ref = {provided.innerRef}
         {...provided.droppableProps}>
-          {channels.map((channel) => (
+          {groups.map((group) => (
             <Draggable
-              key={channel.id + "channel"}
-              draggableId={String(channel.id) + "channel"}
-              index={Number(`${channel.id > 1 ? channel.id - 3 : channel.id - 1}`)}>
+              key={group.id + "group"}
+              draggableId={String(group.id) + "group"}
+              index={Number(`${group.id > 1 ? group.id - 3 : group.id - 1}`)}>
               {(provided) => (
               <ListItemButton
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 ref={provided.innerRef}
-                selected={selectedChannel === channel.id}
-                onClick={() => {viewChannel(channel); mobileDrawerToggle();}}
-                sx={{ pt: 0.5, pb: 0.5}} 
+                selected={selectedGroup === group.id}
+                onClick={() => {viewGroup(group); mobileDrawerToggle();}}
+                sx={{ pt: 0.5, pb: 0.5, backgroundColor: {xs: "#353535", sm: "#121212"}}}  
               >
                 <ListItemIcon>
                   <Chat sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
                 </ListItemIcon>
-                <Tooltip title={channel.name}>
-                  <ListItemText primary={channel.name} primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+                <Tooltip title={group.name} disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
+                  <ListItemText primary={group.name} primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
                 </Tooltip>
               </ListItemButton>
               )} 
@@ -269,9 +279,9 @@ const LeftNav = (props) => {
       <List
       sx={{ className: 'scroller', maxHeight: {xs: '100%', sm:`calc(100vh - ${appBarHeight}px - 34px)`}, overflow: 'auto', overflowX: 'hidden'}}
       className='scroller'>
-        <Tooltip title="Find new courses">
+        <Tooltip title="Find new courses" disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
           <ListItem disablePadding>
-            <ListItemButton sx={{ pt: 0.25, pb: 0.25}} onClick={(e) => searchNewCourses()}>
+            <ListItemButton sx={{ pt: 0.25, pb: 0.25}} onClick={() => searchNewCourses()}>
               <ListItemText primary="Find New Courses" primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
                 <Search sx={{paddingLeft: 2.5}}/>
             </ListItemButton>
@@ -280,12 +290,16 @@ const LeftNav = (props) => {
 
         <ListItem disablePadding>
           <ListItemButton sx={{ pt: 0.5, pb: 0.5}} onClick={openCoursesClick}>
-            <Tooltip title={openCourses ? "Close courses" : "Open courses"}>
+            <Tooltip title={openCourses ? "Close courses" : "Open courses"} disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
               {openCourses ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
             </Tooltip>
             <School sx={{paddingRight: 2.5}}/>
             <ListItemText primary="Courses"/>
-            <Tooltip title="Create a new course" onClick={(e) => {createNewCourse(e); mobileDrawerToggle();}} >
+            <Tooltip 
+              title="Create a new course" 
+              onClick={(e) => {createNewCourse(e); mobileDrawerToggle();}} 
+              disableInteractive 
+              enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
               <AddSharpIcon sx={{paddingLeft: 2.5}}/>
             </Tooltip>
           </ListItemButton>
@@ -297,7 +311,7 @@ const LeftNav = (props) => {
 
         <Divider variant="middle" sx={{paddingTop: 1}} />
 
-        <Tooltip title="Find new clubs">
+        <Tooltip title="Find new clubs" disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
           <ListItem disablePadding sx={{paddingTop: 1}}>
             <ListItemButton sx={{ pt: 0.25, pb: 0.25}} onClick={() => searchNewClubs()}>
               <ListItemText primary="Find New Clubs" primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
@@ -308,12 +322,18 @@ const LeftNav = (props) => {
 
         <ListItem disablePadding>
         <ListItemButton sx={{ pt: 0.5, pb: 0.5}} onClick={openClubsClick}>
-            <Tooltip title={openClubs ? "Close clubs" : "Open clubs"}>
+            <Tooltip 
+            title={openClubs ? "Close clubs" : "Open clubs"} 
+            disableInteractive 
+            enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
               {openClubs ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
             </Tooltip>
             <EmojiEvents sx={{paddingRight: 2.5}}/>
             <ListItemText primary="Clubs"/>
-            <Tooltip title="Create a new club" onClick={(e) => {createNewClub(e); mobileDrawerToggle();}}>
+            <Tooltip title="Create a new club"
+            onClick={(e) => {createNewClub(e); mobileDrawerToggle();}} 
+            disableInteractive 
+            enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
               <AddSharpIcon sx={{paddingLeft: 2.5}}/>
             </Tooltip>
           </ListItemButton>
@@ -325,30 +345,36 @@ const LeftNav = (props) => {
 
         <Divider variant="middle" sx={{paddingTop: 1}} />
 
-        <Tooltip title="Find new channels">
+        <Tooltip title="Find new groups" 
+        disableInteractive 
+        enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
           <ListItem disablePadding sx={{paddingTop: 1.5}}>
-            <ListItemButton sx={{ pt: 0.25, pb: 0.25}} onClick={() => {searchNewChannels(); mobileDrawerToggle();}}> 
-              <ListItemText primary="Find New Channels" primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+            <ListItemButton sx={{ pt: 0.25, pb: 0.25}} onClick={() => {searchNewGroups(); mobileDrawerToggle();}}> 
+              <ListItemText primary="Find New Groups" primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
               <Search sx={{paddingLeft: 2.5}}/>
             </ListItemButton>
           </ListItem>
         </Tooltip>
 
         <ListItem disablePadding>
-          <ListItemButton sx={{ pt: 0.5, pb: 0.5}} onClick={openChannelsClick}>
-            <Tooltip title={openChannels ? "Close channels" : "Open channels"}>
-              {openChannels ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
+          <ListItemButton sx={{ pt: 0.5, pb: 0.5}} onClick={openGroupsClick}>
+            <Tooltip title={openGroups ? "Close groups" : "Open groups"} 
+            disableInteractive 
+            enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
+              {openGroups ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
             </Tooltip>
             <GroupsIcon sx={{paddingRight: 2.5}}/>
-            <ListItemText primary="Channels"/>
-            <Tooltip title="Create a new channel" onClick={(e) => {createNewChannel(e); mobileDrawerToggle();}}>
+            <ListItemText primary="Groups"/>
+            <Tooltip title="Create a new group" onClick={(e) => {createNewGroup(e); mobileDrawerToggle();}} 
+            disableInteractive 
+            enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
               <AddSharpIcon sx={{paddingLeft: 2.5}}/>
             </Tooltip>
           </ListItemButton>
         </ListItem>
 
-        <Collapse in={openChannels} timeout="auto" unmountOnExit>
-          {channelList}
+        <Collapse in={openGroups} timeout="auto" unmountOnExit>
+          {groupList}
         </Collapse>
       </List>
   );
