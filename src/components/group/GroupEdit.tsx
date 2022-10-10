@@ -30,20 +30,20 @@ const GroupEdit = (props) => {
           console.error(error);
         })
         // this is not acceptable beyond MVP
-        .then(() => (window.location = "http://localhost:8080"));
+        .then(() => (window.location =  process.env.REACT_APP_HOME_URL));
     } else {
       axios
         .post("/api/v1/groups", data)
         .catch((error) => {
           console.error(error);
         })
-        .then(() => (window.location = "http://localhost:8080"));
+        .then(() => (window.location =  process.env.REACT_APP_HOME_URL));
     }
   };
 
   const handleCancel = () => {
     // this is not acceptable beyond MVP
-    window.location = "http://localhost:8080";
+    window.location =  process.env.REACT_APP_HOME_URL;
   };
 
   const pageTitle = editable ? (
