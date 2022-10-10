@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Suspense>
+      <Suspense fallback={<div />}>
         <Home />
       </Suspense>
     </UserContext.Provider>

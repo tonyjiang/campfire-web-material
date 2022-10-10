@@ -73,7 +73,7 @@ const LeftNav = (props) => {
       .finally(() => {
         setLoading(false);
       });
-  });
+  }, []);
 
   const createNewCourse = (event: any) => {
     props.setCenterColumn(<CourseEdit editable={true} />);
