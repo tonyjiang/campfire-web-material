@@ -2,13 +2,14 @@
 This React app relies on the Ruby on Rails API server for data access.
 
 ### Starting the application
-We need to specify the Oauth client ID in `.env.development` file when starting the app, like so:
+First get an Oauth client ID from your local Ruby on Rails database. Make sure you have run `seeds.rb` against development database. Then in Rails console run `Doorkeeper::Application.where(name: 'Web')` to get an application object. Copy the `uid` - this is your client ID for web development.
+
+Then edit the Oauth client ID in `.env.development`, like so:
 ```
-REACT_APP_OAUTH_CLIENT_ID=GuBL7rw78bK2nadWKmiLoeXfuxeZeENpgAhaOMKiB5M
+REACT_APP_OAUTH_CLIENT_ID=<your Oauth client ID>
 ```
 
-Runs the app in the development mode.\
-Open [http://localhost:8080](http://localhost:8080) to view it in your browser.
+Finally run `npm start` to start the app in the development mode. Then open [http://localhost:8080](http://localhost:8080) to view it in your browser.
 
 
 # Getting Started with Create React App
