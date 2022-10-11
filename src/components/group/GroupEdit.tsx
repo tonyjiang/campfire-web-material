@@ -1,13 +1,13 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 import { UserContext } from "../user/UserContext";
 
 const GroupEdit = (props) => {
   const [loading, setLoading] = useState(true);
   const [group, setGroup] = useState(props);
   const [editable, setEditable] = useState(true);
-  const { user } = useContext(UserContext);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     setGroup(props);
