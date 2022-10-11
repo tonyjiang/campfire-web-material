@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const GroupEdit = (props) => {
   const [loading, setLoading] = useState(true);
