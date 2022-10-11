@@ -1,11 +1,13 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, Skeleton, Stack, TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { UserContext } from "../user/UserContext";
 
 const GroupEdit = (props) => {
   const [loading, setLoading] = useState(true);
   const [group, setGroup] = useState(props);
   const [editable, setEditable] = useState(true);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     setGroup(props);
@@ -18,7 +20,7 @@ const GroupEdit = (props) => {
 
   const handleSave = () => {
     let data = {
-      user_id: 1,
+      user_id: user.id,
       name: group.name,
       description: group.description,
       public: group.public,

@@ -1,11 +1,13 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, Skeleton, Stack, TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "../../api/axios";
+import { UserContext } from "../user/UserContext";
 
 const ClubEdit = (props) => {
   const [loading, setLoading] = useState(true);
   const [club, setClub] = useState(props);
   const [editable, setEditable] = useState(true);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     setClub(props);
@@ -18,7 +20,7 @@ const ClubEdit = (props) => {
 
   const handleSave = () => {
     let data = {
-      user_id: 1,
+      user_id: user.id,
       name: club.name,
       description: club.description,
       public: club.public,
