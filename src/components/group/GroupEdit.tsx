@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, Skeleton, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import axios from "../../api/axios";
+import axios from "axios";
 
 const GroupEdit = (props) => {
   const [loading, setLoading] = useState(true);
@@ -30,20 +30,20 @@ const GroupEdit = (props) => {
           console.error(error);
         })
         // this is not acceptable beyond MVP
-        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
+        .then(() => (window.location =  process.env.REACT_APP_HOME_URL));
     } else {
       axios
         .post("/api/v1/groups", data)
         .catch((error) => {
           console.error(error);
         })
-        .then(() => (window.location = process.env.REACT_APP_HOME_URL));
+        .then(() => (window.location =  process.env.REACT_APP_HOME_URL));
     }
   };
 
   const handleCancel = () => {
     // this is not acceptable beyond MVP
-    window.location = process.env.REACT_APP_HOME_URL;
+    window.location =  process.env.REACT_APP_HOME_URL;
   };
 
   const pageTitle = editable ? (

@@ -21,7 +21,7 @@ import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 import { TRANSFORMERS } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { Box, Button } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "../../api/axios";
 
 function Placeholder() {

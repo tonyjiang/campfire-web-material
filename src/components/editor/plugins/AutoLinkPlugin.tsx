@@ -1,4 +1,5 @@
 import { AutoLinkPlugin } from "@lexical/react/LexicalAutoLinkPlugin";
+import React from "react";
 
 const URL_MATCHER = /((https?:\/\/(www\.)?)|(www\.))[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
@@ -29,6 +30,7 @@ const MATCHERS = [
   }
 ];
 
+//eslint-disable-line
 export default function PlaygroundAutoLinkPlugin() {
   return <AutoLinkPlugin matchers={MATCHERS} />;
 }

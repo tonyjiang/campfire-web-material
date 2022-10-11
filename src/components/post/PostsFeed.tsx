@@ -52,12 +52,18 @@ const PostsFeed = (props) => {
     );
 
   return (
-    <Stack spacing={1}>
+    <Stack 
+      direction={{ xs: "column-reverse"}} 
+      spacing={1}
+      maxHeight={"100%"}
+      justifyContent={"flex-start"}
+    >
       <CreatePost
         contextType={props.contextType}
         addNewPost={addNewPost}
-        style={{ marginTop: "10px", marginBottom: "10px" }}
+        style={{ marginBottom: "10px" }}
       />
+
       {props.posts.map((post) => (
         <Post post={post} key={post.id} />
       ))}
