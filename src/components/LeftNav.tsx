@@ -43,7 +43,7 @@ import useAppBarHeight from "../Utils";
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { StrictDroppable } from "./StrictDroppable";
 
-const LeftNav = (props) => {
+const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState();
   const [clubs, setClubs] = useState([]);
@@ -90,21 +90,21 @@ const LeftNav = (props) => {
     event.stopPropagation();
   };
 
-  const viewCourse = (course) => {
+  const viewCourse = (course: any) => {
     setSelectedClub(null);
     setSelectedGroup(null);
     setSelectedCourse(course.id);
     props.setCenterColumn(<Course {...course} />);
   };
 
-  const viewClub = (club) => {
+  const viewClub = (club: any) => {
     setSelectedCourse(null);
     setSelectedGroup(null);
     setSelectedClub(club.id);
     props.setCenterColumn(<Club {...club} />);
   };
 
-  const viewGroup = (group) => {
+  const viewGroup = (group: any) => {
     setSelectedCourse(null);
     setSelectedClub(null);
     setSelectedGroup(group.id);
@@ -134,9 +134,8 @@ const LeftNav = (props) => {
   const [openGroups, setGroupsOpen] = useState(true);
 
     
-  const onDragEnd = result => {
-    const {destination, source, draggableId } = result;
-
+  const onDragEndCourses = (result: { destination: any; source: any; }) => {
+    const {destination, source } = result;
     if (!destination) {
       return;
     }
@@ -145,27 +144,63 @@ const LeftNav = (props) => {
       return;
     }
 
+    const movedCourse = courses.splice(source.index, 1)
+    courses.splice(destination.index, 0, movedCourse[0])
+    axios.patch(`/api/v1/course_memberships/?user_id=${user.id}`);
+    const reorderedCourses = courses.map((course: any, i) => ({...course, order: i}));
+    setCourses(reorderedCourses)
+  };
 
+  const onDragEndClubs = (result: { destination: any; source: any; }) => {
+    const {destination, source } = result;
+    if (!destination) {
+      return;
+    }
 
+    if (destination.index === source.index) {
+      return;
+    }
+
+    const movedClub = clubs.splice(source.index, 1)
+    clubs.splice(destination.index, 0, movedClub[0])
+    
+    const reorderedClubs = clubs.map((club: any, i) => ({...club, order: i}));
+    setClubs(reorderedClubs)
+  };
+
+  const onDragEndGroups = (result: { destination: any; source: any; }) => {
+    const {destination, source } = result;
+    if (!destination) {
+      return;
+    }
+
+    if (destination.index === source.index) {
+      return;
+    }
+
+    const movedGroup = groups.splice(source.index, 1)
+    groups.splice(destination.index, 0, movedGroup[0])
+    const reorderedGroups = groups.map((group: any, i) => ({...group, order: i}));
+    setGroups(reorderedGroups)
   };
 
   let courseList = (
     <DragDropContext 
-    onDragEnd = {onDragEnd}
+    onDragEnd = {onDragEndCourses}
     >
       <StrictDroppable droppableId = {"course"}>
         {
-          (provided) => (
+          (provided: any) => (
           <List 
             disablePadding
             ref = {provided.innerRef}
             {...provided.droppableProps}>
-              {courses.map((course) => (
+              {courses.map((course: any) => (
                 <Draggable
                   key={course.id}
                   draggableId={String(course.id)}
-                  index={Number(`${course.id > 4 ? course.id - 2 : course.id - 1}`)}>
-                  {(provided) => (
+                  index={course.order}>
+                  {(provided: any) => (
                   <ListItemButton
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
@@ -193,21 +228,21 @@ const LeftNav = (props) => {
 
   let clubList = (
     <DragDropContext 
-    onDragEnd = {onDragEnd}
+    onDragEnd = {onDragEndClubs}
     >
       <StrictDroppable droppableId = {"club"}>
       {
-        (provided) => (
+        (provided: any) => (
           <List
             disablePadding
             ref = {provided.innerRef}
             {...provided.droppableProps}>
-              {clubs.map((club) => (
+              {clubs.map((club: any) => (
                 <Draggable
                 key={club.id}
                 draggableId={String(club.id)}
-                index={club.id - 1}>
-                {(provided) => (
+                index={club.order}>
+                {(provided: any) => (
                 <ListItemButton
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
@@ -235,21 +270,21 @@ const LeftNav = (props) => {
 
   let groupList = (
     <DragDropContext 
-    onDragEnd = {onDragEnd}
+    onDragEnd = {onDragEndGroups}
     >
       <StrictDroppable droppableId = {"group"}>
       {
-        (provided) => (
+        (provided: any) => (
         <List
         disablePadding
         ref = {provided.innerRef}
         {...provided.droppableProps}>
-          {groups.map((group) => (
+          {groups.map((group: any) => (
             <Draggable
               key={group.id + "group"}
               draggableId={String(group.id) + "group"}
-              index={Number(`${group.id > 1 ? group.id - 3 : group.id - 1}`)}>
-              {(provided) => (
+              index={group.order}>
+              {(provided: any) => (
               <ListItemButton
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
