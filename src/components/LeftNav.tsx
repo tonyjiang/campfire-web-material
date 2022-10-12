@@ -144,9 +144,10 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
       return;
     }
 
+
     const movedCourse = courses.splice(source.index, 1)
     courses.splice(destination.index, 0, movedCourse[0])
-    axios.patch(`/api/v1/course_memberships/?user_id=${user.id}`);
+    axios.patch(`/api/v1/course_memberships/${movedCourse[0].id}`, {source: source.index, destination: destination.index, order: destination.index, user_id: user.id});
     const reorderedCourses = courses.map((course: any, i) => ({...course, order: i}));
     setCourses(reorderedCourses)
   };
