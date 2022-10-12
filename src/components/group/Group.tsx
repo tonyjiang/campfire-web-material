@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import GroupEdit from "./GroupEdit";
 import PostsFeed from "../post/PostsFeed";
 import GroupMembers from "./GroupMembers";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
@@ -43,7 +43,7 @@ const Group = (props) => {
     return (
       <div>
         <h2>
-          Error in Group.jsx! Look at the browser console for details.
+          Error in Group.tsx! Look at the browser console for details.
         </h2>
         <p>{JSON.stringify(error)}</p>
       </div>

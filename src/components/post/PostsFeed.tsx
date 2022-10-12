@@ -6,15 +6,17 @@ import axios from "../../api/axios";
 
 const PostsFeed = (props) => {
   const [error, setError] = useState();
+  const cachedUser = JSON.parse(localStorage.getItem('user'));
 
   const addNewPost = (postText, images) => {
     const data = {
       context_type: props.contextType,
       context_id: props.contextId,
       post_text: postText,
-      user_id: 1,
+      user_id: cachedUser.id,
     };
     const formData = new FormData();
+    formData.append('context_type', props.contextType);
     for (let key in data) formData.append(`post[${key}]`, data[key]);
     if (images?.length > 0) {
       images.forEach(image => {
@@ -28,7 +30,7 @@ const PostsFeed = (props) => {
         const post = {
           id: resp.data.id,
           image_urls: resp.data.image_urls,
-          author: { first_name: "John", last_name: "Smith" },
+          author: cachedUser,
           ...data,
         };
         props.setPosts([post, ...props.posts]);
@@ -43,7 +45,7 @@ const PostsFeed = (props) => {
     return (
       <div>
         <h2>
-          Error in PostsFeed.jsx component! Look at the browser console for
+          Error in PostsFeed.tsx component! Look at the browser console for
           details.
         </h2>
         <hr />
