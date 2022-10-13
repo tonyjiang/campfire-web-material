@@ -1,9 +1,13 @@
 import { Stack } from "@mui/material";
 import React, { useState } from "react";
-import Post from "./Post";
+import Thread from "./Thread";
 import CreatePost from "./CreatePost";
 import axios from "../../api/axios";
 
+// PostsFeed, Thread, Post, and Comment are related in the following ways:
+// 1. A Comment is a Post - except it doesn't have comments
+// 2. A Thread is the combination of a Post and all its Comments
+// 3. PostsFeed is a collection of Threads
 const PostsFeed = (props) => {
   const [error, setError] = useState();
   const cachedUser = JSON.parse(localStorage.getItem('user'));
@@ -55,7 +59,6 @@ const PostsFeed = (props) => {
 
   return (
     <Stack 
-      direction={{ xs: "column-reverse"}} 
       spacing={1}
       maxHeight={"100%"}
       justifyContent={"flex-start"}
@@ -67,7 +70,7 @@ const PostsFeed = (props) => {
       />
 
       {props.posts.map((post) => (
-        <Post post={post} key={post.id} />
+        <Thread op={post} key={post.id} />
       ))}
     </Stack>
   );

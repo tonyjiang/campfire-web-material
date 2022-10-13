@@ -7,12 +7,9 @@ import {
   IconButton,
   ImageList,
   ImageListItem,
-  List,
-  ListItem,
-  styled,
   Typography,
 } from "@mui/material";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import {
   ChatBubbleOutline,
   Favorite,
@@ -24,20 +21,13 @@ import {
 import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
 
-import CreatePost from "./CreatePost";
-
-const CommentCard = styled(Card)(({ theme }) => ({
-  color: theme.palette.primary.light,
-  width: "100%",
-  marginLeft: "5px",
-}));
-
 export default function Post(props) {
   const [post, setPost] = useState(props.post);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [error, setError] = useState();
+  const cachedUser = JSON.parse(localStorage.getItem("user") || "");
 
   useEffect(() => {
     setPost(props.post);
@@ -46,65 +36,15 @@ export default function Post(props) {
     setImageUrls(props.post.image_urls);
   }, [props]);
 
-  const postComments = () => {
-    return (
-      <List>
-        {comments?.map((comment) => (
-          <ListItem key={comment.id}>
-            <CommentCard>
-              <CardHeader
-                avatar={
-                  <Avatar sx={{ bgcolor: blue[500] }} aria-label="user">
-                    {comment.author.first_name.substring(0, 1) +
-                      comment.author.last_name.substring(0, 1)}
-                  </Avatar>
-                }
-                title={`${comment.author.first_name} ${comment.author.last_name}`}
-                subheader={comment.created_at}
-              />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {comment.post_text}
-                </Typography>
-              </CardContent>
-            </CommentCard>
-          </ListItem>
-        ))}
-      </List>
-    );
-  };
-
-  const addNewComment = (commentText) => {
-    const data = {
-      context_type: "Post",
-      context_id: post.id,
-      post_text: commentText,
-      user_id: 2,
-    };
-
-    axios
-      .post("/api/v1/posts", data)
-      .then(() => {
-        const comment = {
-          ...data,
-          author: { first_name: "John", last_name: "Smith" },
-        };
-        setComments([...comments, comment]);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(err);
-      });
-  };
-
   const handleLikeClick = () => {
-    // the current user is hardcoded as 1
-    const like = likes?.find((like) => like.user_id === 1);
+    const like = likes?.find((l) => l.user_id === cachedUser.id);
     if (like) {
       axios
         .delete(`/api/v1/posts/${post.id}/likes/${like.id}`)
-        .then((resp) => {
-          const newLikes = likes.filter((like) => like.user_id !== 1);
+        .then(() => {
+          const newLikes = likes.filter(
+            (like) => like.user_id !== cachedUser.id
+          );
           setLikes(newLikes);
         })
         .catch((err) => {
@@ -113,7 +53,7 @@ export default function Post(props) {
         });
     } else {
       const data = {
-        user_id: 1,
+        user_id: cachedUser.id,
         likable_type: "Post",
         likable_id: post.id,
       };
@@ -133,7 +73,7 @@ export default function Post(props) {
   if (error)
     return (
       <div>
-        <h2>Error in Post.jsx! Look at the browser console for details.</h2>
+        <h2>Error in Post.tsx! Look at the browser console for details.</h2>
         <hr />
         <h4>{JSON.stringify(error)}</h4>
       </div>
@@ -164,24 +104,23 @@ export default function Post(props) {
           <ImageList cols={1} rowHeight="auto">
             {imageUrls.map((imageUrl, index) => (
               <ImageListItem key={index}>
-                <img
-                  src={imageUrl}
-                  alt="where-t-f-is-da-img?"
-                />
+                <img src={imageUrl} alt="where-t-f-is-da-img?" />
               </ImageListItem>
             ))}
           </ImageList>
         ) : null}
       </CardContent>
       <CardActions sx={{ display: "flex" }}>
-        <IconButton sx={{ marginRight: "20px" }}>
-          <ChatBubbleOutline style={{ marginRight: "12px" }} />
-          {comments?.length ? (
-            <span style={{ fontSize: "12px" }}>{comments.length}</span>
-          ) : null}
-        </IconButton>
+        {props.isComment ? null : (
+          <IconButton sx={{ marginRight: "20px" }}>
+            <ChatBubbleOutline style={{ marginRight: "12px" }} />
+            {comments?.length ? (
+              <span style={{ fontSize: "12px" }}>{comments.length}</span>
+            ) : null}
+          </IconButton>
+        )}
         <IconButton sx={{ marginRight: "20px" }} onClick={handleLikeClick}>
-          {likes?.find((like) => like.user_id === 1) ? (
+          {likes?.find((like) => like.user_id === cachedUser.id) ? (
             <Favorite style={{ marginRight: "12px" }} />
           ) : (
             <FavoriteBorder style={{ marginRight: "12px" }} />
@@ -194,12 +133,6 @@ export default function Post(props) {
           <IosShareOutlined />
         </IconButton>
       </CardActions>
-      <CreatePost
-        contextType="Post"
-        addNewPost={addNewComment}
-        style={{ marginLeft: "20px" }}
-      />
-      {postComments()}
     </Card>
   );
-};
+}
