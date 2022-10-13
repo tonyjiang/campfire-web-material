@@ -65,6 +65,7 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
         setCourses(resp1.data);
         setClubs(resp2.data);
         setGroups(resp3.data);
+        console.log(resp1.data.map((x) => ({title: x.title, order: x.order})));
       })
       .catch((error) => {
         console.error(error);
@@ -144,7 +145,6 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
       return;
     }
 
-
     const movedCourse = courses.splice(source.index, 1)
     courses.splice(destination.index, 0, movedCourse[0])
     axios.patch(`/api/v1/course_memberships/${movedCourse[0].id}`, {source: source.index, destination: destination.index, order: destination.index, user_id: user.id});
@@ -164,7 +164,7 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
 
     const movedClub = clubs.splice(source.index, 1)
     clubs.splice(destination.index, 0, movedClub[0])
-    
+    axios.patch(`/api/v1/club_memberships/${movedClub[0].id}`, {source: source.index, destination: destination.index, order: destination.index, user_id: user.id});
     const reorderedClubs = clubs.map((club: any, i) => ({...club, order: i}));
     setClubs(reorderedClubs)
   };
@@ -181,6 +181,7 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
 
     const movedGroup = groups.splice(source.index, 1)
     groups.splice(destination.index, 0, movedGroup[0])
+    axios.patch(`/api/v1/group_memberships/${movedGroup[0].id}`, {source: source.index, destination: destination.index, order: destination.index, user_id: user.id});
     const reorderedGroups = groups.map((group: any, i) => ({...group, order: i}));
     setGroups(reorderedGroups)
   };
