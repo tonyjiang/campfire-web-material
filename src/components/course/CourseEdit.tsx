@@ -10,9 +10,8 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
-import { UserContext } from "../user/UserContext";
 
 const CourseEdit = (props) => {
   const [course, setCourse] = useState(props);
