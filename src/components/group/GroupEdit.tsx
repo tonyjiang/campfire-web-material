@@ -6,7 +6,7 @@ const GroupEdit = (props) => {
   const [loading, setLoading] = useState(true);
   const [group, setGroup] = useState(props);
   const [editable, setEditable] = useState(true);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || '');
 
   useEffect(() => {
     setGroup(props);

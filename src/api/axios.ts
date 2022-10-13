@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const user = JSON.parse(localStorage.getItem('user'));
+const cachedUser = JSON.parse(localStorage.getItem('user') || '');
 export default axios.create({
-  headers: { Authorization: `Bearer ${user.access_token}` }
+  headers: { Authorization: `Bearer ${cachedUser.access_token}` }
 });

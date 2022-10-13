@@ -12,7 +12,7 @@ import { purple } from "@mui/material/colors";
 import { MoreVert } from "@mui/icons-material";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 
 const GroupMembers = (props) => {
   const [loading, setLoading] = useState(true);
