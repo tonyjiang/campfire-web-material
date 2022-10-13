@@ -65,7 +65,6 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
         setCourses(resp1.data);
         setClubs(resp2.data);
         setGroups(resp3.data);
-        console.log(resp1.data.map((x) => ({title: x.title, order: x.order})));
       })
       .catch((error) => {
         console.error(error);
