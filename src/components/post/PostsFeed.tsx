@@ -34,7 +34,7 @@ const PostsFeed = (props) => {
         const post = {
           id: resp.data.id,
           image_urls: resp.data.image_urls,
-          author: cachedUser,
+          user: cachedUser,
           ...data,
         };
         props.setPosts([post, ...props.posts]);

@@ -40,15 +40,7 @@ const HomeFeed = (props) => {
 
   return (
     <Box>
-      {
-        <
-          PostsFeed
-          posts={posts}
-          setPosts={setPosts}
-          contextType="User"
-          contextId={1}
-        />
-      }
+      <div />
     </Box>
   );
 };

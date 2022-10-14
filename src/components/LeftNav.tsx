@@ -40,7 +40,7 @@ import GroupEdit from "./group/GroupEdit";
 import { UserContext } from "./user/UserContext";
 import './scrollbar.css';
 import useAppBarHeight from "../Utils";
-import { DragDropContext, Draggable } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import { StrictDroppable } from "./StrictDroppable";
 
 const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {

@@ -19,7 +19,7 @@ export default function Thread(props) {
 
   useEffect(() => {
     setOp(props.op);
-    setComments(props.op.comments);
+    setComments(props.op.comments || []);
   }, [props]);
 
   const renderedComments = () => {
@@ -47,7 +47,7 @@ export default function Thread(props) {
       .then(() => {
         const comment = {
           ...data,
-          author: cachedUser,
+          user: cachedUser,
         };
         setComments([...comments, comment]);
       })
@@ -68,12 +68,12 @@ export default function Thread(props) {
 
   return (
     <Card key={op.id}>
+      <Post post={op} />
       <CreatePost
         contextType="Post"
         addNewPost={addNewComment}
         style={{ marginLeft: "20px" }}
       />
-      <Post post={op} />
       { renderedComments() }
     </Card>
   );

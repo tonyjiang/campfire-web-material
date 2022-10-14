@@ -84,8 +84,8 @@ export default function Post(props) {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[400] }} aria-label="poster">
-            {post.author.first_name.substring(0, 1) +
-              post.author.last_name.substring(0, 1)}
+            {post.user.first_name.substring(0, 1) +
+              post.user.last_name.substring(0, 1)}
           </Avatar>
         }
         action={
@@ -93,7 +93,7 @@ export default function Post(props) {
             <MoreVert />
           </IconButton>
         }
-        title={`${post.author.first_name} ${post.author.last_name}`}
+        title={`${post.user.first_name} ${post.user.last_name}`}
         subheader={post.created_at}
       />
       <CardContent>
