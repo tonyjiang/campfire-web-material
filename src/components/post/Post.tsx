@@ -79,6 +79,17 @@ export default function Post(props) {
       </div>
     );
 
+  const toLocalTime = (utcTime: string | number | Date) => {
+    const utcDate = new Date(utcTime);
+    return utcDate.toLocaleString([], { 
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+     });
+  }
+
   return (
     <Card key={post.id}>
       <CardHeader
@@ -94,7 +105,7 @@ export default function Post(props) {
           </IconButton>
         }
         title={`${post.user.first_name} ${post.user.last_name}`}
-        subheader={post.created_at}
+        subheader={toLocalTime(post.created_at)}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">

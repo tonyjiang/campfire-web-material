@@ -5,24 +5,25 @@ import GroupEdit from "./GroupEdit";
 import PostsFeed from "../post/PostsFeed";
 import GroupMembers from "./GroupMembers";
 import axios from "../../api/axios";
+import { useParams } from "react-router-dom";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
 }));
 
-const Group = (props: any) => {
-  const [group, setGroup] = useState(props);
+const Group = () => {
   const [posts, setPosts] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
+  const { groupId } = useParams();
+
   useEffect(() => {
     axios
-      .get(`/api/v1/posts?context_type=Group&context_id=${props.id}`)
+      .get(`/api/v1/posts?context_type=Group&context_id=${groupId}`)
       .then((resp) => {
         setPosts(resp.data);
-        setGroup(props);
         setSelectedTab(0);
       })
       .catch((err) => {
@@ -32,7 +33,7 @@ const Group = (props: any) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [props]);
+  }, []);
 
   if (loading) return <Skeleton variant="text" height={100} />;
   if (error)
@@ -47,7 +48,7 @@ const Group = (props: any) => {
 
   return (
     <Box>
-        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Group" contextId={group.id} />
+        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Group" contextId={groupId} />
     </Box>
   );
 };

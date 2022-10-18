@@ -26,6 +26,7 @@ import SignUpModal from "./SignUpModal";
 import { UserContext } from "./UserContext";
 import { ReactComponent as CampfireLogo } from '../../assets/CampfireLogo.svg';
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const MyToolbar = styled(Toolbar)({
   display: "flex",
@@ -38,8 +39,11 @@ export default function Login() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
+
   const { setUser } = useContext(UserContext);
   const oauth_client_id = process.env.REACT_APP_OAUTH_CLIENT_ID;
+
+  const navigate = useNavigate();
 
   let modeTheme = createTheme({
     palette: {
@@ -62,6 +66,7 @@ export default function Login() {
         console.log(resp.data);
         localStorage.setItem('user', JSON.stringify(resp.data));
         setUser(resp.data);
+        navigate('/')
       })
       .catch((err) => {
         console.error(err);
