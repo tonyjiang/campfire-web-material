@@ -47,8 +47,7 @@ export default function SignUpModal() {
       password: password,
       // this could be a company if somebody who is not a college student
       // is taking some public courses; but lets start with universities
-      // organization_id: university,
-      organization_id: 1,
+      institution_id: 1,
       client_id: oauth_client_id,
     };
     axios
@@ -123,9 +122,9 @@ export default function SignUpModal() {
               </FormControl>
             </div>
             <FormControl sx={{ m: 1, width: "50ch" }} variant="outlined">
-              <InputLabel htmlFor="organization">Your University</InputLabel>
+              <InputLabel htmlFor="institution">Your University</InputLabel>
               <OutlinedInput
-                id="organization"
+                id="institution"
                 type="text"
                 label="Your University"
                 value={university}
