@@ -1,9 +1,9 @@
 import { Box, Skeleton, styled, Tab, Tabs } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
-import GroupEdit from "./GroupEdit";
+import InterestEdit from "./InterestEdit";
 import PostsFeed from "../post/PostsFeed";
-import GroupMembers from "./GroupMembers";
+import InterestMembers from "./InterestMembers";
 import axios from "../../api/axios";
 import { useParams } from "react-router-dom";
 
@@ -11,17 +11,17 @@ const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
 }));
 
-const Group = () => {
+const Interest = () => {
   const [posts, setPosts] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
-  const { groupId } = useParams();
+  const { interestId } = useParams();
 
   useEffect(() => {
     axios
-      .get(`/api/v1/posts?context_type=Group&context_id=${groupId}`)
+      .get(`/api/v1/posts?context_type=Interest&context_id=${interestId}`)
       .then((resp) => {
         setPosts(resp.data);
         setSelectedTab(0);
@@ -40,7 +40,7 @@ const Group = () => {
     return (
       <div>
         <h2>
-          Error in Group.tsx! Look at the browser console for details.
+          Error in Interest.tsx! Look at the browser console for details.
         </h2>
         <p>{JSON.stringify(error)}</p>
       </div>
@@ -48,9 +48,9 @@ const Group = () => {
 
   return (
     <Box>
-        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Group" contextId={groupId} />
+        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Interest" contextId={interestId} />
     </Box>
   );
 };
 
-export default Group;
+export default Interest;

@@ -15,7 +15,7 @@ export default function Thread(props) {
   const [op, setOp] = useState(props.op);
   const [comments, setComments] = useState([]);
   const [error, setError] = useState();
-  const cachedUser = JSON.parse(localStorage.getItem("user") || "");
+  const cachedUser = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
     setOp(props.op);

@@ -2,7 +2,7 @@ import Login from "./components/user/Login";
 import { UserContext } from "./components/user/UserContext";
 import React, { Suspense, useState } from "react";
 import { createBrowserRouter, Route, RouterProvider, Routes, useNavigate } from "react-router-dom";
-import Group from "./components/group/Group";
+import Interest from "./components/interest/Interest";
 import Course, { Loader as CourseLoader } from "./components/course/Course";
 import Club from "./components/club/Club";
 import { UnavailableRoute } from "./components/UnavailableRoute";
@@ -25,8 +25,8 @@ const router = createBrowserRouter([
         element: <Club/>
       },
       {
-        path: "group/:groupId",
-        element: <Group/>
+        path: "interest/:interestId",
+        element: <Interest/>
       }
     ]
   },

@@ -63,7 +63,6 @@ export default function Login() {
     axios
       .post('/api/v1/users/login', data)
       .then((resp) => {
-        console.log(resp.data);
         localStorage.setItem('user', JSON.stringify(resp.data));
         setUser(resp.data);
         navigate('/')

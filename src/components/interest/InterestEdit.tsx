@@ -2,14 +2,15 @@ import { Box, Button, Checkbox, FormControlLabel, FormGroup, Skeleton, Stack, Te
 import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
 
-const GroupEdit = (props) => {
+const InterestEdit = (props) => {
   const [loading, setLoading] = useState(true);
-  const [group, setGroup] = useState(props);
+  const [interest, setInterest] = useState(props);
   const [editable, setEditable] = useState(true);
-  const user = JSON.parse(localStorage.getItem("user") || '');
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const cachedUser = 1;
 
   useEffect(() => {
-    setGroup(props);
+    setInterest(props);
     setEditable(props.editable ? true : false);
   }, [props]);
 
@@ -20,13 +21,13 @@ const GroupEdit = (props) => {
   const handleSave = () => {
     let data = {
       user_id: user.id,
-      name: group.name,
-      description: group.description,
-      public: group.public,
+      name: interest.name,
+      description: interest.description,
+      public: interest.public,
     };
-    if (group.id) {
+    if (interest.id) {
       axios
-        .patch(`/api/v1/groups/${group.id}`, data)
+        .patch(`/api/v1/interests/${interest.id}`, data)
         .catch((error) => {
           console.error(error);
         })
@@ -34,7 +35,7 @@ const GroupEdit = (props) => {
         .then(() => (window.location =  process.env.REACT_APP_HOME_URL));
     } else {
       axios
-        .post("/api/v1/groups", data)
+        .post("/api/v1/interests", data)
         .catch((error) => {
           console.error(error);
         })
@@ -98,14 +99,14 @@ const GroupEdit = (props) => {
         <FormGroup>
           <Stack spacing={3}>
             {pageTitle}
-            <input hidden value={group?.id} />
+            <input hidden value={interest?.id} />
             <TextField
               variant="outlined"
               label="Name"
               disabled={!editable}
               required
-              value={group?.name || ""}
-              onChange={(e) => setGroup({ ...group, name: e.target.value })}
+              value={interest?.name || ""}
+              onChange={(e) => setInterest({ ...interest, name: e.target.value })}
             />
             <TextField
               multiline
@@ -113,15 +114,15 @@ const GroupEdit = (props) => {
               disabled={!editable}
               variant="outlined"
               label="Description"
-              value={group?.description || ""}
+              value={interest?.description || ""}
               onChange={(e) =>
-                setGroup({ ...group, description: e.target.value })
+                setInterest({ ...interest, description: e.target.value })
               }
             />
             <FormControlLabel
               control={<Checkbox
-                checked={group?.public}
-                onChange={(e) => setGroup({...group, public: e.target.checked}) }
+                checked={interest?.public}
+                onChange={(e) => setInterest({...interest, public: e.target.checked}) }
               />}
               label="Public"
             />
@@ -132,4 +133,4 @@ const GroupEdit = (props) => {
   );
 };
 
-export default GroupEdit;
+export default InterestEdit;

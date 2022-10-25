@@ -17,7 +17,7 @@ const CourseEdit = (props) => {
   const [course, setCourse] = useState(props);
   const [editable, setEditable] = useState();
   const [error, setError] = useState();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
     setCourse(props);

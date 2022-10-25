@@ -6,7 +6,7 @@ const ClubEdit = (props) => {
   const [loading, setLoading] = useState(true);
   const [club, setClub] = useState(props);
   const [editable, setEditable] = useState(true);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
     setClub(props);

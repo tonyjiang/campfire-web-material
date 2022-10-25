@@ -10,7 +10,7 @@ const HomeFeed = (props) => {
   const [error, setError] = useState();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user") || "null");
     axios
       .get(`/api/v1/users/${user.id}/feed`)
       .then((resp) => {

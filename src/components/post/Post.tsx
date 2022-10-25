@@ -27,7 +27,8 @@ export default function Post(props) {
   const [likes, setLikes] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [error, setError] = useState();
-  const cachedUser = JSON.parse(localStorage.getItem("user") || "");
+  const cachedUser = JSON.parse(localStorage.getItem("user") || "null");
+  
 
   useEffect(() => {
     setPost(props.post);

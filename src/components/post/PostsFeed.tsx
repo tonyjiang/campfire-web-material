@@ -10,7 +10,7 @@ import axios from "../../api/axios";
 // 3. PostsFeed is a collection of Threads
 const PostsFeed = (props) => {
   const [error, setError] = useState();
-  const cachedUser = JSON.parse(localStorage.getItem('user'));
+  const cachedUser = JSON.parse(localStorage.getItem("user") || "null");
 
   const addNewPost = (postText, images) => {
     const data = {

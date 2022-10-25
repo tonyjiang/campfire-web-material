@@ -35,8 +35,8 @@ import Course from "./course/Course";
 import CourseEdit from "./course/CourseEdit";
 import Club from "./club/Club";
 import ClubEdit from "./club/ClubEdit";
-import Group from "./group/Group";
-import GroupEdit from "./group/GroupEdit";
+import Interest from "./interest/Interest";
+import InterestEdit from "./interest/InterestEdit";
 import { UserContext } from "./user/UserContext";
 import './scrollbar.css';
 import useAppBarHeight from "../Utils";
@@ -49,8 +49,8 @@ const LeftNav = () => {
   const [selectedCourse, setSelectedCourse] = useState<any>();
   const [clubs, setClubs] = useState<any[]>([]);
   const [selectedClub, setSelectedClub] = useState<any>();
-  const [groups, setGroups] = useState<any[]>([]);
-  const [selectedGroup, setSelectedGroup] = useState<any>();
+  const [interests, setInterests] = useState<any[]>([]);
+  const [selectedInterest, setSelectedInterest] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const { user } = useContext(UserContext);
@@ -61,12 +61,12 @@ const LeftNav = () => {
   useEffect(() => {
     const req1 = axios.get(`/api/v1/courses?user_id=${user.id}`);
     const req2 = axios.get(`/api/v1/clubs?user_id=${user.id}`);
-    const req3 = axios.get(`/api/v1/groups?user_id=${user.id}`);
+    const req3 = axios.get(`/api/v1/interests?user_id=${user.id}`);
     Promise.all([req1, req2, req3])
       .then(([resp1, resp2, resp3]) => {
         setCourses(resp1.data);
         setClubs(resp2.data);
-        setGroups(resp3.data);
+        setInterests(resp3.data);
       })
       .catch((error) => {
         console.error(error);
@@ -85,29 +85,29 @@ const LeftNav = () => {
     event.stopPropagation();
   };
 
-  const createNewGroup = (event: any) => {
+  const createNewInterest = (event: any) => {
     event.stopPropagation();
   };
 
   const viewCourse = (course: any) => {
     setSelectedClub(null);
-    setSelectedGroup(null);
+    setSelectedInterest(null);
     setSelectedCourse(course.id);
     navigate(`course/${course.id}`);
   };
 
   const viewClub = (club: any) => {
     setSelectedCourse(null);
-    setSelectedGroup(null);
+    setSelectedInterest(null);
     setSelectedClub(club.id);
     navigate(`club/${club.id}`);
   };
 
-  const viewGroup = (group: any) => {
+  const viewInterest = (interest: any) => {
     setSelectedCourse(null);
     setSelectedClub(null);
-    setSelectedGroup(group.id);
-    navigate(`group/${group.id}`);
+    setSelectedInterest(interest.id);
+    navigate(`interest/${interest.id}`);
   };
 
   const openCoursesClick = (event: any) => {
@@ -118,8 +118,8 @@ const LeftNav = () => {
     setClubsOpen(!openClubs);
   };
 
-  const openGroupsClick = (event: any) => {
-    setGroupsOpen(!openGroups);
+  const openInterestsClick = (event: any) => {
+    setInterestsOpen(!openInterests);
   };
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -130,7 +130,7 @@ const LeftNav = () => {
 
   const [openCourses, setCoursesOpen] = useState(false);
   const [openClubs, setClubsOpen] = useState(false);
-  const [openGroups, setGroupsOpen] = useState(false);
+  const [openInterests, setInterestsOpen] = useState(false);
 
   const onDragEndCourses = (result: DropResult) => {
     const {destination, source } = result;
@@ -166,7 +166,7 @@ const LeftNav = () => {
     setClubs(reorderedClubs)
   };
 
-  const onDragEndGroups = (result: any) => {
+  const onDragEndInterests = (result: any) => {
     const {destination, source } = result;
     if (!destination) {
       return;
@@ -176,11 +176,11 @@ const LeftNav = () => {
       return;
     }
 
-    const movedGroup = groups.splice(source.index, 1)
-    groups.splice(destination.index, 0, movedGroup[0])
-    axios.patch(`/api/v1/group_memberships/${movedGroup[0].id}`, {source: source.index, destination: destination.index, order: destination.index, user_id: user.id});
-    const reorderedGroups = groups.map((group: any, i) => ({...group, order: i}));
-    setGroups(reorderedGroups)
+    const movedInterest = interests.splice(source.index, 1)
+    interests.splice(destination.index, 0, movedInterest[0])
+    axios.patch(`/api/v1/interest_memberships/${movedInterest[0].id}`, {source: source.index, destination: destination.index, order: destination.index, user_id: user.id});
+    const reorderedInterests = interests.map((interest: any, i) => ({...interest, order: i}));
+    setInterests(reorderedInterests)
   };
 
   let courseList = (
@@ -253,8 +253,8 @@ const LeftNav = () => {
                   <ListItemIcon>
                     <Carpenter sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
                   </ListItemIcon>
-                  <Tooltip title={club.name} disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
-                    <ListItemText primary={club.name} primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+                  <Tooltip title={club.title} disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
+                    <ListItemText primary={club.title} primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
                   </Tooltip>
                 </ListItemButton>
                 )} 
@@ -267,36 +267,36 @@ const LeftNav = () => {
     </DragDropContext>
   );
 
-  let groupList = (
+  let interestList = (
     <DragDropContext 
-    onDragEnd = {onDragEndGroups}
+    onDragEnd = {onDragEndInterests}
     >
-      <StrictDroppable droppableId = {"group"}>
+      <StrictDroppable droppableId = {"interest"}>
       {
         (provided: any) => (
         <List
         disablePadding
         ref = {provided.innerRef}
         {...provided.droppableProps}>
-          {groups.map((group: any) => (
+          {interests.map((interest: any) => (
             <Draggable
-              key={group.id + "group"}
-              draggableId={String(group.id) + "group"}
-              index={group.order}>
+              key={interest.id + "interest"}
+              draggableId={String(interest.id) + "interest"}
+              index={interest.order}>
               {(provided: any) => (
               <ListItemButton
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 ref={provided.innerRef}
-                selected={selectedGroup === group.id}
-                onClick={() => {viewGroup(group); mobileDrawerToggle();}}
+                selected={selectedInterest === interest.id}
+                onClick={() => {viewInterest(interest); mobileDrawerToggle();}}
                 sx={{ pt: 0.5, pb: 0.5, backgroundColor: {xs: "#353535", sm: "#121212"}}}  
               >
                 <ListItemIcon>
                   <Chat sx={{ paddingLeft: 4, paddingRight: 2.5 }}/>
                 </ListItemIcon>
-                <Tooltip title={group.name} disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
-                  <ListItemText primary={group.name} primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+                <Tooltip title={interest.title} disableInteractive enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
+                  <ListItemText primary={interest.title} primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
                 </Tooltip>
               </ListItemButton>
               )} 
@@ -379,27 +379,27 @@ const LeftNav = () => {
 
         <Divider variant="middle" sx={{paddingTop: 1}} />
 
-        <Tooltip title="Find new groups" 
+        <Tooltip title="Find new interests" 
         disableInteractive 
         enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
           <ListItem disablePadding sx={{paddingTop: 1.5}}>
-            <ListItemButton sx={{ pt: 0.25, pb: 0.25}} onClick={() => {searchNewGroups(); mobileDrawerToggle();}}> 
-              <ListItemText primary="Find New Groups" primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
+            <ListItemButton sx={{ pt: 0.25, pb: 0.25}} onClick={() => {searchNewInterests(); mobileDrawerToggle();}}> 
+              <ListItemText primary="Find New Interests" primaryTypographyProps={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}/>
               <Search sx={{paddingLeft: 2.5}}/>
             </ListItemButton>
           </ListItem>
         </Tooltip>
 
         <ListItem disablePadding>
-          <ListItemButton sx={{ pt: 0.5, pb: 0.5}} onClick={openGroupsClick}>
-            <Tooltip title={openGroups ? "Close groups" : "Open groups"} 
+          <ListItemButton sx={{ pt: 0.5, pb: 0.5}} onClick={openInterestsClick}>
+            <Tooltip title={openInterests ? "Close interests" : "Open interests"} 
             disableInteractive 
             enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
-              {openGroups ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
+              {openInterests ? <ExpandMore sx={{marginRight: 1}}/> : <KeyboardArrowRight sx={{marginRight: 1.25, marginLeft: -0.25}}/>}
             </Tooltip>
             <GroupsIcon sx={{paddingRight: 2.5}}/>
-            <ListItemText primary="Groups"/>
-            <Tooltip title="Create a new group" onClick={(e) => {createNewGroup(e); mobileDrawerToggle();}} 
+            <ListItemText primary="Interests"/>
+            <Tooltip title="Create a new interest" onClick={(e) => {createNewInterest(e); mobileDrawerToggle();}} 
             disableInteractive 
             enterDelay={500} enterNextDelay={500} enterTouchDelay={500}>
               <AddSharpIcon sx={{paddingLeft: 2.5}}/>
@@ -407,8 +407,8 @@ const LeftNav = () => {
           </ListItemButton>
         </ListItem>
 
-        <Collapse in={openGroups} timeout="auto" unmountOnExit>
-          {groupList}
+        <Collapse in={openInterests} timeout="auto" unmountOnExit>
+          {interestList}
         </Collapse>
       </List>
   );

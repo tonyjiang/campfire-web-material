@@ -17,6 +17,8 @@ import { UserContext } from "./user/UserContext";
 import { ReactComponent as CampfireLogo } from '../assets/CampfireLogo.svg';
 import { useNavigate } from "react-router-dom";
 
+const cachedUser = JSON.parse(localStorage.getItem("user") || "null");
+
 const MyToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
@@ -52,7 +54,7 @@ const HeaderBar = () => {
         </Box>
         <IconsBox sx={{'&:hover': {cursor: "pointer"}}} onClick={(e) => setProfileMenuOpen(true)}>
         <UserBox>
-          <Typography variant="inherit">Tony</Typography>
+          <Typography variant="inherit">{cachedUser.first_name} {cachedUser.last_name}.</Typography>
           </UserBox>
           <Avatar
             sx={{ width: 40, height: 40 }}
