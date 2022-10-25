@@ -5,24 +5,25 @@ import ClubEdit from "./ClubEdit";
 import PostsFeed from "../post/PostsFeed";
 import ClubMembers from "./ClubMembers";
 import axios from "../../api/axios";
+import { useParams } from "react-router-dom";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
 }));
 
-const Club = (props) => {
-  const [club, setClub] = useState(props);
+const Club = () => {
   const [posts, setPosts] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
+  const { clubId } = useParams();
+
   useEffect(() => {
     axios
-      .get(`/api/v1/posts?context_type=Club&context_id=${props.id}`)
+      .get(`/api/v1/posts?context_type=Club&context_id=${clubId}`)
       .then((resp) => {
         setPosts(resp.data);
-        setClub(props);
         setSelectedTab(0);
       })
       .catch((err) => {
@@ -32,7 +33,7 @@ const Club = (props) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [props]);
+  }, []);
 
   const handleTabChange = (_, id) => {
     setSelectedTab(id);
@@ -70,11 +71,11 @@ const Club = (props) => {
     <Box flex={4} p={{ xs: 0, md: 2 }}>
       {clubHeader}
       {selectedTab === 0 ? (
-        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Club" contextId={club.id} />
+        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Club" contextId={clubId} />
       ) : selectedTab === 1 ? (
-        <ClubEdit {...club} />
+        <ClubEdit />
       ) : ( 
-        <ClubMembers {...club} />
+        <ClubMembers />
       )}
     </Box>
   );

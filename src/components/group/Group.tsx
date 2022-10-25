@@ -5,24 +5,25 @@ import GroupEdit from "./GroupEdit";
 import PostsFeed from "../post/PostsFeed";
 import GroupMembers from "./GroupMembers";
 import axios from "../../api/axios";
+import { useParams } from "react-router-dom";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
 }));
 
-const Group = (props) => {
-  const [group, setGroup] = useState(props);
+const Group = () => {
   const [posts, setPosts] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
+  const { groupId } = useParams();
+
   useEffect(() => {
     axios
-      .get(`/api/v1/posts?context_type=Group&context_id=${props.id}`)
+      .get(`/api/v1/posts?context_type=Group&context_id=${groupId}`)
       .then((resp) => {
         setPosts(resp.data);
-        setGroup(props);
         setSelectedTab(0);
       })
       .catch((err) => {
@@ -32,11 +33,7 @@ const Group = (props) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [props]);
-
-  const handleTabChange = (_, id) => {
-    setSelectedTab(id);
-  };
+  }, []);
 
   if (loading) return <Skeleton variant="text" height={100} />;
   if (error)
@@ -49,33 +46,9 @@ const Group = (props) => {
       </div>
     );
 
-  const groupHeader = (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={selectedTab}
-          onChange={handleTabChange}
-          indicatorColor="secondary"
-          variant="fullWidth"
-        >
-          <Tab label="Conversations" id={0} aria-controls="tab-0" />
-          <SecondaryTab label="About" id={1} aria-controls="tab-1" />
-          <SecondaryTab label="Members" id={2} aria-controls="tab-2" />
-        </Tabs>
-      </Box>
-    </Box>
-  );
-
   return (
-    <Box flex={4} p={{ xs: 0, md: 2 }}>
-      {groupHeader}
-      {selectedTab === 0 ? (
-        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Group" contextId={group.id} />
-      ) : selectedTab === 1 ? (
-        <GroupEdit {...group} />
-      ) : ( 
-        <GroupMembers {...group} />
-      )}
+    <Box>
+        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Group" contextId={groupId} />
     </Box>
   );
 };

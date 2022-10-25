@@ -15,7 +15,7 @@ import {
 import React, { useContext, useState } from "react";
 import { UserContext } from "./user/UserContext";
 import { ReactComponent as CampfireLogo } from '../assets/CampfireLogo.svg';
-
+import { useNavigate } from "react-router-dom";
 
 const MyToolbar = styled(Toolbar)({
   display: "flex",
@@ -33,13 +33,15 @@ const UserBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 
-const HeaderBar = ({ mode, setMode }) => {
+const HeaderBar = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.clear();
     setUser(null);
+    navigate('/login')
   }
 
   return (

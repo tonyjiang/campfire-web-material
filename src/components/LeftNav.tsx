@@ -40,21 +40,23 @@ import GroupEdit from "./group/GroupEdit";
 import { UserContext } from "./user/UserContext";
 import './scrollbar.css';
 import useAppBarHeight from "../Utils";
-import { DragDropContext, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 import { StrictDroppable } from "./StrictDroppable";
+import { Link, useNavigate } from "react-router-dom";
 
-const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
-  const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState();
-  const [clubs, setClubs] = useState([]);
-  const [selectedClub, setSelectedClub] = useState();
-  const [groups, setGroups] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState();
+const LeftNav = () => {
+  const [courses, setCourses] = useState<any[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<any>();
+  const [clubs, setClubs] = useState<any[]>([]);
+  const [selectedClub, setSelectedClub] = useState<any>();
+  const [groups, setGroups] = useState<any[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const { user } = useContext(UserContext);
 
   const appBarHeight = useAppBarHeight()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const req1 = axios.get(`/api/v1/courses?user_id=${user.id}`);
@@ -76,17 +78,14 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
   }, [user]);
 
   const createNewCourse = (event: any) => {
-    props.setCenterColumn(<CourseEdit editable={true} />);
     event.stopPropagation();
   };
 
   const createNewClub = (event: any) => {
-    props.setCenterColumn(<ClubEdit editable={true} />);
     event.stopPropagation();
   };
 
   const createNewGroup = (event: any) => {
-    props.setCenterColumn(<GroupEdit editable={true} />);
     event.stopPropagation();
   };
 
@@ -94,21 +93,21 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
     setSelectedClub(null);
     setSelectedGroup(null);
     setSelectedCourse(course.id);
-    props.setCenterColumn(<Course {...course} />);
+    navigate(`course/${course.id}`);
   };
 
   const viewClub = (club: any) => {
     setSelectedCourse(null);
     setSelectedGroup(null);
     setSelectedClub(club.id);
-    props.setCenterColumn(<Club {...club} />);
+    navigate(`club/${club.id}`);
   };
 
   const viewGroup = (group: any) => {
     setSelectedCourse(null);
     setSelectedClub(null);
     setSelectedGroup(group.id);
-    props.setCenterColumn(<Group {...group} />);
+    navigate(`group/${group.id}`);
   };
 
   const openCoursesClick = (event: any) => {
@@ -129,12 +128,11 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
     setMobileOpen(!mobileOpen);
   };
 
-  const [openCourses, setCoursesOpen] = useState(true);
-  const [openClubs, setClubsOpen] = useState(true);
-  const [openGroups, setGroupsOpen] = useState(true);
+  const [openCourses, setCoursesOpen] = useState(false);
+  const [openClubs, setClubsOpen] = useState(false);
+  const [openGroups, setGroupsOpen] = useState(false);
 
-    
-  const onDragEndCourses = (result: { destination: any; source: any; }) => {
+  const onDragEndCourses = (result: DropResult) => {
     const {destination, source } = result;
     if (!destination) {
       return;
@@ -151,7 +149,7 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
     setCourses(reorderedCourses)
   };
 
-  const onDragEndClubs = (result: { destination: any; source: any; }) => {
+  const onDragEndClubs = (result: any) => {
     const {destination, source } = result;
     if (!destination) {
       return;
@@ -168,7 +166,7 @@ const LeftNav = (props: { setCenterColumn: (arg0: JSX.Element) => void; }) => {
     setClubs(reorderedClubs)
   };
 
-  const onDragEndGroups = (result: { destination: any; source: any; }) => {
+  const onDragEndGroups = (result: any) => {
     const {destination, source } = result;
     if (!destination) {
       return;

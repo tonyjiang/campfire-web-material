@@ -6,48 +6,22 @@ import CourseMembers from "./CourseMembers";
 import PostsFeed from "../post/PostsFeed";
 import SyllabusEdit from "./SyllabusEdit";
 import axios from "../../api/axios";
+import { useLoaderData, useParams } from "react-router-dom";
 
 const SecondaryTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.primary.light,
 }));
 
-const Course = (props) => {
-  const [loading, setLoading] = useState(true);
-  const [course, setCourse] = useState(props);
-  const [posts, setPosts] = useState([]);
+const Course = () => {
+  const loadedData: any = useLoaderData();
+
+  const [posts, setPosts] = useState(loadedData.posts);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [error, setError] = useState(null);
+  const { courseId } = useParams();
 
-  useEffect(() => {
-    axios
-      .get(`/api/v1/posts?context_type=Course&context_id=${props.id}`)
-      .then((resp) => {
-        setPosts(resp.data);
-        setCourse(props);
-        setSelectedTab(0);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [props]);
-
-  const handleTabChange = (_, id) => {
+  const handleTabChange = (_: any, id: any) => {
     setSelectedTab(id);
   };
-
-  if (loading) return <Skeleton variant="text" height={100} />;
-  if (error)
-    return (
-      <div>
-        <h2>Error in Course.jsx component! Look at the browser console for details.</h2>
-        <hr />
-        <p>{JSON.stringify(error)}</p>
-      </div>
-    );
 
   const courseHeader = (
     <Box sx={{ width: "100%" }}>
@@ -68,19 +42,31 @@ const Course = (props) => {
   );
 
   return (
-    <Box flex={4} p={{ xs: 0, md: 2 }}>
+    <Box flex={4}>
       {courseHeader}
       {selectedTab === 0 ? (
-        <PostsFeed posts={posts} setPosts={ setPosts } contextType="Course" contextId={course.id} />
+        <PostsFeed posts={loadedData.posts} setPosts={ setPosts } contextType="Course" contextId={courseId} />
       ) : selectedTab === 1 ? (
-        <CourseEdit {...course} />
+        <CourseEdit />
       ) : selectedTab === 2 ? (
-        <SyllabusEdit {...course} />
+        <SyllabusEdit />
       ) : (
-        <CourseMembers {...course} />
+        <CourseMembers />
       )}
     </Box>
   );
 };
 
 export default Course;
+
+export const Loader = async ({ params }: any) => {
+  const { courseId } = params;
+  let posts = null;
+  const postsPromise: any = await axios.get(`/api/v1/posts?context_type=Course&context_id=${courseId}`)
+  .catch((err) => {
+      console.error(err);
+    });
+
+  posts = postsPromise.data
+  return {posts}
+}
