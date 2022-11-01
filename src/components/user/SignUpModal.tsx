@@ -51,7 +51,7 @@ export default function SignUpModal() {
       client_id: oauth_client_id,
     };
     axios
-      .post("/api/v1/users", data)
+      .post(`${process.env.REACT_APP_API_URL}/api/v1/users`, data)
       .then((resp) => {
         localStorage.setItem('user', JSON.stringify(resp.data));
         setUser(resp.data);
