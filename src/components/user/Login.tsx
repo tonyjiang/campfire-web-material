@@ -46,8 +46,7 @@ export default function Login() {
       mode: mode,
     },
   });
-  modeTheme = responsiveFontSizes(modeTheme)
-
+  modeTheme = responsiveFontSizes(modeTheme);
 
   const handleLogin = () => {
     const data = {
@@ -57,7 +56,7 @@ export default function Login() {
     };
 
     axios
-      .post('/api/v1/users/login', data)
+      .post(`${process.env.REACT_APP_API_URL}/api/v1/users/login`, data)
       .then((resp) => {
         console.log(resp.data);
         localStorage.setItem('user', JSON.stringify(resp.data));
