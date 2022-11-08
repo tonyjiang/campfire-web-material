@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:18-bullseye AS builder
 
 ENV NODE_ENV development
 
