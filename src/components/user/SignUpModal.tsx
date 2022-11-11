@@ -19,6 +19,7 @@ import { useContext, useState } from "react";
 import axios from "axios";
 
 import { UserContext } from "./UserContext";
+import React from "react";
 
 const SytledModal = styled(Modal)({
   display: "flex",

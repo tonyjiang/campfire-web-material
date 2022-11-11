@@ -46,15 +46,19 @@ const HeaderBar = () => {
     navigate('/login')
   }
 
+  console.table(cachedUser)
+
   return (
     <AppBar position="sticky">
       <MyToolbar>
         <Box display="flex" alignItems={"center"}>
-        <CampfireLogo height={40} fill={"white"} stroke={"grey"}/>
+          <Box sx={{'&:hover': {cursor: "pointer"}}}>
+            <CampfireLogo onClick={() => navigate('/')} height={40} fill={"white"} stroke={"grey"}/>
+          </Box>
         </Box>
         <IconsBox sx={{'&:hover': {cursor: "pointer"}}} onClick={(e) => setProfileMenuOpen(true)}>
         <UserBox>
-          <Typography variant="inherit">{cachedUser.first_name} {cachedUser.last_name}.</Typography>
+          <Typography variant="inherit">{cachedUser.first_name} {cachedUser.last_name[0]}.</Typography>
           </UserBox>
           <Avatar
             sx={{ width: 40, height: 40 }}

@@ -59,7 +59,7 @@ const Course = () => {
 
 export default Course;
 
-export const Loader = async ({ params }: any) => {
+export const loader = async ({ params }: any) => {
   const { courseId } = params;
   let posts = null;
   const postsPromise: any = await axios.get(`/api/v1/posts?context_type=Course&context_id=${courseId}`)

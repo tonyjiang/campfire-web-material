@@ -1,8 +1,6 @@
 import { Box, createTheme, Grid, ThemeProvider } from "@mui/material";
-import { useState } from "react";
 
-import LeftNav from "./components/LeftNav";
-import HomeFeed from "./components/HomeFeed";
+import LeftNav from "./components/leftNav/LeftNav";
 import HeaderBar from "./components/HeaderBar";
 import React from "react";
 import useAppBarHeight from "./Utils";
@@ -14,7 +12,7 @@ const Home = () => {
       mode: "dark",
     },
   });
-
+  
   const appBarHeight = useAppBarHeight()
 
   return (

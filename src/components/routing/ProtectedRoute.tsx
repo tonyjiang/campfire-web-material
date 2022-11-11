@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { LandingPage } from "./LandingPage";
-import { UserContext } from "./user/UserContext";
+import { LandingPage } from "../LandingPage";
+import { UserContext } from "../user/UserContext";
 
 interface protectedRouteObject {
     user?: any,

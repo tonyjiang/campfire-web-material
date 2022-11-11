@@ -27,6 +27,7 @@ import { UserContext } from "./UserContext";
 import { ReactComponent as CampfireLogo } from '../../assets/CampfireLogo.svg';
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import useAppBarHeight from "../../Utils";
 
 const MyToolbar = styled(Toolbar)({
   display: "flex",
@@ -52,6 +53,7 @@ export default function Login() {
   });
   modeTheme = responsiveFontSizes(modeTheme)
 
+  const appBarHeight = useAppBarHeight()
 
   const handleLogin = () => {
     const data = {
@@ -82,11 +84,15 @@ export default function Login() {
         <AppBar position="sticky">
           <MyToolbar>
             <Box display="flex">
-              <CampfireLogo height={40} fill={"white"} stroke={"grey"}/>
+              <Box sx={{'&:hover': {cursor: "pointer"}}}>
+                <CampfireLogo onClick={() => navigate('/')} height={40} fill={"white"} stroke={"grey"}/>
+              </Box>
             </Box>
           </MyToolbar>
         </AppBar>
-        <Grid container sx={{minHeight: "95vh", maxHeight: "95vh"}}>
+        <Grid container sx={{
+          minHeight: `calc(100vh - ${appBarHeight}px)`,
+          maxHeight: `calc(100vh - ${appBarHeight}px)`}}>
           <Grid item xs={true}></Grid>
           <Grid 
             item
@@ -94,7 +100,7 @@ export default function Login() {
             justifyContent="center" 
             alignItems="center" 
             direction="column"
-            sx={{marginTop: "-25vh"}}> 
+            sx={{marginTop: "-5vh"}}> 
           <Stack spacing={2}>
               <div style={{
                 display: 'inline-flex'
@@ -129,7 +135,6 @@ export default function Login() {
                       <IconButton
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
-                        onMouseDown={(e) => e.preventDefault()}
                         edge="end"
                       >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
