@@ -2,7 +2,7 @@
 Do you know that in the US about a third college students drop out? Not only they don't become Steve Jobs, they do less well than those who finish their degrees. Lack of engagement is a big cause behind this problem. Campfire is a social learning platform designed to make college more engaging for students, therefore reduce the dropout rate. How does it do it? An chat app like Discord, an AI-powered chatbot and tutor, and a course management system for professors. We believe the combination of these three tools can produce great results.
 
 # Deveopment
-This React app relies on the Ruby on Rails API server for data access.
+This React app is built using Material UI. It relies on the Ruby on Rails API server for data access and authentication.
 
 ### Starting the application
 First get an Oauth client ID from your local database used by Ruby on Rails backend. Make sure you have run `seeds.rb` against development database. Then in Rails console run `Doorkeeper::Application.where(name: 'Web')` to get an application object. Copy the `uid` - this is your client ID for web development.
